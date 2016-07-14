@@ -24,6 +24,7 @@ public:
     void setRotation(float x, float y, float z);
     void setColor(int r, int g, int b, int a) { color = ofColor(r, g, b, a); };
     void setColor(int r, int g, int b) { setColor(r, g, b, 255); };
+    void setIsSelected(bool _selected) { isSelected = _selected; };
 
     //Getters
     string getText() { return text; };
@@ -38,6 +39,7 @@ private:
     ofVec3f viewPosition;
     ofVec3f upVector;
     ofQuaternion rotation;
+    bool isSelected;
     float theta;
     ofVec3f axis;
     ofEasyCam* cam;

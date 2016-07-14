@@ -38,18 +38,13 @@ void ofApp::setup(){
 //    positions[6] = drawText("MARGAUX", 80, ofVec3f(.54, -.31, 0));
     
     vector<string> names;
-    names.push_back("JAMES");
-    names.push_back("MARGAUX");
-    names.push_back("MARTA");
+    names.push_back("META-LOOPS");
+    names.push_back("INTERACTION");
+    names.push_back("COMMERCIAL");
     names.push_back("PETE");
     names.push_back("JOEL");
     names.push_back("AMALIE");
-    names.push_back("TEST1");
-    names.push_back("TEST2");
-    names.push_back("TEST3");
-    names.push_back("TEST4");
-    names.push_back("TEST5");
-    names.push_back("TEST6");
+    names.push_back("SAM");
     
     texts.resize(names.size());
     
@@ -65,15 +60,15 @@ void ofApp::setup(){
 
 //--------------------------------------------------------------
 void ofApp::update(){
-    float newX = ofLerp(cam.getPosition().x, cameraPosTarget.x, 0.1);
-    float newY = ofLerp(cam.getPosition().y, cameraPosTarget.y, 0.1);
-    float newZ = ofLerp(cam.getPosition().z, cameraPosTarget.z, 0.1);
+    float newX = ofLerp(cam.getPosition().x, cameraPosTarget.x, 0.05);
+    float newY = ofLerp(cam.getPosition().y, cameraPosTarget.y, 0.05);
+    float newZ = ofLerp(cam.getPosition().z, cameraPosTarget.z, 0.05);
     
     cam.setPosition(newX, newY, newZ);
     
-    float newUpX = ofLerp(cam.getUpDir().x, camUpVectorTarget.x, 0.1);
-    float newUpY = ofLerp(cam.getUpDir().y, camUpVectorTarget.y, 0.1);
-    float newUpZ = ofLerp(cam.getUpDir().z, camUpVectorTarget.z, 0.1);
+    float newUpX = ofLerp(cam.getUpDir().x, camUpVectorTarget.x, 0.05);
+    float newUpY = ofLerp(cam.getUpDir().y, camUpVectorTarget.y, 0.05);
+    float newUpZ = ofLerp(cam.getUpDir().z, camUpVectorTarget.z, 0.05);
 
     cam.lookAt(ofVec3f(0, 0, 0), ofVec3f(newUpX, newUpY, newUpZ));
     
@@ -111,11 +106,13 @@ void ofApp::draw(){
         camUpVectorTarget = texts[highestPercentageIndex].getUpVector();
     
     for(int i = 0; i < texts.size(); i++) {
-        ofColor col = ofColor(0, 255, 255, 50);
+        ofColor col = ofColor(0, 0, 0);
         if(i == highestPercentageIndex) {
-            col.lerp(ofColor(255, 255, 0, 255), highestPercentage);
+            texts[i].setIsSelected(true);
+            //col.lerp(ofColor(255, 255, 255), highestPercentage);
         } else {
-            col.lerp(ofColor(255, 255, 0, 255), 0.0);
+            texts[i].setIsSelected(false);
+            //col.lerp(ofColor(127, 127, 127), 0.0);
         }
         texts[i].setColor(col.r, col.g, col.b);
         if(i != highestPercentageIndex) {

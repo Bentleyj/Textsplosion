@@ -10,16 +10,16 @@
 
 Textsplosion::Textsplosion() {
     noise = 0;
+    isSelected = false;
 }
 
 void Textsplosion::update() {
-    noise += 0.001;
+    //noise += 0.001;
 }
 
 void Textsplosion::draw() {
     ofPushMatrix();
     
-    ofSetColor(0, 255, 255);
     float dist = (ofVec3f(0, 0, 0) - cam->getPosition()).length();
     
     ofRectangle rect = font->getStringBoundingBox(text, 0, 0);
@@ -36,11 +36,11 @@ void Textsplosion::draw() {
         vector<ofPoint> points = lines[0].getVertices();
         
         for(int i = 0; i < points.size(); i++) {
-            ofColor col = color;
             mesh.addVertex(ofVec3f(points[i].x - rect.width/2, -points[i].y - lineRect.getHeight() + rect.height/2, 0));
-            mesh.addColor(col);
+            ofVec3f pos = ofVec3f(points[i].x - rect.width/2, -points[i].y - lineRect.getHeight() + rect.height/2);
+            mesh.addColor(color);
             mesh.addVertex(ofVec3f(points[(i+1)%points.size()].x - rect.width/2, -points[(i+1)%points.size()].y - lineRect.getHeight() + rect.height/2, 0));
-            mesh.addColor(col);
+            mesh.addColor(color);
         }
     }
     
@@ -55,6 +55,13 @@ void Textsplosion::draw() {
         vertex.x *= scale;
         vertex.y *= scale;
         mesh.setVertex(i, vertex);
+        float dist = (vertex - ofVec3f(0, 0, 0)).length();
+        float camDist = ( cam->getPosition() - ofVec3f(0, 0, 0) ).length();
+        float percent = ofMap(dist, 0, camDist, 1.0, 0.0, true);
+        ofColor col = color;
+        col.lerp(ofColor(220, 220, 220), percent);
+        if(isSelected) col = ofColor(255);
+        mesh.setColor(i, col);
     }
     
     ofSetLineWidth(3);
