@@ -2,6 +2,7 @@
 //  Textsplosion.h
 //  test_Text
 //
+//  This is the class that holds 
 //  Created by James Bentley on 08/07/2016.
 //
 //
@@ -30,6 +31,7 @@ public:
     string getText() { return text; };
     ofVec3f getViewPosition() { return viewPosition; };
     ofVec3f getUpVector() { return upVector; };
+    
     //Functionality
     void draw();
     void update();

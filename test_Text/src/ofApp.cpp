@@ -12,6 +12,8 @@ void ofApp::setup(){
     
     cam.disableMouseMiddleButton();
     
+    ofSetDataPathRoot("../Resources/data/");
+    
     noiseOffset1 = 0;
     noiseOffset2 = 1000;
     noiseOffset3 = 2000;
@@ -23,19 +25,10 @@ void ofApp::setup(){
     
     ofSetLogLevel(OF_LOG_ERROR);
         
-    cameraPosTarget = ofVec3f(0, 0, 400);
+    cameraPosTarget = ofVec3f(0, 0, 600);
     camUpVectorTarget = ofVec3f(0, 1, 0);
     
     ofBackground(ofColor(0));
-    //positions[0] = drawText("EDMOND SAFRA", 45, ofVec3f(0, 1, 0));
-    //positions[1] = drawText("LILLY SAFRA", 45, ofVec3f(-.03, .50, 0));
-    
-//    ofHideCursor();
-//    positions[2] = drawText("MARTA", 35, ofVec3f(.51, .88, 0));
-//    positions[3] = drawText("JAMES", 143, ofVec3f(.27, -.68, 0));
-//    positions[4] = drawText("SAM", 202, ofVec3f(.50, .33, 0));
-//    positions[5] = drawText("AMALIE", 216, ofVec3f(-.62, .26, 0));
-//    positions[6] = drawText("MARGAUX", 80, ofVec3f(.54, -.31, 0));
     
     vector<string> names;
     names.push_back("META-LOOPS");
@@ -45,6 +38,7 @@ void ofApp::setup(){
     names.push_back("JOEL");
     names.push_back("AMALIE");
     names.push_back("SAM");
+    names.push_back("MARGAUX");
     
     texts.resize(names.size());
     
@@ -53,7 +47,6 @@ void ofApp::setup(){
         texts[i].setCam(&cam);
         texts[i].setText(names[i]);
         texts[i].setViewPosition(ofVec3f(ofRandom(-1.0, 1.0), ofRandom(-1.0, 1.0), 0.0));
-//        texts[i].setUpVector(ofVec3f(0, 1, 0));
     }
 
 }
@@ -101,7 +94,7 @@ void ofApp::draw(){
     }
     
 //    if(ofGetKeyPressed()) {
-        float distance = (cam.getPosition() - ofVec3f(0, 0, 0)).length();
+        float distance = 600;//(cam.getPosition() - ofVec3f(0, 0, 0)).length();
         cameraPosTarget = distance * texts[highestPercentageIndex].getViewPosition();
         camUpVectorTarget = texts[highestPercentageIndex].getUpVector();
     
@@ -160,9 +153,6 @@ ofVec3f ofApp::drawText(string text, ofVec3f viewPositionNorm) {
     float phi = atan(sqrt(viewPositionNorm.x * viewPositionNorm.x + viewPositionNorm.y * viewPositionNorm.y)/(viewPositionNorm.z));
     ofRotateX(theta * 180 / PI);
     ofRotateY(phi * 180 / PI);
-//    ofRotateX(viewPositionNorm.x);
-//    ofRotateY(viewPositionNorm.y);
-    //ofRotate(rotation, rotationAxis.x, rotationAxis.y, rotationAxis.z);
     ofSetColor(0, 255, 255);
     float dist = (ofVec3f(0, 0, 0) - cam.getPosition()).length();
     
@@ -191,8 +181,6 @@ ofVec3f ofApp::drawText(string text, ofVec3f viewPositionNorm) {
     float zOffset = ofMap(ofNoise(noise), 0, 1, 50, -50);
     for(int i = 0; i < mesh.getNumVertices(); i++) {
         ofVec3f vertex = mesh.getVertex(i);
-//        vertex.x -= rect.width/2;
-//        vertex.y += rect.height/2;
         if(i%2 == 0) zOffset = ofMap(ofNoise(noise + i), 0, 1, 500, -500);
         vertex.z += zOffset;
         float distanceToTarget = (cam.getPosition() - ofVec3f(0, 0, 0)).length();

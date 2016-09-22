@@ -14,7 +14,7 @@ Textsplosion::Textsplosion() {
 }
 
 void Textsplosion::update() {
-    //noise += 0.001;
+    noise += 0.001;
 }
 
 void Textsplosion::draw() {
@@ -54,10 +54,10 @@ void Textsplosion::draw() {
         float scale = distanceToObject / distanceToTarget;
         vertex.x *= scale;
         vertex.y *= scale;
-        mesh.setVertex(i, vertex);
         float dist = (vertex - ofVec3f(0, 0, 0)).length();
         float camDist = ( cam->getPosition() - ofVec3f(0, 0, 0) ).length();
         float percent = ofMap(dist, 0, camDist, 1.0, 0.0, true);
+        mesh.setVertex(i, vertex);
         ofColor col = color;
         col.lerp(ofColor(220, 220, 220), percent);
         if(isSelected) col = ofColor(255);
