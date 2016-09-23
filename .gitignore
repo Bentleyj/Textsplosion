@@ -65,6 +65,10 @@ Thumbs.db
 *.aps
 ipch/
 
+*.exe
+*.db
+*.opendb
+
 *.dll
 
 # Folder config file
