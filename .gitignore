@@ -57,9 +57,15 @@ xcuserdata
 #Windows
 # Windows image file caches
 Thumbs.db
+*.sdf
+*.opensdf
+*.suo
+*.pdb
+*.ilk
+*.aps
+ipch/
+
+*.dll
+
 # Folder config file
 Desktop.ini
-compressed.jpg
-settings.xml
-cove/bin/data/tiles
-cove/bin/data/content/crossrail/tilesQuick
