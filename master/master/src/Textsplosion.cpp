@@ -28,23 +28,23 @@ void Textsplosion::draw() {
 	float distanceToTarget = (cam->getPosition() - textCenter).length();
 
 	//We could replace this with a vertex shader... Would definitely make it more scalable.. That's what I'll start right now!
-    for(int i = 0; i < originalMesh.getNumVertices(); i++) {
-        ofVec3f vertex = originalMesh.getVertex(i);
-        if(i%2 == 0) offset = ofMap(ofNoise(noise + i*0.1), 0, 1, distanceToTarget * 0.9, -distanceToTarget * 0.9);
-        vertex.z += offset;
-        float distanceToObject = distanceToTarget - offset;
-        float scale = distanceToObject / distanceToTarget;
-        vertex.x *= scale;
-        vertex.y *= scale;
-        float dist = (vertex - textCenter).length();
-        float camDist = ( cam->getPosition() - textCenter).length();
-        float percent = ofMap(dist, 0, camDist, 1.0, 0.0, true);
-        displayMesh.setVertex(i, vertex);
-        ofColor col = color;
-        col.lerp(ofColor(220, 220, 220), percent);
-        if(isSelected) col = ofColor(255);
-		displayMesh.setColor(i, col);
-    }
+  //  for(int i = 0; i < originalMesh.getNumVertices(); i++) {
+  //      ofVec3f vertex = originalMesh.getVertex(i);
+  //      if(i%2 == 0) offset = ofMap(ofNoise(noise + i*0.1), 0, 1, distanceToTarget * 0.9, -distanceToTarget * 0.9);
+  //      vertex.z += offset;
+  //      float distanceToObject = distanceToTarget - offset;
+  //      float scale = distanceToObject / distanceToTarget;
+  //      vertex.x *= scale;
+  //      vertex.y *= scale;
+  //      float dist = (vertex - textCenter).length();
+  //      float camDist = ( cam->getPosition() - textCenter).length();
+  //      float percent = ofMap(dist, 0, camDist, 1.0, 0.0, true);
+  //      displayMesh.setVertex(i, vertex);
+  //      ofColor col = color;
+  //      col.lerp(ofColor(220, 220, 220), percent);
+  //      if(isSelected) col = ofColor(255);
+		//displayMesh.setColor(i, col);
+  //  }
     
     ofSetLineWidth(1);
     

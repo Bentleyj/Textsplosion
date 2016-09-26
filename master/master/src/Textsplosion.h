@@ -43,6 +43,7 @@ public:
     string getText() { return text; };
     ofVec3f getViewPosition() { return viewPosition; };
     ofVec3f getUpVector() { return upVector; };
+	bool getIsSelected() { return isSelected; };
     
     //Functionality
     void draw();
@@ -52,8 +53,8 @@ private:
     string text;
 	ofVec3f viewPosition;
 	ofVec3f upVector;
-	ofMesh originalMesh;
-	ofMesh displayMesh;
+	ofVboMesh originalMesh;
+	ofVboMesh displayMesh;
 	ofVec3f textCenter;
 	float rotationTheta;
 	ofVec3f rotationAxis;

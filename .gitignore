@@ -64,6 +64,8 @@ Thumbs.db
 *.ilk
 *.aps
 ipch/
+*.exp
+*.lib
 
 *.exe
 *.db

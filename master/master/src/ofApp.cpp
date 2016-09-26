@@ -12,7 +12,7 @@ void ofApp::setup() {
 
 	cam.disableMouseMiddleButton();
 
-	ofSetDataPathRoot("../Resources/data/");
+	//ofSetDataPathRoot("../Resources/data/");
 
 	noiseOffset1 = 0;
 	noiseOffset2 = 1000;
@@ -31,11 +31,13 @@ void ofApp::setup() {
 	ofBackground(ofColor(0));
 
 	vector<string> names;
-	names.push_back("THE QUICK");
-	names.push_back("BROWN FOX");
-	names.push_back("JUMPED OVER");
-	names.push_back("THE LAZY");
-	names.push_back("DOG");
+	for (int i = 0; i < 20; i++) {
+		names.push_back("THE QUICK");
+		names.push_back("BROWN FOX");
+		names.push_back("JUMPED OVER");
+		names.push_back("THE LAZY");
+		names.push_back("DOG");
+	}
 
 	texts.resize(names.size());
 
@@ -47,8 +49,7 @@ void ofApp::setup() {
 		texts[i].setCenter(ofVec3f(0, 0, 0));
 	}
 
-	noiseShader.load("shaders/noiseVertex.glsl", "shaders/noiseFrag.hlsl");
-
+	noiseShader.load("shaders/noise.vert", "shaders/noise.frag");
 }
 
 //--------------------------------------------------------------
@@ -76,7 +77,7 @@ void ofApp::draw() {
 	//    ofEnableDepthTest();
 	//light.enable();
 
-	float highestPercentage = 0.0;
+	float highestPercentage = -1.0;
 	float lowestPercentage = 1.0;
 	float highestTheta;
 	int highestPercentageIndex;
@@ -94,8 +95,15 @@ void ofApp::draw() {
 		}
 	}
 
+	noiseShader.begin();
+
+	//we want to pass in some varrying values to animate our type / color 
+	noiseShader.setUniform1f("timeVal", ofGetElapsedTimef() * 0.01);
+	noiseShader.setUniform1f("distortAmount", 500.0);
+	noiseShader.setUniform3f("camPosition", cam.getPosition());
+
 	//    if(ofGetKeyPressed()) {
-	float distance = 600;//(cam.getPosition() - ofVec3f(0, 0, 0)).length();
+	float distance = (cam.getPosition() - ofVec3f(0, 0, 0)).length();
 	cameraPosTarget = distance * texts[highestPercentageIndex].getViewPosition();
 	camUpVectorTarget = texts[highestPercentageIndex].getUpVector();
 
@@ -111,11 +119,14 @@ void ofApp::draw() {
 		}
 		texts[i].setColor(col.r, col.g, col.b);
 		if (i != highestPercentageIndex) {
+			noiseShader.setUniform1i("isSelected", 0);
 			texts[i].draw();
 		}
 	}
-
+	noiseShader.setUniform1i("isSelected", 1);
 	texts[highestPercentageIndex].draw();
+
+	noiseShader.end();
 
 
 	//    ofDrawAxis(10);
