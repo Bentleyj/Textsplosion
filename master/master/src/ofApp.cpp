@@ -4,7 +4,7 @@
 void ofApp::setup() {
 	font = new ofTrueTypeFont();
 
-	font->load("fonts/Plain-Light.ttf", 50, true, true, true);
+	font->load("fonts/BebasNeue/BebasNeue.otf", 50, true, true, true);
 
 	light.setPosition(0, 0, 0);
 
@@ -30,8 +30,16 @@ void ofApp::setup() {
 
 	ofBackground(ofColor(0));
 
+
+	textNoise.load("shaders/textNoise.vert", "shaders/textNoise.frag");
+	backgroundNoise.load("shaders/backgroundNoise.vert", "shaders/backgroundNoise.frag");
+
+
+	shaders.push_back(textNoise);
+	shaders.push_back(backgroundNoise);
+
 	vector<string> names;
-	for (int i = 0; i < 20; i++) {
+	for (int i = 0; i < NUM_NAMES; i++) {
 		names.push_back("THE QUICK");
 		names.push_back("BROWN FOX");
 		names.push_back("JUMPED OVER");
@@ -44,12 +52,13 @@ void ofApp::setup() {
 	for (int i = 0; i < names.size(); i++) {
 		texts[i].setFont(font);
 		texts[i].setCam(&cam);
+		texts[i].setColor(ofRandom(127, 255), ofRandom(127, 255), ofRandom(127, 255));
+		texts[i].setShaders(&shaders);
 		texts[i].setText(names[i]);
 		texts[i].setViewPosition(ofVec3f(ofRandom(-1.0, 1.0), ofRandom(-1.0, 1.0), 0.0));
 		texts[i].setCenter(ofVec3f(0, 0, 0));
 	}
 
-	noiseShader.load("shaders/noise.vert", "shaders/noise.frag");
 }
 
 //--------------------------------------------------------------
@@ -74,8 +83,6 @@ void ofApp::update() {
 //--------------------------------------------------------------
 void ofApp::draw() {
 	cam.begin();
-	//    ofEnableDepthTest();
-	//light.enable();
 
 	float highestPercentage = -1.0;
 	float lowestPercentage = 1.0;
@@ -95,17 +102,19 @@ void ofApp::draw() {
 		}
 	}
 
-	noiseShader.begin();
+	//drawSquares();
+
+	//textNoise.begin();
 
 	//we want to pass in some varrying values to animate our type / color 
-	noiseShader.setUniform1f("timeVal", ofGetElapsedTimef() * 0.01);
-	noiseShader.setUniform1f("distortAmount", 500.0);
-	noiseShader.setUniform3f("camPosition", cam.getPosition());
 
-	//    if(ofGetKeyPressed()) {
 	float distance = (cam.getPosition() - ofVec3f(0, 0, 0)).length();
 	cameraPosTarget = distance * texts[highestPercentageIndex].getViewPosition();
 	camUpVectorTarget = texts[highestPercentageIndex].getUpVector();
+
+	//textNoise.setUniform1f("timeVal", ofGetElapsedTimef() * 0.01);
+	//textNoise.setUniform1f("distortAmount", 500.0);
+	//textNoise.setUniform3f("camPosition", cam.getPosition());
 
 	for (int i = 0; i < texts.size(); i++) {
 		ofColor col = ofColor(0, 0, 0);
@@ -119,15 +128,14 @@ void ofApp::draw() {
 		}
 		texts[i].setColor(col.r, col.g, col.b);
 		if (i != highestPercentageIndex) {
-			noiseShader.setUniform1i("isSelected", 0);
 			texts[i].draw();
 		}
 	}
-	noiseShader.setUniform1i("isSelected", 1);
 	texts[highestPercentageIndex].draw();
 
-	noiseShader.end();
+	//textNoise.end();
 
+	//ofDrawSphere(0, 0, 0, 10);
 
 	//    ofDrawAxis(10);
 
@@ -138,6 +146,8 @@ void ofApp::draw() {
 	}
 
 	gui.draw();
+
+	ofDrawBitmapString(ofToString(ofGetFrameRate()), 10, 10);
 }
 
 //--------------------------------------------------------------

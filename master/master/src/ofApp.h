@@ -5,6 +5,8 @@
 #include "ofxGui.h"
 #include "Textsplosion.h"
 
+#define NUM_NAMES 50
+
 class ofApp : public ofBaseApp {
 
 public:
@@ -52,7 +54,10 @@ public:
 
 	ofTrueTypeFont* font;
 
-	ofShader noiseShader;
+	ofShader textNoise;
+	ofShader backgroundNoise;
+
+	vector<ofShader> shaders;
 
 	ofLight light;
 

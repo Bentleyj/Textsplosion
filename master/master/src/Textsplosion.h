@@ -3,12 +3,11 @@
 //  test_Text
 //
 //  This is the class that holds the text and the position that we view it from.
-// Effectively all it should have is 7 things:
+// Effectively all it should have is 6 things:
 // 1. A string describing the name, 
 // 2. A ofVec3f describing the position from which our object should be viewed
 // 3. An Up-Vector describing the orientation of our text.
-// 4. The ofMesh object that we use to draw our text.
-// 5. The ofMesh that we start with, we'll save this so we can offset it from this and our mesh doesn't explode into oblivion.
+// 4. The ofMesh that we use to draw.
 // To use ofRotate we need to rotate by some angle about an axis so we also need to store that angle and that axis. This is used when drawing the mesh.
 // 5. Axis about which to rotate before drawing the mesh
 // 6. Angle We should rotate about that axis
@@ -38,12 +37,14 @@ public:
     void setColor(int r, int g, int b) { setColor(r, g, b, 255); };
     void setIsSelected(bool _selected) { isSelected = _selected; };
 	void setCenter(ofVec3f _pos) { textCenter = _pos; };
+	void setShaders(vector<ofShader>* _shaders) { shaders = _shaders; };
 
     //Getters
     string getText() { return text; };
     ofVec3f getViewPosition() { return viewPosition; };
     ofVec3f getUpVector() { return upVector; };
 	bool getIsSelected() { return isSelected; };
+	ofVec3f getCenter() { return textCenter; };
     
     //Functionality
     void draw();
@@ -53,8 +54,11 @@ private:
     string text;
 	ofVec3f viewPosition;
 	ofVec3f upVector;
-	ofVboMesh originalMesh;
-	ofVboMesh displayMesh;
+	ofVboMesh mesh;
+	ofVboMesh backgroundMesh;
+	vector<ofShader>* shaders;
+
+	//ofRectangle boundingBox;
 	ofVec3f textCenter;
 	float rotationTheta;
 	ofVec3f rotationAxis;
@@ -62,8 +66,6 @@ private:
 	//Looks stuff
     ofColor color;
 	bool isSelected;
-	float noise;
-
 
 	//References to outside things used for calculations
 	ofEasyCam* cam;

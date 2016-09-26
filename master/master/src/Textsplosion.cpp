@@ -10,52 +10,45 @@
 
 Textsplosion::Textsplosion() {
 	//Set everything up by default (real simple)
-    noise = 0;
     isSelected = false;
 }
 
 void Textsplosion::update() {
 	// Update the noise
-    noise += 0.001;
 }
 
 void Textsplosion::draw() {
 	// We'll draw our display mesh each frame
     ofPushMatrix();
-    
-    float offset = 0;
-
-	float distanceToTarget = (cam->getPosition() - textCenter).length();
-
-	//We could replace this with a vertex shader... Would definitely make it more scalable.. That's what I'll start right now!
-  //  for(int i = 0; i < originalMesh.getNumVertices(); i++) {
-  //      ofVec3f vertex = originalMesh.getVertex(i);
-  //      if(i%2 == 0) offset = ofMap(ofNoise(noise + i*0.1), 0, 1, distanceToTarget * 0.9, -distanceToTarget * 0.9);
-  //      vertex.z += offset;
-  //      float distanceToObject = distanceToTarget - offset;
-  //      float scale = distanceToObject / distanceToTarget;
-  //      vertex.x *= scale;
-  //      vertex.y *= scale;
-  //      float dist = (vertex - textCenter).length();
-  //      float camDist = ( cam->getPosition() - textCenter).length();
-  //      float percent = ofMap(dist, 0, camDist, 1.0, 0.0, true);
-  //      displayMesh.setVertex(i, vertex);
-  //      ofColor col = color;
-  //      col.lerp(ofColor(220, 220, 220), percent);
-  //      if(isSelected) col = ofColor(255);
-		//displayMesh.setColor(i, col);
-  //  }
-    
+        
     ofSetLineWidth(1);
     
 //    ofDrawArrow(ofVec3f(0, 0, 0), ofVec3f(0, 0, 100));
+	//ofTranslate(textCenter);
 
     ofRotate(rotationTheta, rotationAxis.x, rotationAxis.y, rotationAxis.z);
-    
-    displayMesh.setMode(OF_PRIMITIVE_LINES);
-	displayMesh.draw();
-//    ofSetColor(255, 0, 0);
-//    ofDrawArrow(ofVec3f(0, 0, 0), ofVec3f(0, 0, 100));
+	ofSetColor(color);
+
+	(*shaders)[1].begin();
+	(*shaders)[1].setUniform1f("timeVal", ofGetElapsedTimef() * 0.1);
+	(*shaders)[1].setUniform1f("distortAmount", 1000.0);
+	(*shaders)[1].setUniform3f("camPosition", cam->getPosition());
+	(*shaders)[1].setUniform1i("isSelected", isSelected);
+	backgroundMesh.setMode(OF_PRIMITIVE_TRIANGLES);
+	backgroundMesh.draw();
+	(*shaders)[1].end();
+
+
+	ofSetColor(255, 255, 255);
+	(*shaders)[0].begin();
+	(*shaders)[0].setUniform1f("timeVal", ofGetElapsedTimef() * 0.01);
+	(*shaders)[0].setUniform1f("distortAmount", 500.0);
+	(*shaders)[0].setUniform3f("camPosition", cam->getPosition());
+	(*shaders)[0].setUniform1i("isSelected", isSelected);
+	mesh.setMode(OF_PRIMITIVE_LINES);
+	mesh.draw();
+	(*shaders)[0].end();
+
 
     ofPopMatrix();
 }
@@ -101,12 +94,12 @@ void Textsplosion::setViewPosition(ofVec3f _pos) {
     
 	rotationTheta = acos((trace - 1) / 2);
 	rotationTheta *= 180 / PI;
-    cout<<"rotationTheta: "<< rotationTheta <<endl;
+    //cout<<"rotationTheta: "<< rotationTheta <<endl;
     
     ofQuaternion rotation = ofQuaternion(rotationTheta, rotationAxis);
     
     upVector = rotation * upVectorTemp;
-    cout<<"upVector: "<<upVector.x<<", "<<upVector.y<<", "<<upVector.z<<endl;
+    //cout<<"upVector: "<<upVector.x<<", "<<upVector.y<<", "<<upVector.z<<endl;
 }
 
 void Textsplosion::setText(string _text) {
@@ -114,6 +107,36 @@ void Textsplosion::setText(string _text) {
 
 	// Find the string bounding box for our font about the particular text we want to write.
 	ofRectangle rect = font->getStringBoundingBox(text, 0, 0);
+	ofRectangle boundingBox = rect;
+	boundingBox.y = -boundingBox.y;
+	boundingBox.y -= boundingBox.height;
+	boundingBox.x -= boundingBox.width / 2;
+
+	boundingBox.width += 10;
+	boundingBox.height += 10;
+
+	boundingBox.x -= 5;
+	boundingBox.y -= 5;
+
+	backgroundMesh.addVertex(boundingBox.getTopLeft());
+	backgroundMesh.addColor(color);
+	backgroundMesh.addVertex(boundingBox.getBottomLeft());
+	backgroundMesh.addColor(color);
+	backgroundMesh.addVertex(boundingBox.getTopRight());
+	backgroundMesh.addColor(color);
+	backgroundMesh.addVertex(boundingBox.getBottomRight());
+	backgroundMesh.addColor(color);
+	backgroundMesh.addVertex(boundingBox.getTopLeft());
+	backgroundMesh.addColor(color);
+	backgroundMesh.addVertex(boundingBox.getBottomRight());
+	backgroundMesh.addColor(color);
+
+	backgroundMesh.addIndex(0);
+	backgroundMesh.addIndex(1);
+	backgroundMesh.addIndex(3);
+	backgroundMesh.addIndex(4);
+	backgroundMesh.addIndex(5);
+	backgroundMesh.addIndex(2);
 
 	// Get the text as a vector of ofTTFCharacters, these characters have a whole bunch of info about the text.
 	vector<ofTTFCharacter> characters = font->getStringAsPoints(text);
@@ -133,18 +156,13 @@ void Textsplosion::setText(string _text) {
 
 			//Go through all the points and add them to the meshes
 			for (int i = 0; i < points.size(); i++) {
-				originalMesh.addVertex(ofVec3f(points[i].x - rect.width / 2, -points[i].y - lineRect.getHeight() + rect.height / 2, 0));
-				originalMesh.addColor(color);
-				originalMesh.addVertex(ofVec3f(points[(i + 1) % points.size()].x - rect.width / 2, -points[(i + 1) % points.size()].y - lineRect.getHeight() + rect.height / 2, 0));
-				originalMesh.addColor(color);
-
-				originalMesh.addVertex(ofVec3f(points[i].x - rect.width / 2, -points[i].y - lineRect.getHeight() + rect.height / 2, 0));
-				originalMesh.addColor(color);
-				originalMesh.addVertex(ofVec3f(points[(i + 1) % points.size()].x - rect.width / 2, -points[(i + 1) % points.size()].y - lineRect.getHeight() + rect.height / 2, 0));
-				originalMesh.addColor(color);
+				mesh.addVertex(ofVec3f(points[i].x - rect.width / 2, -points[i].y, 0));
+				mesh.addColor(ofColor(255, 255, 255));
+				mesh.addVertex(ofVec3f(points[(i + 1) % points.size()].x - rect.width / 2, -points[(i + 1) % points.size()].y, 0));
+				mesh.addColor(ofColor(255, 255, 255));
 			}
 		}
 
-		displayMesh = originalMesh;
+		mesh = mesh;
 	}
 };
