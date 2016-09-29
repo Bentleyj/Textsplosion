@@ -4,8 +4,8 @@
 #include "ofxFontStash.h"
 #include "ofxGui.h"
 #include "Textsplosion.h"
-
-#define NUM_NAMES 50
+#include "ofxPostProcessing.h"
+#include "ofxEasing.h"
 
 class ofApp : public ofBaseApp {
 
@@ -33,9 +33,6 @@ public:
 
 	ofxPanel gui;
 
-	ofParameter<float> xScale;
-	ofParameter<float> yScale;
-
 	vector<ofVec2f> positions;
 
 	ofVec3f cameraPosTarget;
@@ -56,6 +53,13 @@ public:
 
 	ofShader textNoise;
 	ofShader backgroundNoise;
+
+	ofxPostProcessing post;
+
+	float initTime;
+	float duration;
+
+	HorizontalTiltShifPass::Ptr tiltShiftHoriPass;
 
 	vector<ofShader> shaders;
 

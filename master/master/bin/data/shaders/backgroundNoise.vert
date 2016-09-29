@@ -116,14 +116,14 @@ void main(){
 
 	float distToVertexFromCenter = length(pos.xyz - center);
 
-	float percentColor = map(distToVertexFromCenter, 0.0, distanceToTarget, 1.0, 0.5);
+	float percentColor = map(distToVertexFromCenter, 0.0, distanceToTarget, 0.1, 0.2);
 	
 	gl_Position = pos;
 	gl_TexCoord[0] = gl_MultiTexCoord0;
 	if(isSelected) {
 		gl_FrontColor = gl_Color;
 	} else  {
-		gl_FrontColor = gl_Color * percentColor;
+		gl_FrontColor = vec4(gl_Color.rgb, percentColor);
 	}
 	
 }

@@ -5,7 +5,7 @@ uniform float timeVal = 1.0;
 uniform float distortAmount = 100.0;
 uniform vec3 camPosition;// = vec3(0.0, 0.0, 1.0);
 uniform vec3 center = vec3(0.0, 0.0, 0.0);
-uniform bool isSelected = TRUE;
+uniform float brightnessModifier = 0.0;
 
 //
 // Description : Array and textureless GLSL 2D simplex noise function.
@@ -86,7 +86,6 @@ float map(float input, float input_start, float input_end, float output_start, f
 
 
 void main(){
-
 	// get original vertex postion
 	vec4 pos = gl_Vertex;
 
@@ -108,22 +107,23 @@ void main(){
 
 	float scale = distanceToObject / distanceToTarget;
 
-
 	pos.x *= scale;
 	pos.y *= scale;
 
-	pos = gl_ProjectionMatrix * gl_ModelViewMatrix * pos;
-
 	float distToVertexFromCenter = length(pos.xyz - center);
 
-	float percentColor = map(distToVertexFromCenter, 0.0, distanceToTarget, 1.0, 0.5);
+	pos = gl_ProjectionMatrix * gl_ModelViewMatrix * pos;
+
+
+  	float percentColor = brightnessModifier + map(distToVertexFromCenter, 0.0, distanceToTarget, 0.9, 0.0);
+
+
+  	if(snoise(vec2(gl_VertexID, 100.0f)) > 0.75) {
+  		percentColor = 1.0;
+  	}
 	
 	gl_Position = pos;
 	gl_TexCoord[0] = gl_MultiTexCoord0;
-	if(isSelected) {
-		gl_FrontColor = gl_Color;
-	} else  {
-		gl_FrontColor = gl_Color * percentColor;
-	}
+	gl_FrontColor = vec4(1.0, 1.0, 1.0, 1.0) * percentColor;///*gl_Color*/(colorClose * percentColor + colorFar * (1-percentColor));
 	
 }

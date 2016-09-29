@@ -7,99 +7,106 @@
 //
 
 #include "Textsplosion.h"
+#include "ofxEasing.h"
 
 Textsplosion::Textsplosion() {
 	//Set everything up by default (real simple)
-    isSelected = false;
+	fadeStartTime = 0.0;
+	fadeEndTime = 0.0;
+	brightnessModifier = 0.0;
 }
 
 void Textsplosion::update() {
 	// Update the noise
+	float now = ofGetElapsedTimef();
+
+	if (now < fadeEndTime) {
+		auto easingMethod = &ofxeasing::quart::easeIn;
+		brightnessModifier = ofxeasing::map(now, fadeStartTime, fadeEndTime, brightnessModifier, targetBrightness, easingMethod);
+	}
 }
 
 void Textsplosion::draw() {
 	// We'll draw our display mesh each frame
     ofPushMatrix();
-        
-    ofSetLineWidth(1);
-    
-//    ofDrawArrow(ofVec3f(0, 0, 0), ofVec3f(0, 0, 100));
-	//ofTranslate(textCenter);
 
-    ofRotate(rotationTheta, rotationAxis.x, rotationAxis.y, rotationAxis.z);
-	ofSetColor(color);
+    ofSetLineWidth(3);
 
-	(*shaders)[1].begin();
-	(*shaders)[1].setUniform1f("timeVal", ofGetElapsedTimef() * 0.1);
-	(*shaders)[1].setUniform1f("distortAmount", 1000.0);
-	(*shaders)[1].setUniform3f("camPosition", cam->getPosition());
-	(*shaders)[1].setUniform1i("isSelected", isSelected);
-	backgroundMesh.setMode(OF_PRIMITIVE_TRIANGLES);
-	backgroundMesh.draw();
-	(*shaders)[1].end();
+	float angle;
+	ofVec3f axis;
+	quat.getRotate(angle, axis);
+	ofRotate(angle, axis.x, axis.y, axis.z);
+	ofRotate(-90.0, 1.0, 0.0, 0.0);
 
+	//ofDrawAxis(100);
+
+	//(*shaders)[1].begin();
+	//(*shaders)[1].setUniform1f("timeVal", ofGetElapsedTimef() * 0.1);
+	//(*shaders)[1].setUniform1f("distortAmount", 1000.0);
+	//(*shaders)[1].setUniform3f("camPosition", cam->getPosition());
+	//(*shaders)[1].setUniform1i("isSelected", isSelected);
+	//ofSetColor(255, 0, 0, 255);
+	//backgroundMesh.setMode(OF_PRIMITIVE_TRIANGLES);
+	//backgroundMesh.draw();
+	//(*shaders)[1].end();
 
 	ofSetColor(255, 255, 255);
 	(*shaders)[0].begin();
 	(*shaders)[0].setUniform1f("timeVal", ofGetElapsedTimef() * 0.01);
 	(*shaders)[0].setUniform1f("distortAmount", 500.0);
 	(*shaders)[0].setUniform3f("camPosition", cam->getPosition());
-	(*shaders)[0].setUniform1i("isSelected", isSelected);
+	(*shaders)[0].setUniform1f("brightnessModifier", brightnessModifier);
 	mesh.setMode(OF_PRIMITIVE_LINES);
+
 	mesh.draw();
 	(*shaders)[0].end();
-
 
     ofPopMatrix();
 }
 
-void Textsplosion::setViewPosition(ofVec3f _pos) {
-	//Given a position in space, calculate the up vector and the rotation.
-	//
-    viewPosition = _pos.normalize();
-    ofMatrix3x3 R;
-    ofVec3f upVectorTemp = ofVec3f(0.0, 1.0, 0.0);
-    ofVec3f initialVector = ofVec3f(0.0, 0.0, 1.0);
-    //cout<<"initial vector: "<<initialVector.x<<", "<<initialVector.y<<", "<<initialVector.z<<endl;
+void Textsplosion::fadeIn(float duration) {
+	fadeStartTime = ofGetElapsedTimef();
+	fadeEndTime = fadeStartTime + duration;
+	targetBrightness = 1.0;
+}
 
-    ofVec3f newVector = _pos.normalize();
-    //cout<<"new vector: "<<newVector.x<<", "<<newVector.y<<", "<<newVector.z<<endl;
+void Textsplosion::fadeOut(float duration) {
+	fadeStartTime = ofGetElapsedTimef();
+	fadeEndTime = fadeStartTime +duration;
+	targetBrightness = 0.0;
+}
 
-    ofMatrix3x3 I;
-    I.set(1, 0, 0, 0, 1, 0, 0, 0, 1);
-    
-    ofVec3f v = initialVector.cross(newVector);
-    //cout<<"initial vector: "<<initialVector.x<<", "<<initialVector.y<<", "<<initialVector.z<<endl;
-    //cout<<"new vector: "<<newVector.x<<", "<<newVector.y<<", "<<newVector.z<<endl;
-    //cout<<"v: "<<v.x<<", "<<v.y<<", "<<v.z<<endl;
-    float s = v.length();
-    float c = initialVector.dot(newVector);
-    
-    ofMatrix3x3 skewSymV;
-    skewSymV.set(0, -v.z, v.y, v.z, 0, -v.x, -v.y, v.x, 0);
-    
-    R = I + skewSymV + skewSymV * skewSymV * (1 - c) / (s * s);
-    
-    if (initialVector == newVector) {
-        R = I;
-    }
-    
-    //cout<<"R: "<<endl<<R.a<<" "<<R.b<<" "<<R.c<<endl<<R.d<<" "<<R.e<<" "<<R.f<<endl<<R.g<<" "<<R.h<<" "<<R.i<<endl;
+void Textsplosion::setViewPositionSpherical(float _r, float _theta, float _phi)
+{
+	//We set the view position using spherical coordinates
+	float r = _r;
+	float theta = _theta;
+	float phi = _phi;
 
-    rotationAxis = ofVec3f(R.h - R.f, R.c - R.g, R.d - R.b);
-	rotationAxis = rotationAxis.normalize();
-    //cout<<"axis: "<<axis.x<<", "<<axis.y<<", "<<axis.z<<endl;
-    
-    float trace = R.a + R.e + R.i;
-    
-	rotationTheta = acos((trace - 1) / 2);
-	rotationTheta *= 180 / PI;
-    //cout<<"rotationTheta: "<< rotationTheta <<endl;
-    
-    ofQuaternion rotation = ofQuaternion(rotationTheta, rotationAxis);
-    
-    upVector = rotation * upVectorTemp;
-    //cout<<"upVector: "<<upVector.x<<", "<<upVector.y<<", "<<upVector.z<<endl;
+	//convert from spherical to cartesian coordinates
+	float xpos = r * sin(theta * PI / 180.0) * sin(phi * PI / 180.0);
+	float ypos = r * cos(theta * PI / 180.0);
+	float zpos = r * sin(theta * PI / 180.0) * cos(phi * PI / 180.0);
+
+	viewPosition = ofVec3f(xpos, ypos, zpos);
+
+	viewPosition.normalize();
+
+	float thetaRad = theta * PI / 180.0;
+	float phiRad = phi * PI / 180.0;
+
+	ofVec3f originalForward = ofVec3f(0.0, 1.0, 0.0);
+
+	if (viewPosition == originalForward || viewPosition == originalForward * -1) {
+		viewPosition = ofVec3f(1.0, 1.0, 1.0);
+		viewPosition.normalize();
+	}
+
+	quat.makeRotate(originalForward, viewPosition);
+
+	ofVec3f upVectorTemp = ofVec3f(0.0, 0.0, -1.0);
+
+	upVector = quat * upVectorTemp;
 }
 
 void Textsplosion::setText(string _text) {
@@ -119,17 +126,11 @@ void Textsplosion::setText(string _text) {
 	boundingBox.y -= 5;
 
 	backgroundMesh.addVertex(boundingBox.getTopLeft());
-	backgroundMesh.addColor(color);
 	backgroundMesh.addVertex(boundingBox.getBottomLeft());
-	backgroundMesh.addColor(color);
 	backgroundMesh.addVertex(boundingBox.getTopRight());
-	backgroundMesh.addColor(color);
 	backgroundMesh.addVertex(boundingBox.getBottomRight());
-	backgroundMesh.addColor(color);
 	backgroundMesh.addVertex(boundingBox.getTopLeft());
-	backgroundMesh.addColor(color);
 	backgroundMesh.addVertex(boundingBox.getBottomRight());
-	backgroundMesh.addColor(color);
 
 	backgroundMesh.addIndex(0);
 	backgroundMesh.addIndex(1);
@@ -156,13 +157,12 @@ void Textsplosion::setText(string _text) {
 
 			//Go through all the points and add them to the meshes
 			for (int i = 0; i < points.size(); i++) {
-				mesh.addVertex(ofVec3f(points[i].x - rect.width / 2, -points[i].y, 0));
+				mesh.addVertex(ofVec3f(points[i].x - rect.width / 2, -points[i].y - rect.height / 2, 0));
 				mesh.addColor(ofColor(255, 255, 255));
-				mesh.addVertex(ofVec3f(points[(i + 1) % points.size()].x - rect.width / 2, -points[(i + 1) % points.size()].y, 0));
+				mesh.addVertex(ofVec3f(points[(i + 1) % points.size()].x - rect.width / 2, -points[(i + 1) % points.size()].y - rect.height / 2, 0));
 				mesh.addColor(ofColor(255, 255, 255));
 			}
 		}
-
 		mesh = mesh;
 	}
 };

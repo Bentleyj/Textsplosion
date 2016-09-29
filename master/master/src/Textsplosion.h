@@ -17,7 +17,6 @@
 //  Created by James Bentley on 08/07/2016.
 //
 //
-
 #ifndef Textsplosion_h
 #define Textsplosion_h
 
@@ -30,12 +29,12 @@ public:
     //Setters
     void setText(string _text);
     void setViewPosition(ofVec3f _pos);
+	void setViewPositionSpherical(float _r, float _theta, float _phi);
     void setUpVector(ofVec3f _upVector ) { upVector = _upVector; };
     void setCam(ofEasyCam* _cam) { cam = _cam; };
     void setFont(ofTrueTypeFont* _font) { font = _font; };
     void setColor(int r, int g, int b, int a) { color = ofColor(r, g, b, a); };
     void setColor(int r, int g, int b) { setColor(r, g, b, 255); };
-    void setIsSelected(bool _selected) { isSelected = _selected; };
 	void setCenter(ofVec3f _pos) { textCenter = _pos; };
 	void setShaders(vector<ofShader>* _shaders) { shaders = _shaders; };
 
@@ -43,12 +42,15 @@ public:
     string getText() { return text; };
     ofVec3f getViewPosition() { return viewPosition; };
     ofVec3f getUpVector() { return upVector; };
-	bool getIsSelected() { return isSelected; };
 	ofVec3f getCenter() { return textCenter; };
+	float getBrightnessModifier() { return brightnessModifier; };
     
     //Functionality
     void draw();
     void update();
+	void fadeIn(float duration);
+	void fadeOut(float duration);
+
 private:
 	//Core variables
     string text;
@@ -57,6 +59,7 @@ private:
 	ofVboMesh mesh;
 	ofVboMesh backgroundMesh;
 	vector<ofShader>* shaders;
+	ofQuaternion quat;
 
 	//ofRectangle boundingBox;
 	ofVec3f textCenter;
@@ -65,7 +68,10 @@ private:
 
 	//Looks stuff
     ofColor color;
-	bool isSelected;
+	float brightnessModifier;
+	float fadeStartTime;
+	float fadeEndTime;
+	float targetBrightness;
 
 	//References to outside things used for calculations
 	ofEasyCam* cam;

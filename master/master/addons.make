@@ -1,2 +1,4 @@
 ofxGui
+ofxEasing
 ofxFontStash
+ofxPostProcessing

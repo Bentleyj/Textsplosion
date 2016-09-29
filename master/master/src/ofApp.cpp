@@ -1,10 +1,15 @@
 #include "ofApp.h"
 
+#define NUM_NAMES 50
+
 //--------------------------------------------------------------
 void ofApp::setup() {
+
+	ofSetWindowPosition(ofGetScreenWidth() + 10, 10);
+
 	font = new ofTrueTypeFont();
 
-	font->load("fonts/BebasNeue/BebasNeue.otf", 50, true, true, true);
+	font->load("fonts/maxter_board_st/Maxter Board St.ttf", 50, true, true, true);
 
 	light.setPosition(0, 0, 0);
 
@@ -12,7 +17,16 @@ void ofApp::setup() {
 
 	cam.disableMouseMiddleButton();
 
+	gui.setup("settings.xml");
+
 	//ofSetDataPathRoot("../Resources/data/");
+
+	post.init(ofGetWidth(), ofGetHeight());
+	//post.createPass
+
+	tiltShiftHoriPass = post.createPass<HorizontalTiltShifPass>();
+	tiltShiftHoriPass->setEnabled(true);
+	tiltShiftHoriPass->setH(0.005);
 
 	noiseOffset1 = 0;
 	noiseOffset2 = 1000;
@@ -40,11 +54,11 @@ void ofApp::setup() {
 
 	vector<string> names;
 	for (int i = 0; i < NUM_NAMES; i++) {
-		names.push_back("THE QUICK");
+		names.push_back("A QUICK");
 		names.push_back("BROWN FOX");
 		names.push_back("JUMPED OVER");
 		names.push_back("THE LAZY");
-		names.push_back("DOG");
+	    names.push_back("DOG");
 	}
 
 	texts.resize(names.size());
@@ -55,25 +69,37 @@ void ofApp::setup() {
 		texts[i].setColor(ofRandom(127, 255), ofRandom(127, 255), ofRandom(127, 255));
 		texts[i].setShaders(&shaders);
 		texts[i].setText(names[i]);
-		texts[i].setViewPosition(ofVec3f(ofRandom(-1.0, 1.0), ofRandom(-1.0, 1.0), 0.0));
+		float theta = ofRandom(0.0, 180.0);
+		float phi = ofRandom(0.0, 360.0);
+		texts[i].setViewPositionSpherical(150.0, theta, phi);
 		texts[i].setCenter(ofVec3f(0, 0, 0));
 	}
 
+	ofEnableAntiAliasing();
+
+	duration = 20.0f;
+	initTime = 0.0f;
 }
 
 //--------------------------------------------------------------
 void ofApp::update() {
-	float newX = ofLerp(cam.getPosition().x, cameraPosTarget.x, 0.05);
-	float newY = ofLerp(cam.getPosition().y, cameraPosTarget.y, 0.05);
-	float newZ = ofLerp(cam.getPosition().z, cameraPosTarget.z, 0.05);
+	float now = ofGetElapsedTimef();
+	float endTime = initTime + duration;
 
-	cam.setPosition(newX, newY, newZ);
+	if (now < endTime) {
+		auto easingMethod = &ofxeasing::quart::easeIn;
+		float newX = ofxeasing::map(now, initTime, endTime, cam.getPosition().x, cameraPosTarget.x, easingMethod);
+		float newY = ofxeasing::map(now, initTime, endTime, cam.getPosition().y, cameraPosTarget.y, easingMethod);
+		float newZ = ofxeasing::map(now, initTime, endTime, cam.getPosition().z, cameraPosTarget.z, easingMethod);
 
-	float newUpX = ofLerp(cam.getUpDir().x, camUpVectorTarget.x, 0.05);
-	float newUpY = ofLerp(cam.getUpDir().y, camUpVectorTarget.y, 0.05);
-	float newUpZ = ofLerp(cam.getUpDir().z, camUpVectorTarget.z, 0.05);
+		cam.setPosition(newX, newY, newZ);
 
-	cam.lookAt(ofVec3f(0, 0, 0), ofVec3f(newUpX, newUpY, newUpZ));
+		float newUpX = ofxeasing::map(now, initTime, endTime, cam.getUpDir().x, camUpVectorTarget.x, easingMethod);
+		float newUpY = ofxeasing::map(now, initTime, endTime, cam.getUpDir().y, camUpVectorTarget.y, easingMethod);
+		float newUpZ = ofxeasing::map(now, initTime, endTime, cam.getUpDir().z, camUpVectorTarget.z, easingMethod);
+
+		cam.lookAt(ofVec3f(0, 0, 0), ofVec3f(newUpX, newUpY, newUpZ));
+	}
 
 	for (int i = 0; i < texts.size(); i++) {
 		texts[i].update();
@@ -83,10 +109,10 @@ void ofApp::update() {
 //--------------------------------------------------------------
 void ofApp::draw() {
 	cam.begin();
+	//post.begin(cam);
 
 	float highestPercentage = -1.0;
 	float lowestPercentage = 1.0;
-	float highestTheta;
 	int highestPercentageIndex;
 	for (int i = 0; i < texts.size(); i++) {
 		ofVec3f currentViewPos = cam.getPosition().normalize();
@@ -109,33 +135,22 @@ void ofApp::draw() {
 	//we want to pass in some varrying values to animate our type / color 
 
 	float distance = (cam.getPosition() - ofVec3f(0, 0, 0)).length();
-	cameraPosTarget = distance * texts[highestPercentageIndex].getViewPosition();
-	camUpVectorTarget = texts[highestPercentageIndex].getUpVector();
-
-	//textNoise.setUniform1f("timeVal", ofGetElapsedTimef() * 0.01);
-	//textNoise.setUniform1f("distortAmount", 500.0);
-	//textNoise.setUniform3f("camPosition", cam.getPosition());
-
-	for (int i = 0; i < texts.size(); i++) {
-		ofColor col = ofColor(0, 0, 0);
-		if (i == highestPercentageIndex) {
-			texts[i].setIsSelected(true);
-			//col.lerp(ofColor(255, 255, 255), highestPercentage);
-		}
-		else {
-			texts[i].setIsSelected(false);
-			//col.lerp(ofColor(127, 127, 127), 0.0);
-		}
-		texts[i].setColor(col.r, col.g, col.b);
-		if (i != highestPercentageIndex) {
-			texts[i].draw();
-		}
-	}
-	texts[highestPercentageIndex].draw();
-
-	//textNoise.end();
 
 	//ofDrawSphere(0, 0, 0, 10);
+
+	//ofDrawAxis(100);
+
+	for (int i = 0; i < texts.size(); i++) {
+		texts[i].draw();
+	}
+	for (int i = 0; i < texts.size(); i++) {
+		if(texts[i].getBrightnessModifier() > 0.001)
+			texts[i].draw();
+	}
+
+	//post.end();
+
+	//textNoise.end();
 
 	//    ofDrawAxis(10);
 
@@ -153,13 +168,16 @@ void ofApp::draw() {
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key) {
 	if (key == ' ') {
+		texts[textIndex].fadeOut(20.0f);
 		textIndex++;
 		textIndex %= texts.size();
 		float distance = (cam.getPosition() - ofVec3f(0, 0, 0)).length();
-		cameraPosTarget = distance * texts[textIndex].getViewPosition();
+		cameraPosTarget = texts[textIndex].getViewPosition() * distance;
 		camUpVectorTarget = texts[textIndex].getUpVector();
-		cout << "camUpVectorTarget: " << camUpVectorTarget.x << ", " << camUpVectorTarget.y << ", " << camUpVectorTarget.z << endl;
+		texts[textIndex].fadeIn(20.0f);
+		initTime = ofGetElapsedTimef();
 
+		camUpVectorTarget = texts[textIndex].getUpVector();
 	}
 	if (key == 'a') {
 		animating = !animating;
@@ -260,7 +278,7 @@ void ofApp::mouseExited(int x, int y) {
 
 //--------------------------------------------------------------
 void ofApp::windowResized(int w, int h) {
-
+	post.init(w, h);
 }
 
 //--------------------------------------------------------------

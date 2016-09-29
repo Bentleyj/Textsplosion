@@ -95,17 +95,14 @@
       <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>C:\Users\Flowers\Documents\of_v0.9.3_vs_release\addons\ofxGui\src;
-C:\Users\Flowers\Documents\of_v0.9.3_vs_release\addons\ofxFontStash\src;
-C:\Users\Flowers\Documents\of_v0.9.3_vs_release\addons\ofxFontStash\libs\fontstash\src;
-libs/fontstash/src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Flowers\Documents\of_v0.9.3_vs_release\addons\ofxGui\src;C:\Users\Flowers\Documents\of_v0.9.3_vs_release\addons\ofxFontStash\src;C:\Users\Flowers\Documents\of_v0.9.3_vs_release\addons\ofxFontStash\libs\fontstash\src;libs/fontstash/src;C:\Users\Flowers\Documents\of_v0.9.3_vs_release\addons\ofxPostProcessing\src;
+C:\Users\Flowers\Documents\of_v0.9.3_vs_release\addons\ofxEasing\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <CompileAs>CompileAsCpp</CompileAs>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
-      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
@@ -118,10 +115,8 @@ libs/fontstash/src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories
       <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>C:\Users\Flowers\Documents\of_v0.9.3_vs_release\addons\ofxGui\src;
-C:\Users\Flowers\Documents\of_v0.9.3_vs_release\addons\ofxFontStash\src;
-C:\Users\Flowers\Documents\of_v0.9.3_vs_release\addons\ofxFontStash\libs\fontstash\src;
-libs/fontstash/src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Flowers\Documents\of_v0.9.3_vs_release\addons\ofxGui\src;C:\Users\Flowers\Documents\of_v0.9.3_vs_release\addons\ofxFontStash\src;C:\Users\Flowers\Documents\of_v0.9.3_vs_release\addons\ofxFontStash\libs\fontstash\src;libs/fontstash/src;C:\Users\Flowers\Documents\of_v0.9.3_vs_release\addons\ofxPostProcessing\src;
+C:\Users\Flowers\Documents\of_v0.9.3_vs_release\addons\ofxEasing\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <CompileAs>CompileAsCpp</CompileAs>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
@@ -129,7 +124,6 @@ libs/fontstash/src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
-      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
@@ -141,10 +135,8 @@ libs/fontstash/src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories
       <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>C:\Users\Flowers\Documents\of_v0.9.3_vs_release\addons\ofxGui\src;
-C:\Users\Flowers\Documents\of_v0.9.3_vs_release\addons\ofxFontStash\src;
-C:\Users\Flowers\Documents\of_v0.9.3_vs_release\addons\ofxFontStash\libs\fontstash\src;
-libs/fontstash/src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Flowers\Documents\of_v0.9.3_vs_release\addons\ofxGui\src;C:\Users\Flowers\Documents\of_v0.9.3_vs_release\addons\ofxFontStash\src;C:\Users\Flowers\Documents\of_v0.9.3_vs_release\addons\ofxFontStash\libs\fontstash\src;libs/fontstash/src;C:\Users\Flowers\Documents\of_v0.9.3_vs_release\addons\ofxPostProcessing\src;
+C:\Users\Flowers\Documents\of_v0.9.3_vs_release\addons\ofxEasing\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <CompileAs>CompileAsCpp</CompileAs>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
@@ -155,7 +147,6 @@ libs/fontstash/src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
-      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
@@ -167,10 +158,8 @@ libs/fontstash/src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories
       <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>C:\Users\Flowers\Documents\of_v0.9.3_vs_release\addons\ofxGui\src;
-C:\Users\Flowers\Documents\of_v0.9.3_vs_release\addons\ofxFontStash\src;
-C:\Users\Flowers\Documents\of_v0.9.3_vs_release\addons\ofxFontStash\libs\fontstash\src;
-libs/fontstash/src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Flowers\Documents\of_v0.9.3_vs_release\addons\ofxGui\src;C:\Users\Flowers\Documents\of_v0.9.3_vs_release\addons\ofxFontStash\src;C:\Users\Flowers\Documents\of_v0.9.3_vs_release\addons\ofxFontStash\libs\fontstash\src;libs/fontstash/src;C:\Users\Flowers\Documents\of_v0.9.3_vs_release\addons\ofxPostProcessing\src;
+C:\Users\Flowers\Documents\of_v0.9.3_vs_release\addons\ofxEasing\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <CompileAs>CompileAsCpp</CompileAs>
     </ClCompile>
     <Link>
@@ -180,7 +169,6 @@ libs/fontstash/src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
-      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
@@ -198,11 +186,37 @@ libs/fontstash/src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories
     <ClCompile Include="..\..\..\..\addons\ofxGui\src\ofxSlider.cpp" />
     <ClCompile Include="..\..\..\..\addons\ofxGui\src\ofxSliderGroup.cpp" />
     <ClCompile Include="..\..\..\..\addons\ofxGui\src\ofxToggle.cpp" />
+    <ClCompile Include="..\..\..\..\addons\ofxPostProcessing\src\BleachBypassPass.cpp" />
+    <ClCompile Include="..\..\..\..\addons\ofxPostProcessing\src\BloomPass.cpp" />
+    <ClCompile Include="..\..\..\..\addons\ofxPostProcessing\src\ContrastPass.cpp" />
+    <ClCompile Include="..\..\..\..\addons\ofxPostProcessing\src\ConvolutionPass.cpp" />
+    <ClCompile Include="..\..\..\..\addons\ofxPostProcessing\src\DofAltPass.cpp" />
+    <ClCompile Include="..\..\..\..\addons\ofxPostProcessing\src\DofPass.cpp" />
+    <ClCompile Include="..\..\..\..\addons\ofxPostProcessing\src\EdgePass.cpp" />
+    <ClCompile Include="..\..\..\..\addons\ofxPostProcessing\src\FakeSSSPass.cpp" />
+    <ClCompile Include="..\..\..\..\addons\ofxPostProcessing\src\FxaaPass.cpp" />
+    <ClCompile Include="..\..\..\..\addons\ofxPostProcessing\src\GodRaysPass.cpp" />
+    <ClCompile Include="..\..\..\..\addons\ofxPostProcessing\src\HorizontalTiltShifPass.cpp" />
+    <ClCompile Include="..\..\..\..\addons\ofxPostProcessing\src\HsbShiftPass.cpp" />
+    <ClCompile Include="..\..\..\..\addons\ofxPostProcessing\src\KaleidoscopePass.cpp" />
+    <ClCompile Include="..\..\..\..\addons\ofxPostProcessing\src\LimbDarkeningPass.cpp" />
+    <ClCompile Include="..\..\..\..\addons\ofxPostProcessing\src\LUTPass.cpp" />
+    <ClCompile Include="..\..\..\..\addons\ofxPostProcessing\src\NoiseWarpPass.cpp" />
+    <ClCompile Include="..\..\..\..\addons\ofxPostProcessing\src\PixelatePass.cpp" />
+    <ClCompile Include="..\..\..\..\addons\ofxPostProcessing\src\PostProcessing.cpp" />
+    <ClCompile Include="..\..\..\..\addons\ofxPostProcessing\src\RenderPass.cpp" />
+    <ClCompile Include="..\..\..\..\addons\ofxPostProcessing\src\RGBShiftPass.cpp" />
+    <ClCompile Include="..\..\..\..\addons\ofxPostProcessing\src\RimHighlightingPass.cpp" />
+    <ClCompile Include="..\..\..\..\addons\ofxPostProcessing\src\SSAOPass.cpp" />
+    <ClCompile Include="..\..\..\..\addons\ofxPostProcessing\src\ToonPass.cpp" />
+    <ClCompile Include="..\..\..\..\addons\ofxPostProcessing\src\VerticalTiltShifPass.cpp" />
+    <ClCompile Include="..\..\..\..\addons\ofxPostProcessing\src\ZoomBlurPass.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\ofApp.cpp" />
     <ClCompile Include="src\Textsplosion.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\..\addons\ofxEasing\src\ofxEasing.h" />
     <ClInclude Include="..\..\..\..\addons\ofxFontStash\libs\fontstash\src\fontstash.h" />
     <ClInclude Include="..\..\..\..\addons\ofxFontStash\libs\fontstash\src\stb_truetype.h" />
     <ClInclude Include="..\..\..\..\addons\ofxFontStash\src\ofxFontStash.h" />
@@ -215,6 +229,32 @@ libs/fontstash/src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories
     <ClInclude Include="..\..\..\..\addons\ofxGui\src\ofxSlider.h" />
     <ClInclude Include="..\..\..\..\addons\ofxGui\src\ofxSliderGroup.h" />
     <ClInclude Include="..\..\..\..\addons\ofxGui\src\ofxToggle.h" />
+    <ClInclude Include="..\..\..\..\addons\ofxPostProcessing\src\BleachBypassPass.h" />
+    <ClInclude Include="..\..\..\..\addons\ofxPostProcessing\src\BloomPass.h" />
+    <ClInclude Include="..\..\..\..\addons\ofxPostProcessing\src\ContrastPass.h" />
+    <ClInclude Include="..\..\..\..\addons\ofxPostProcessing\src\ConvolutionPass.h" />
+    <ClInclude Include="..\..\..\..\addons\ofxPostProcessing\src\DofAltPass.h" />
+    <ClInclude Include="..\..\..\..\addons\ofxPostProcessing\src\DofPass.h" />
+    <ClInclude Include="..\..\..\..\addons\ofxPostProcessing\src\EdgePass.h" />
+    <ClInclude Include="..\..\..\..\addons\ofxPostProcessing\src\FakeSSSPass.h" />
+    <ClInclude Include="..\..\..\..\addons\ofxPostProcessing\src\FxaaPass.h" />
+    <ClInclude Include="..\..\..\..\addons\ofxPostProcessing\src\GodRaysPass.h" />
+    <ClInclude Include="..\..\..\..\addons\ofxPostProcessing\src\HorizontalTiltShifPass.h" />
+    <ClInclude Include="..\..\..\..\addons\ofxPostProcessing\src\HsbShiftPass.h" />
+    <ClInclude Include="..\..\..\..\addons\ofxPostProcessing\src\KaleidoscopePass.h" />
+    <ClInclude Include="..\..\..\..\addons\ofxPostProcessing\src\LimbDarkeningPass.h" />
+    <ClInclude Include="..\..\..\..\addons\ofxPostProcessing\src\LUTPass.h" />
+    <ClInclude Include="..\..\..\..\addons\ofxPostProcessing\src\NoiseWarpPass.h" />
+    <ClInclude Include="..\..\..\..\addons\ofxPostProcessing\src\ofxPostProcessing.h" />
+    <ClInclude Include="..\..\..\..\addons\ofxPostProcessing\src\PixelatePass.h" />
+    <ClInclude Include="..\..\..\..\addons\ofxPostProcessing\src\PostProcessing.h" />
+    <ClInclude Include="..\..\..\..\addons\ofxPostProcessing\src\RenderPass.h" />
+    <ClInclude Include="..\..\..\..\addons\ofxPostProcessing\src\RGBShiftPass.h" />
+    <ClInclude Include="..\..\..\..\addons\ofxPostProcessing\src\RimHighlightingPass.h" />
+    <ClInclude Include="..\..\..\..\addons\ofxPostProcessing\src\SSAOPass.h" />
+    <ClInclude Include="..\..\..\..\addons\ofxPostProcessing\src\ToonPass.h" />
+    <ClInclude Include="..\..\..\..\addons\ofxPostProcessing\src\VerticalTiltShifPass.h" />
+    <ClInclude Include="..\..\..\..\addons\ofxPostProcessing\src\ZoomBlurPass.h" />
     <ClInclude Include="src\ofApp.h" />
     <ClInclude Include="src\Textsplosion.h" />
   </ItemGroup>
