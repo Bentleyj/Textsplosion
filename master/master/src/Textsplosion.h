@@ -21,6 +21,7 @@
 #define Textsplosion_h
 
 #include "ofMain.h"
+#include "ofTessellator.h"
 
 class Textsplosion {
 public:
@@ -28,15 +29,23 @@ public:
     Textsplosion();
     //Setters
     void setText(string _text);
-    void setViewPosition(ofVec3f _pos);
 	void setViewPositionSpherical(float _r, float _theta, float _phi);
     void setUpVector(ofVec3f _upVector ) { upVector = _upVector; };
     void setCam(ofEasyCam* _cam) { cam = _cam; };
     void setFont(ofTrueTypeFont* _font) { font = _font; };
-    void setColor(int r, int g, int b, int a) { color = ofColor(r, g, b, a); };
-    void setColor(int r, int g, int b) { setColor(r, g, b, 255); };
+	void setImg(ofImage* _img) { img = _img; };
+    void setColor1(int r, int g, int b, int a) { color1 = ofColor(r, g, b, a); };
+	void setColor2(int r, int g, int b, int a) { color2 = ofColor(r, g, b, a); };
+    void setColor(int r, int g, int b) { 
+		setColor1(r, g, b, 255);
+		setColor1(r, g, b, 255);
+	};
+	void setColorGradient(int r1, int g1, int b1, int a1, int r2, int g2, int b2, int a2) { setColor1(r1, g1, b1, a1); setColor2(r2, g2, b2, a2); };
+	void setColorGradient(int r1, int g1, int b1, int r2, int g2, int b2) { setColor1(r1, g1, b1, 255.0); setColor2(r2, g2, b2, 255.0); };
 	void setCenter(ofVec3f _pos) { textCenter = _pos; };
 	void setShaders(vector<ofShader>* _shaders) { shaders = _shaders; };
+	void setDistortFactor(float _distortFactor) { distortFactor = _distortFactor; };
+	void setLineWidth(float _lineWidth) { lineWidth = _lineWidth; };
 
     //Getters
     string getText() { return text; };
@@ -44,6 +53,7 @@ public:
     ofVec3f getUpVector() { return upVector; };
 	ofVec3f getCenter() { return textCenter; };
 	float getBrightnessModifier() { return brightnessModifier; };
+	float getDistortFactor() { return distortFactor; };
     
     //Functionality
     void draw();
@@ -60,6 +70,7 @@ private:
 	ofVboMesh backgroundMesh;
 	vector<ofShader>* shaders;
 	ofQuaternion quat;
+	float distortFactor;
 
 	//ofRectangle boundingBox;
 	ofVec3f textCenter;
@@ -67,15 +78,18 @@ private:
 	ofVec3f rotationAxis;
 
 	//Looks stuff
-    ofColor color;
+    ofColor color1;
+	ofColor color2;
 	float brightnessModifier;
 	float fadeStartTime;
 	float fadeEndTime;
 	float targetBrightness;
+	float lineWidth;
 
 	//References to outside things used for calculations
 	ofEasyCam* cam;
 	ofTrueTypeFont* font;
+	ofImage* img;
 };
 
 #endif /* textsplosion_hpp */

@@ -95,10 +95,13 @@ void main(){
 
 	float cappedDistortAmount = min(distortAmount, distanceToTarget);
 
+  float percentColor;
+
 	if(gl_VertexID%2 == 0) {
 		noiseAmntZ = snoise( vec2(timeVal + gl_VertexID%1000, 1.0f)) * cappedDistortAmount;
 	} else {
 		noiseAmntZ = snoise( vec2(timeVal + gl_VertexID%1000 - 1, 1.0f)) * cappedDistortAmount;
+
 	}
 
 	pos.z += noiseAmntZ;//cos(pos.x * timeVal);//noiseAmntZ;
@@ -107,23 +110,29 @@ void main(){
 
 	float scale = distanceToObject / distanceToTarget;
 
-	pos.x *= scale;
-	pos.y *= scale;
+  pos.x *= scale;
+  pos.y *= scale;
 
-	float distToVertexFromCenter = length(pos.xyz - center);
+  float distToVertexFromCenter = length(pos.xyz - center);
+
+
+  //if(percentColor < 1.0) {
+  percentColor = brightnessModifier + map(distToVertexFromCenter, 0.0, distanceToTarget, 0.0, 1.0);
+  if(percentColor > 1.0) percentColor = 1.0;
+  // //}
+  // if(snoise(vec2(gl_VertexID - 1, 100.0f)) > 0.7) {
+  //   percentColor = 1.0;
+  // }
 
 	pos = gl_ProjectionMatrix * gl_ModelViewMatrix * pos;
 
-
-  	float percentColor = brightnessModifier + map(distToVertexFromCenter, 0.0, distanceToTarget, 0.9, 0.0);
-
-
-  	if(snoise(vec2(gl_VertexID, 100.0f)) > 0.75) {
-  		percentColor = 1.0;
-  	}
+    //if(percentColor < 0.1) {
+   //     gl_FrontColor = vec4(0.0, 0.0, 0.0, 1.0);///*gl_Color*/(colorClose * percentColor + colorFar * (1-percentColor));
+    //} else {
+    gl_FrontColor = vec4((gl_Color * percentColor).xyz, 1.0);///*gl_Color*/(colorClose * percentColor + colorFar * (1-percentColor));
+    //}
 	
 	gl_Position = pos;
 	gl_TexCoord[0] = gl_MultiTexCoord0;
-	gl_FrontColor = vec4(1.0, 1.0, 1.0, 1.0) * percentColor;///*gl_Color*/(colorClose * percentColor + colorFar * (1-percentColor));
 	
 }

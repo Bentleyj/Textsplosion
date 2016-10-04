@@ -1,28 +1,33 @@
 #include "ofApp.h"
 
-#define NUM_NAMES 50
+#define NUM_NAMES 10
 
 //--------------------------------------------------------------
 void ofApp::setup() {
 
-	ofSetWindowPosition(ofGetScreenWidth() + 10, 10);
+	ofSetWindowPosition(ofGetScreenWidth() + 10, 30);
 
 	font = new ofTrueTypeFont();
 
-	font->load("fonts/maxter_board_st/Maxter Board St.ttf", 50, true, true, true);
+	font->load("fonts/BebasNeue/BebasNeue.otf", 50, true, true, true);
+
+	//font->setLetterSpacing(10.0f);
 
 	light.setPosition(0, 0, 0);
 
 	cam.lookAt(ofVec3f(0, 0, 0));
 
-	cam.disableMouseMiddleButton();
+	img.load("images/Charlotte+Rampling+style+hippie.jpg");
 
-	gui.setup("settings.xml");
+	gui.setup("GUI", "settings/settings.xml");
+	gui.add(distortFactor.set("Distort", 500.0, 0.0, 1000.0));
+	gui.add(transitionDuration.set("Duration", 20.0, 1.0, 30.0));
+	gui.add(lineWidth.set("Line Width", 3.0, 1.0, 10.0));
+	gui.loadFromFile("settings/settings.xml");
 
 	//ofSetDataPathRoot("../Resources/data/");
 
 	post.init(ofGetWidth(), ofGetHeight());
-	//post.createPass
 
 	tiltShiftHoriPass = post.createPass<HorizontalTiltShifPass>();
 	tiltShiftHoriPass->setEnabled(true);
@@ -43,22 +48,20 @@ void ofApp::setup() {
 	camUpVectorTarget = ofVec3f(0, 1, 0);
 
 	ofBackground(ofColor(0));
-
+	//ofBackgroundGradient(ofColor(10), ofColor(0), OF_GRADIENT_CIRCULAR);
 
 	textNoise.load("shaders/textNoise.vert", "shaders/textNoise.frag");
 	backgroundNoise.load("shaders/backgroundNoise.vert", "shaders/backgroundNoise.frag");
-
 
 	shaders.push_back(textNoise);
 	shaders.push_back(backgroundNoise);
 
 	vector<string> names;
 	for (int i = 0; i < NUM_NAMES; i++) {
-		names.push_back("A QUICK");
-		names.push_back("BROWN FOX");
-		names.push_back("JUMPED OVER");
-		names.push_back("THE LAZY");
-	    names.push_back("DOG");
+		names.push_back("WELCOME");
+		names.push_back("TO");
+		names.push_back("VILLAGE");
+	    names.push_back("TV");
 	}
 
 	texts.resize(names.size());
@@ -66,8 +69,9 @@ void ofApp::setup() {
 	for (int i = 0; i < names.size(); i++) {
 		texts[i].setFont(font);
 		texts[i].setCam(&cam);
-		texts[i].setColor(ofRandom(127, 255), ofRandom(127, 255), ofRandom(127, 255));
+		texts[i].setColorGradient(ofRandom(127, 255), ofRandom(127, 255), ofRandom(127, 255), ofRandom(127, 255), ofRandom(127, 255), ofRandom(127, 255));
 		texts[i].setShaders(&shaders);
+		texts[i].setImg(&img);
 		texts[i].setText(names[i]);
 		float theta = ofRandom(0.0, 180.0);
 		float phi = ofRandom(0.0, 360.0);
@@ -77,14 +81,13 @@ void ofApp::setup() {
 
 	ofEnableAntiAliasing();
 
-	duration = 20.0f;
 	initTime = 0.0f;
 }
 
 //--------------------------------------------------------------
 void ofApp::update() {
 	float now = ofGetElapsedTimef();
-	float endTime = initTime + duration;
+	float endTime = initTime + transitionDuration;
 
 	if (now < endTime) {
 		auto easingMethod = &ofxeasing::quart::easeIn;
@@ -102,79 +105,72 @@ void ofApp::update() {
 	}
 
 	for (int i = 0; i < texts.size(); i++) {
+		texts[i].setDistortFactor(distortFactor);
+		texts[i].setLineWidth(lineWidth);
 		texts[i].update();
 	}
 }
 
 //--------------------------------------------------------------
 void ofApp::draw() {
+
 	cam.begin();
-	//post.begin(cam);
 
-	float highestPercentage = -1.0;
-	float lowestPercentage = 1.0;
-	int highestPercentageIndex;
-	for (int i = 0; i < texts.size(); i++) {
-		ofVec3f currentViewPos = cam.getPosition().normalize();
-		ofVec3f textViewPos = texts[i].getViewPosition().normalize();
-		float diff = (currentViewPos - textViewPos).length();
-		float percent = ofMap(diff, 0.0, 2.0, 1.0, 0.0, true);
-		if (percent > highestPercentage) {
-			highestPercentage = percent;
-			highestPercentageIndex = i;
-		}
-		else if (percent < lowestPercentage) {
-			lowestPercentage = percent;
-		}
-	}
 
-	//drawSquares();
+	//float highestPercentage = -1.0;
+	//float lowestPercentage = 1.0;
+	//int highestPercentageIndex;
+	//for (int i = 0; i < texts.size(); i++) {
+	//	ofVec3f currentViewPos = cam.getPosition().normalize();
+	//	ofVec3f textViewPos = texts[i].getViewPosition().normalize();
+	//	float diff = (currentViewPos - textViewPos).length();
+	//	float percent = ofMap(diff, 0.0, 2.0, 1.0, 0.0, true);
+	//	if (percent > highestPercentage) {
+	//		highestPercentage = percent;
+	//		highestPercentageIndex = i;
+	//	}
+	//	else if (percent < lowestPercentage) {
+	//		lowestPercentage = percent;
+	//	}
+	//}
 
-	//textNoise.begin();
-
-	//we want to pass in some varrying values to animate our type / color 
-
-	float distance = (cam.getPosition() - ofVec3f(0, 0, 0)).length();
-
-	//ofDrawSphere(0, 0, 0, 10);
-
-	//ofDrawAxis(100);
+	//float distance = (cam.getPosition() - ofVec3f(0, 0, 0)).length();
 
 	for (int i = 0; i < texts.size(); i++) {
 		texts[i].draw();
 	}
 	for (int i = 0; i < texts.size(); i++) {
-		if(texts[i].getBrightnessModifier() > 0.001)
+		if (texts[i].getBrightnessModifier() > 0.01) {
 			texts[i].draw();
+		}
 	}
-
-	//post.end();
-
-	//textNoise.end();
-
-	//    ofDrawAxis(10);
-
+	
 	cam.end();
 
 	if (animating) {
 		noise += 0.01;
 	}
 
-	gui.draw();
+	if (showGui) {
+		ofPushStyle();
+		ofSetColor(255);
+		gui.draw();
+		ofDrawBitmapString(ofToString(ofGetFrameRate()), 10, ofGetHeight() - 10);
+		ofPopStyle();
+	}
 
-	ofDrawBitmapString(ofToString(ofGetFrameRate()), 10, 10);
 }
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key) {
 	if (key == ' ') {
-		texts[textIndex].fadeOut(20.0f);
+		texts[textIndex].fadeOut(transitionDuration);
 		textIndex++;
 		textIndex %= texts.size();
 		float distance = (cam.getPosition() - ofVec3f(0, 0, 0)).length();
 		cameraPosTarget = texts[textIndex].getViewPosition() * distance;
 		camUpVectorTarget = texts[textIndex].getUpVector();
-		texts[textIndex].fadeIn(20.0f);
+		texts[textIndex].fadeIn(transitionDuration);
 		initTime = ofGetElapsedTimef();
 
 		camUpVectorTarget = texts[textIndex].getUpVector();
@@ -185,60 +181,9 @@ void ofApp::keyPressed(int key) {
 	if (key == 'f') {
 		ofToggleFullscreen();
 	}
-}
-
-//--------------------------------------------------------------
-ofVec3f ofApp::drawText(string text, ofVec3f viewPositionNorm) {
-	ofPushMatrix();
-	float theta = atan(viewPositionNorm.y / viewPositionNorm.x);
-	float phi = atan(sqrt(viewPositionNorm.x * viewPositionNorm.x + viewPositionNorm.y * viewPositionNorm.y) / (viewPositionNorm.z));
-	ofRotateX(theta * 180 / PI);
-	ofRotateY(phi * 180 / PI);
-	ofSetColor(0, 255, 255);
-	float dist = (ofVec3f(0, 0, 0) - cam.getPosition()).length();
-
-	ofRectangle rect = font->getStringBoundingBox(text, 0, 0);
-
-	vector<ofTTFCharacter> characters = font->getStringAsPoints(text);
-
-	ofMesh mesh;
-
-	for (int j = 0; j < characters.size(); j++) {
-		vector<ofPolyline> lines = characters[j].getOutline();
-
-		ofRectangle lineRect = lines[0].getBoundingBox();
-
-		vector<ofPoint> points = lines[0].getVertices();
-
-		for (int i = 0; i < points.size(); i++) {
-			ofColor col = ofColor(0, 255, 255/*ofMap(i, 0, points.size(), 0, 255), 0, 0*/);
-			mesh.addVertex(ofVec3f(points[i].x - rect.width / 2, -points[i].y - lineRect.getHeight() + rect.height / 2, 0));
-			mesh.addColor(col);
-			mesh.addVertex(ofVec3f(points[(i + 1) % points.size()].x - rect.width / 2, -points[(i + 1) % points.size()].y - lineRect.getHeight() + rect.height / 2, 0));
-			mesh.addColor(col);
-		}
+	if (key == 'g') {
+		showGui = !showGui;
 	}
-
-	float zOffset = ofMap(ofNoise(noise), 0, 1, 50, -50);
-	for (int i = 0; i < mesh.getNumVertices(); i++) {
-		ofVec3f vertex = mesh.getVertex(i);
-		if (i % 2 == 0) zOffset = ofMap(ofNoise(noise + i), 0, 1, 500, -500);
-		vertex.z += zOffset;
-		float distanceToTarget = (cam.getPosition() - ofVec3f(0, 0, 0)).length();
-		float distanceToObject = distanceToTarget - zOffset;
-		float scale = distanceToObject / distanceToTarget;
-		vertex.x *= scale;
-		vertex.y *= scale;
-		mesh.setVertex(i, vertex);
-	}
-
-	ofSetLineWidth(3);
-
-	mesh.setMode(OF_PRIMITIVE_LINES);
-	mesh.draw();
-	ofPopMatrix();
-
-	return viewPositionNorm;
 }
 
 //--------------------------------------------------------------
@@ -289,78 +234,4 @@ void ofApp::gotMessage(ofMessage msg) {
 //--------------------------------------------------------------
 void ofApp::dragEvent(ofDragInfo dragInfo) {
 
-}
-
-//--------------------------------------------------------------
-void ofApp::drawSquares() {
-	float distanceToTarget = (cam.getPosition() - ofVec3f(0, 0, 0)).length();
-
-	float minDist = 100;
-	float maxDist = -100;
-
-	ofSetColor(0, 0, 255);
-	float zOffset = ofMap(ofNoise(noise + noiseOffset1), 0, 1.0, minDist, maxDist);
-	float distanceToObject = distanceToTarget - zOffset;
-	float scale = distanceToObject / distanceToTarget;
-	ofDrawBox(12.5*scale, 12.5*scale, zOffset, 25 * scale, 25 * scale, 0);
-
-	zOffset = ofMap(ofNoise(noise + noiseOffset2), 0, 1.0, minDist, maxDist);
-	distanceToObject = distanceToTarget - zOffset;
-	scale = distanceToObject / distanceToTarget;
-	ofDrawBox(-12.5*scale, 12.5*scale, zOffset, 25 * scale, 25 * scale, 0);
-
-	zOffset = ofMap(ofNoise(noise + noiseOffset3), 0, 1.0, minDist, maxDist);
-	distanceToObject = distanceToTarget - zOffset;
-	scale = distanceToObject / distanceToTarget;
-	ofDrawBox(-12.5*scale, -12.5*scale, zOffset, 25 * scale, 25 * scale, 0);
-
-	zOffset = ofMap(ofNoise(noise + noiseOffset4), 0, 1.0, minDist, maxDist);
-	distanceToObject = distanceToTarget - zOffset;
-	scale = distanceToObject / distanceToTarget;
-	ofDrawBox(12.5*scale, -12.5*scale, zOffset, 25 * scale, 25 * scale, 0);
-
-	ofRotate(90, 1, 0, 0);
-	ofSetColor(0, 255, 0);
-	zOffset = ofMap(ofNoise(noise + noiseOffset1), 0, 1.0, minDist, maxDist);
-	distanceToObject = distanceToTarget - zOffset;
-	scale = distanceToObject / distanceToTarget;
-	ofDrawBox(12.5*scale, 12.5*scale, zOffset, 25 * scale, 25 * scale, 0);
-
-	zOffset = ofMap(ofNoise(noise + noiseOffset2), 0, 1.0, minDist, maxDist);
-	distanceToObject = distanceToTarget - zOffset;
-	scale = distanceToObject / distanceToTarget;
-	ofDrawBox(-12.5*scale, 12.5*scale, zOffset, 25 * scale, 25 * scale, 0);
-
-	zOffset = ofMap(ofNoise(noise + noiseOffset3), 0, 1.0, minDist, maxDist);
-	distanceToObject = distanceToTarget - zOffset;
-	scale = distanceToObject / distanceToTarget;
-	ofDrawBox(-12.5*scale, -12.5*scale, zOffset, 25 * scale, 25 * scale, 0);
-
-	zOffset = ofMap(ofNoise(noise + noiseOffset4), 0, 1.0, minDist, maxDist);
-	distanceToObject = distanceToTarget - zOffset;
-	scale = distanceToObject / distanceToTarget;
-	ofDrawBox(12.5*scale, -12.5*scale, zOffset, 25 * scale, 25 * scale, 0);
-
-	ofRotate(90, 0, 1, 0);
-
-	ofSetColor(255, 0, 0);
-	zOffset = ofMap(ofNoise(noise + noiseOffset1), 0, 1.0, minDist, maxDist);
-	distanceToObject = distanceToTarget - zOffset;
-	scale = distanceToObject / distanceToTarget;
-	ofDrawBox(12.5*scale, 12.5*scale, zOffset, 25 * scale, 25 * scale, 0);
-
-	zOffset = ofMap(ofNoise(noise + noiseOffset2), 0, 1.0, minDist, maxDist);
-	distanceToObject = distanceToTarget - zOffset;
-	scale = distanceToObject / distanceToTarget;
-	ofDrawBox(-12.5*scale, 12.5*scale, zOffset, 25 * scale, 25 * scale, 0);
-
-	zOffset = ofMap(ofNoise(noise + noiseOffset3), 0, 1.0, minDist, maxDist);
-	distanceToObject = distanceToTarget - zOffset;
-	scale = distanceToObject / distanceToTarget;
-	ofDrawBox(-12.5*scale, -12.5*scale, zOffset, 25 * scale, 25 * scale, 0);
-
-	zOffset = ofMap(ofNoise(noise + noiseOffset4), 0, 1.0, minDist, maxDist);
-	distanceToObject = distanceToTarget - zOffset;
-	scale = distanceToObject / distanceToTarget;
-	ofDrawBox(12.5*scale, -12.5*scale, zOffset, 25 * scale, 25 * scale, 0);
 }

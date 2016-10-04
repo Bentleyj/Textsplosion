@@ -5,8 +5,8 @@ uniform float timeVal = 1.0;
 uniform float distortAmount = 100.0;
 uniform vec3 camPosition;// = vec3(0.0, 0.0, 1.0);
 uniform vec3 center = vec3(0.0, 0.0, 0.0);
-uniform bool isSelected = TRUE;
 
+varying float scale;
 //
 // Description : Array and textureless GLSL 2D simplex noise function.
 //      Author : Ian McEwan, Ashima Arts.
@@ -94,36 +94,31 @@ void main(){
 
 	float cappedDistortAmount = min(distortAmount, distanceToTarget);
 
-	//if(gl_VertexID%3 == 0) {
-		noiseAmntZ = snoise( vec2(timeVal + gl_VertexID%1000, 1.0f)) * cappedDistortAmount;
-	//} else if (gl_VertexID%3 == 1) {
-	//	noiseAmntZ = snoise( vec2(timeVal + gl_VertexID%1000 - 1, 1.0f)) * cappedDistortAmount;
-	//} else if (gl_VertexID%3 == 2) {
-  //  noiseAmntZ = snoise( vec2(timeVal + gl_VertexID%1000 - 2, 1.0f)) * cappedDistortAmount;
-  //}
+	if(gl_VertexID%3 == 0) {
+		noiseAmntZ = snoise( vec2(timeVal + gl_VertexID%2000, 1.0f)) * cappedDistortAmount;
+	} else if(gl_VertexID%3 == 1) {
+		noiseAmntZ = snoise( vec2(timeVal + gl_VertexID%2000 - 1, 1.0f)) * cappedDistortAmount;
+	} else {
+		noiseAmntZ = snoise( vec2(timeVal + gl_VertexID%2000 - 2, 1.0f)) * cappedDistortAmount;
+	}
 
 	pos.z += noiseAmntZ;//cos(pos.x * timeVal);//noiseAmntZ;
 
 	float distanceToObject = distanceToTarget - noiseAmntZ;
 
-	float scale = distanceToObject / distanceToTarget;
-
+	scale = distanceToObject / distanceToTarget;
 
 	pos.x *= scale;
 	pos.y *= scale;
 
-	pos = gl_ProjectionMatrix * gl_ModelViewMatrix * pos;
-
 	float distToVertexFromCenter = length(pos.xyz - center);
+
+	pos = gl_ProjectionMatrix * gl_ModelViewMatrix * pos;
 
 	float percentColor = map(distToVertexFromCenter, 0.0, distanceToTarget, 0.1, 0.2);
 	
 	gl_Position = pos;
 	gl_TexCoord[0] = gl_MultiTexCoord0;
-	if(isSelected) {
-		gl_FrontColor = gl_Color;
-	} else  {
-		gl_FrontColor = vec4(gl_Color.rgb, percentColor);
-	}
+	gl_FrontColor = gl_Color;
 	
 }

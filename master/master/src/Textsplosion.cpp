@@ -14,6 +14,8 @@ Textsplosion::Textsplosion() {
 	fadeStartTime = 0.0;
 	fadeEndTime = 0.0;
 	brightnessModifier = 0.0;
+	distortFactor - 0.0;
+	lineWidth = 1.0;
 }
 
 void Textsplosion::update() {
@@ -30,7 +32,7 @@ void Textsplosion::draw() {
 	// We'll draw our display mesh each frame
     ofPushMatrix();
 
-    ofSetLineWidth(3);
+    ofSetLineWidth(lineWidth);
 
 	float angle;
 	ofVec3f axis;
@@ -42,22 +44,21 @@ void Textsplosion::draw() {
 
 	//(*shaders)[1].begin();
 	//(*shaders)[1].setUniform1f("timeVal", ofGetElapsedTimef() * 0.1);
-	//(*shaders)[1].setUniform1f("distortAmount", 1000.0);
+	//(*shaders)[1].setUniform1f("distortAmount", distortFactor);
 	//(*shaders)[1].setUniform3f("camPosition", cam->getPosition());
-	//(*shaders)[1].setUniform1i("isSelected", isSelected);
-	//ofSetColor(255, 0, 0, 255);
+	//(*shaders)[1].setUniform1f("brightnessModifier", brightnessModifier);
+	//(*shaders)[1].setUniformTexture("texture0", *img, 0);
 	//backgroundMesh.setMode(OF_PRIMITIVE_TRIANGLES);
 	//backgroundMesh.draw();
 	//(*shaders)[1].end();
 
-	ofSetColor(255, 255, 255);
+	ofSetColor(color1);
 	(*shaders)[0].begin();
 	(*shaders)[0].setUniform1f("timeVal", ofGetElapsedTimef() * 0.01);
-	(*shaders)[0].setUniform1f("distortAmount", 500.0);
+	(*shaders)[0].setUniform1f("distortAmount", distortFactor);
 	(*shaders)[0].setUniform3f("camPosition", cam->getPosition());
 	(*shaders)[0].setUniform1f("brightnessModifier", brightnessModifier);
 	mesh.setMode(OF_PRIMITIVE_LINES);
-
 	mesh.draw();
 	(*shaders)[0].end();
 
@@ -114,41 +115,75 @@ void Textsplosion::setText(string _text) {
 
 	// Find the string bounding box for our font about the particular text we want to write.
 	ofRectangle rect = font->getStringBoundingBox(text, 0, 0);
-	ofRectangle boundingBox = rect;
-	boundingBox.y = -boundingBox.y;
-	boundingBox.y -= boundingBox.height;
-	boundingBox.x -= boundingBox.width / 2;
+	//ofRectangle boundingBox = rect;
+	//boundingBox.y = -boundingBox.y;
+	//boundingBox.y -= boundingBox.height;
+	//boundingBox.x -= boundingBox.width / 2;
 
-	boundingBox.width += 10;
-	boundingBox.height += 10;
+	//boundingBox.width += 10;
+	//boundingBox.height += 10;
 
-	boundingBox.x -= 5;
-	boundingBox.y -= 5;
+	//boundingBox.x -= 5;
+	//boundingBox.y -= 5;
 
-	backgroundMesh.addVertex(boundingBox.getTopLeft());
-	backgroundMesh.addVertex(boundingBox.getBottomLeft());
-	backgroundMesh.addVertex(boundingBox.getTopRight());
-	backgroundMesh.addVertex(boundingBox.getBottomRight());
-	backgroundMesh.addVertex(boundingBox.getTopLeft());
-	backgroundMesh.addVertex(boundingBox.getBottomRight());
+	//backgroundMesh.addVertex(boundingBox.getTopLeft());
+	//backgroundMesh.addVertex(boundingBox.getBottomLeft());
+	//backgroundMesh.addVertex(boundingBox.getTopRight());
+	//backgroundMesh.addVertex(boundingBox.getBottomRight());
+	//backgroundMesh.addVertex(boundingBox.getTopLeft());
+	//backgroundMesh.addVertex(boundingBox.getBottomRight());
 
-	backgroundMesh.addIndex(0);
-	backgroundMesh.addIndex(1);
-	backgroundMesh.addIndex(3);
-	backgroundMesh.addIndex(4);
-	backgroundMesh.addIndex(5);
-	backgroundMesh.addIndex(2);
+	ofRectangle square = ofRectangle(-100, -100, 200, 200);
+
+	int w = 200;
+	int h = 200;
+
+	int meshSize = 6;
+
+	//backgroundMesh.addVertex(ofVec3f(-100, -100, 0));
+	//backgroundMesh.addVertex(ofVec3f(100, 100, 0));
+
+	//backgroundMesh.addIndex(0);
+	//backgroundMesh.addIndex(1);
+
+	//int xStep = w / 10; // 20;
+	//int yStep = h / 10;
+	//for (int y = 0; y < h; y += xStep) {
+	//	for (int x = 0; x < w; x += yStep) {
+	//		backgroundMesh.addVertex(ofVec3f((x - w / 2) * meshSize, (y - h / 2) * meshSize, 0));
+	//		backgroundMesh.addTexCoord(ofVec3f(x * (img->getWidth() / w), y * (img->getHeight() / h)));
+	//		backgroundMesh.addVertex(ofVec3f((x + xStep - w / 2) * meshSize, (y - h / 2) * meshSize, 0));
+	//		backgroundMesh.addTexCoord(ofVec3f((x + xStep) * (img->getWidth() / w), y * (img->getHeight() / h)));
+	//		backgroundMesh.addVertex(ofVec3f((x - w / 2) * meshSize, (y + yStep - h / 2) * meshSize, 0));
+	//		backgroundMesh.addTexCoord(ofVec3f(x * (img->getWidth() / w), (y + yStep) * (img->getHeight() / h)));
+	//	}
+	//}
+
+	//for (int y = h; y > 0; y -= xStep) {
+	//	for (int x = w; x > 0; x -= yStep) {
+	//		backgroundMesh.addVertex(ofVec3f((x - w / 2) * meshSize, (y - h / 2) * meshSize, 0));
+	//		backgroundMesh.addTexCoord(ofVec3f(x * (img->getWidth() / w), y * (img->getHeight() / h)));
+	//		backgroundMesh.addVertex(ofVec3f((x - xStep - w / 2) * meshSize, (y - h / 2) * meshSize, 0));
+	//		backgroundMesh.addTexCoord(ofVec3f((x - xStep) * (img->getWidth() / w), y * (img->getHeight() / h)));
+	//		backgroundMesh.addVertex(ofVec3f((x - w / 2) * meshSize, (y - yStep - h / 2) * meshSize, 0));
+	//		backgroundMesh.addTexCoord(ofVec3f(x * (img->getWidth() / w), (y - yStep) * (img->getHeight() / h)));
+	//	}
+	//}
 
 	// Get the text as a vector of ofTTFCharacters, these characters have a whole bunch of info about the text.
 	vector<ofTTFCharacter> characters = font->getStringAsPoints(text);
-
+	characters[0].draw();
 	// Go through all the characters
 	for (int j = 0; j < characters.size(); j++) {
 		// Get the outline of each character
 		vector<ofPolyline> lines = characters[j].getOutline();
+		//ofTessellator tess;
 
-		// Get the bounding box of the first outline (this should always be the largest outline)
-		ofRectangle lineRect = lines[0].getBoundingBox();
+
+		//for (int i = 0; i < tessMesh.getNumVertices(); i++) {
+		//	mesh.addVertex(tessMesh.getVertex(i));
+		//	mesh.addColor(ofColor(255, 255, 255));
+		//}
 
 		for (int k = 0; k < lines.size(); k++) {
 
@@ -158,11 +193,10 @@ void Textsplosion::setText(string _text) {
 			//Go through all the points and add them to the meshes
 			for (int i = 0; i < points.size(); i++) {
 				mesh.addVertex(ofVec3f(points[i].x - rect.width / 2, -points[i].y - rect.height / 2, 0));
-				mesh.addColor(ofColor(255, 255, 255));
+				mesh.addColor(color1);
 				mesh.addVertex(ofVec3f(points[(i + 1) % points.size()].x - rect.width / 2, -points[(i + 1) % points.size()].y - rect.height / 2, 0));
-				mesh.addColor(ofColor(255, 255, 255));
+				mesh.addColor(color2);
 			}
 		}
-		mesh = mesh;
 	}
 };

@@ -26,14 +26,16 @@ public:
 	void dragEvent(ofDragInfo dragInfo);
 	void gotMessage(ofMessage msg);
 
-	void drawSquares();
-	ofVec3f drawText(string text, ofVec3f viewPositionNorm);
-
 	vector<Textsplosion> texts;
 
 	ofxPanel gui;
 
 	vector<ofVec2f> positions;
+
+	ofParameter<float> distortFactor;
+	ofParameter<float> transitionDuration;
+	ofParameter<float> lineWidth;
+
 
 	ofVec3f cameraPosTarget;
 	ofVec3f camUpVectorTarget;
@@ -48,11 +50,14 @@ public:
 	int textIndex;
 
 	bool animating = false;
+	bool showGui = true;
 
 	ofTrueTypeFont* font;
 
 	ofShader textNoise;
 	ofShader backgroundNoise;
+
+	ofImage img;
 
 	ofxPostProcessing post;
 
