@@ -40,6 +40,9 @@
     <ClCompile Include="..\..\..\..\addons\ofxFontStash\libs\fontstash\src\stb_truetype.c">
       <Filter>addons\ofxFontStash\libs\fontstash\src</Filter>
     </ClCompile>
+    <ClCompile Include="src\triangulate.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -74,6 +77,12 @@
     </Filter>
     <Filter Include="addons\ofxFontStash\libs\fontstash\src">
       <UniqueIdentifier>{5e3a1eac-ef98-44ae-8b0d-78eb8b11caee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="data">
+      <UniqueIdentifier>{278c95c4-969c-4cc8-b234-2ef4ea4f2b08}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="data\shaders">
+      <UniqueIdentifier>{c2cde891-fc21-4327-86f6-30a13b5b63b6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -119,8 +128,25 @@
     <ClInclude Include="..\..\..\..\addons\ofxFontStash\libs\fontstash\src\stb_truetype.h">
       <Filter>addons\ofxFontStash\libs\fontstash\src</Filter>
     </ClInclude>
+    <ClInclude Include="src\triangulate.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="icon.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bin\data\shaders\backgroundNoise.frag">
+      <Filter>data\shaders</Filter>
+    </None>
+    <None Include="bin\data\shaders\backgroundNoise.vert">
+      <Filter>data\shaders</Filter>
+    </None>
+    <None Include="bin\data\shaders\textNoise.frag">
+      <Filter>data\shaders</Filter>
+    </None>
+    <None Include="bin\data\shaders\textNoise.vert">
+      <Filter>data\shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

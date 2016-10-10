@@ -2,6 +2,9 @@
 
 #include "ofMain.h"
 #include "ofxFontStash.h"
+#include "ofxGui.h"
+#include "triangulate.h"
+
 
 class ofApp : public ofBaseApp{
 
@@ -24,8 +27,17 @@ class ofApp : public ofBaseApp{
 
 		ofTrueTypeFont font;
 
+		ofShader shader;
+
 		ofEasyCam cam;
 
 		string text;
+
+		ofMesh finalMesh;
+		ofMesh originalMesh;
+
+		ofParameter<int> meshIndex;
+
+		ofxPanel gui;
 
 };

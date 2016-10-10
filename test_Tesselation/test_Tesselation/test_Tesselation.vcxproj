@@ -200,6 +200,7 @@ libs/fontstash/src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories
     <ClCompile Include="..\..\..\..\addons\ofxGui\src\ofxToggle.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\ofApp.cpp" />
+    <ClCompile Include="src\triangulate.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\addons\ofxEasing\src\ofxEasing.h" />
@@ -216,6 +217,7 @@ libs/fontstash/src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories
     <ClInclude Include="..\..\..\..\addons\ofxGui\src\ofxSliderGroup.h" />
     <ClInclude Include="..\..\..\..\addons\ofxGui\src\ofxToggle.h" />
     <ClInclude Include="src\ofApp.h" />
+    <ClInclude Include="src\triangulate.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="$(OF_ROOT)\libs\openFrameworksCompiled\project\vs\openframeworksLib.vcxproj">
@@ -228,6 +230,12 @@ libs/fontstash/src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">/D_DEBUG %(AdditionalOptions)</AdditionalOptions>
       <AdditionalIncludeDirectories>$(OF_ROOT)\libs\openFrameworksCompiled\project\vs</AdditionalIncludeDirectories>
     </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bin\data\shaders\backgroundNoise.frag" />
+    <None Include="bin\data\shaders\backgroundNoise.vert" />
+    <None Include="bin\data\shaders\textNoise.frag" />
+    <None Include="bin\data\shaders\textNoise.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ProjectExtensions>

@@ -206,7 +206,6 @@ void ofApp::draw() {
 }
 
 void ofApp::goToNextText() {
-	cout << "Going!" << endl;
 	texts[textIndex].fadeOut(transitionDuration);
 	textIndex++;
 	textIndex %= images.size();
