@@ -1,0 +1,126 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="src\ofApp.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\main.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\addons\ofxGui\src\ofxBaseGui.cpp">
+      <Filter>addons\ofxGui\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\addons\ofxGui\src\ofxButton.cpp">
+      <Filter>addons\ofxGui\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\addons\ofxGui\src\ofxGuiGroup.cpp">
+      <Filter>addons\ofxGui\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\addons\ofxGui\src\ofxLabel.cpp">
+      <Filter>addons\ofxGui\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\addons\ofxGui\src\ofxPanel.cpp">
+      <Filter>addons\ofxGui\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\addons\ofxGui\src\ofxSlider.cpp">
+      <Filter>addons\ofxGui\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\addons\ofxGui\src\ofxSliderGroup.cpp">
+      <Filter>addons\ofxGui\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\addons\ofxGui\src\ofxToggle.cpp">
+      <Filter>addons\ofxGui\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\addons\ofxFontStash\src\ofxFontStash.cpp">
+      <Filter>addons\ofxFontStash\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\addons\ofxFontStash\libs\fontstash\src\fontstash.c">
+      <Filter>addons\ofxFontStash\libs\fontstash\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\addons\ofxFontStash\libs\fontstash\src\stb_truetype.c">
+      <Filter>addons\ofxFontStash\libs\fontstash\src</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="src">
+      <UniqueIdentifier>{d8376475-7454-4a24-b08a-aac121d3ad6f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons">
+      <UniqueIdentifier>{f0578602-9ee6-454d-8064-73681809ac5a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxGui">
+      <UniqueIdentifier>{3f301d28-5e76-4e36-90ae-db34b9031500}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxGui\src">
+      <UniqueIdentifier>{92cd64d8-8f82-4976-97da-388b29072ee5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxEasing">
+      <UniqueIdentifier>{a27927c1-f177-4271-90c8-5becd9504194}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxEasing\src">
+      <UniqueIdentifier>{4b9e24f3-68b0-416e-8e38-2904bb716bd4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxFontStash">
+      <UniqueIdentifier>{6a5bf48c-0441-45ad-a140-e3828115da29}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxFontStash\src">
+      <UniqueIdentifier>{82776886-9c2c-46bf-ae77-6bad624b5e72}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxFontStash\libs">
+      <UniqueIdentifier>{5f1fa714-06c1-430b-bfb9-22632d6ab24f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxFontStash\libs\fontstash">
+      <UniqueIdentifier>{34f22c75-ab6d-4fd2-9369-3843e4619837}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxFontStash\libs\fontstash\src">
+      <UniqueIdentifier>{5e3a1eac-ef98-44ae-8b0d-78eb8b11caee}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\ofApp.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\addons\ofxGui\src\ofxBaseGui.h">
+      <Filter>addons\ofxGui\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\addons\ofxGui\src\ofxButton.h">
+      <Filter>addons\ofxGui\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\addons\ofxGui\src\ofxGui.h">
+      <Filter>addons\ofxGui\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\addons\ofxGui\src\ofxGuiGroup.h">
+      <Filter>addons\ofxGui\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\addons\ofxGui\src\ofxLabel.h">
+      <Filter>addons\ofxGui\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\addons\ofxGui\src\ofxPanel.h">
+      <Filter>addons\ofxGui\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\addons\ofxGui\src\ofxSlider.h">
+      <Filter>addons\ofxGui\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\addons\ofxGui\src\ofxSliderGroup.h">
+      <Filter>addons\ofxGui\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\addons\ofxGui\src\ofxToggle.h">
+      <Filter>addons\ofxGui\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\addons\ofxEasing\src\ofxEasing.h">
+      <Filter>addons\ofxEasing\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\addons\ofxFontStash\src\ofxFontStash.h">
+      <Filter>addons\ofxFontStash\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\addons\ofxFontStash\libs\fontstash\src\fontstash.h">
+      <Filter>addons\ofxFontStash\libs\fontstash\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\addons\ofxFontStash\libs\fontstash\src\stb_truetype.h">
+      <Filter>addons\ofxFontStash\libs\fontstash\src</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="icon.rc" />
+  </ItemGroup>
+</Project>

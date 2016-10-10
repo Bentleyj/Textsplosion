@@ -118,6 +118,9 @@
     <ClCompile Include="..\..\..\..\addons\ofxPostProcessing\src\ZoomBlurPass.cpp">
       <Filter>addons\ofxPostProcessing\src</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\addons\ofxNestedFileLoader\src\ofxNestedFileLoader.cpp">
+      <Filter>addons\ofxNestedFileLoader\src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -158,6 +161,18 @@
     </Filter>
     <Filter Include="addons\ofxEasing\src">
       <UniqueIdentifier>{60a46c9a-8c02-42da-867f-0a5b54dc07f8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="data">
+      <UniqueIdentifier>{1de3a9ca-47f9-4640-b64e-d21ba37057cd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="data\shaders">
+      <UniqueIdentifier>{0820afc7-5fda-4c7f-a118-772fe2f26333}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxNestedFileLoader">
+      <UniqueIdentifier>{a2df100e-19e3-4bbb-abca-c3297db3fb9e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxNestedFileLoader\src">
+      <UniqueIdentifier>{628b85e8-6a0d-4c2b-b05a-929eec413e42}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -284,8 +299,25 @@
     <ClInclude Include="..\..\..\..\addons\ofxEasing\src\ofxEasing.h">
       <Filter>addons\ofxEasing\src</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\..\addons\ofxNestedFileLoader\src\ofxNestedFileLoader.h">
+      <Filter>addons\ofxNestedFileLoader\src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="icon.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bin\data\shaders\backgroundNoise.frag">
+      <Filter>data\shaders</Filter>
+    </None>
+    <None Include="bin\data\shaders\backgroundNoise.vert">
+      <Filter>data\shaders</Filter>
+    </None>
+    <None Include="bin\data\shaders\textNoise.frag">
+      <Filter>data\shaders</Filter>
+    </None>
+    <None Include="bin\data\shaders\textNoise.vert">
+      <Filter>data\shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

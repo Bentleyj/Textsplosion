@@ -46,6 +46,29 @@ public:
 	void setShaders(vector<ofShader>* _shaders) { shaders = _shaders; };
 	void setDistortFactor(float _distortFactor) { distortFactor = _distortFactor; };
 	void setLineWidth(float _lineWidth) { lineWidth = _lineWidth; };
+	void setShardSize(ofVec2f _size) {
+		int width = 200;//(int)(img->getWidth());
+		int height = 200;//(int)(img->getWidth());
+
+		//if ((int)(_size.x) % width) {
+		//	ofLogError("Textsplosion::setShardSize(): Warning, the width of your image: " + ofToString(width) + " does not divide evenly into your shard size x: " + ofToString(_size.x) + ".\n Setting anyway but expect holes.\n Options are that do divide evenly are:");
+		//	for (int i = 0; i < width; i++) {
+		//		if (i % width == 0) {
+		//			ofLogError("Texsplosion::setShardSize(): " + ofToString(i) + "\n");
+		//		}
+		//	}
+		//}
+		//if ((int)(_size.y) % (int)(height)) {
+		//	ofLogError("Warning, the width of your image: " + ofToString(height) + " does not divide evenly into your shard size x: " + ofToString(_size.y) + ".\n Setting anyway but expect holes\n Options are that do divide evenly are:");
+		//	for (int i = 0; i < width; i++) {
+		//		if (i%width == 0) {
+		//			ofLogError("Texsplosion::setShardSize(): " + ofToString(i) + "\n");
+		//		}
+		//	}
+		//}
+		shardSize = _size;
+	};
+	void setShardSize(float _x, float _y) { setShardSize(ofVec2f(_x, _y)); };
 
     //Getters
     string getText() { return text; };
@@ -54,6 +77,7 @@ public:
 	ofVec3f getCenter() { return textCenter; };
 	float getBrightnessModifier() { return brightnessModifier; };
 	float getDistortFactor() { return distortFactor; };
+	ofVec2f getShardSize() { return shardSize; };
     
     //Functionality
     void draw();
@@ -68,9 +92,13 @@ private:
 	ofVec3f upVector;
 	ofVboMesh mesh;
 	ofVboMesh backgroundMesh;
-	vector<ofShader>* shaders;
 	ofQuaternion quat;
+	ofVec2f shardSize;
+
+	//uniforms to go to the various shaders
+	vector<ofShader>* shaders;
 	float distortFactor;
+
 
 	//ofRectangle boundingBox;
 	ofVec3f textCenter;

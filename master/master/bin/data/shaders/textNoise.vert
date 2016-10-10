@@ -117,7 +117,10 @@ void main(){
 
 
   //if(percentColor < 1.0) {
-  percentColor = brightnessModifier + map(distToVertexFromCenter, 0.0, distanceToTarget, 0.0, 1.0);
+  float normalizedDist =  map(distToVertexFromCenter, 0.0, 300.0/*distanceToTarget*/, 0.0, 1.0);
+
+  percentColor = brightnessModifier;
+
   if(percentColor > 1.0) percentColor = 1.0;
   // //}
   // if(snoise(vec2(gl_VertexID - 1, 100.0f)) > 0.7) {
@@ -129,7 +132,12 @@ void main(){
     //if(percentColor < 0.1) {
    //     gl_FrontColor = vec4(0.0, 0.0, 0.0, 1.0);///*gl_Color*/(colorClose * percentColor + colorFar * (1-percentColor));
     //} else {
-    gl_FrontColor = vec4((gl_Color * percentColor).xyz, 1.0);///*gl_Color*/(colorClose * percentColor + colorFar * (1-percentColor));
+	vec4 col1 = vec4(0.200, 0.600, 0.750, 1.0);
+	vec4 col2 = vec4(0.900, 0.600, 0.600, 1.0);
+
+	vec4 newCol = mix(col2, col1, normalizedDist);
+
+    gl_FrontColor = vec4((gl_Color * percentColor + newCol * (1 - percentColor)).xyz, 0.5 + percentColor);///*gl_Color*/(colorClose * percentColor + colorFar * (1-percentColor));
     //}
 	
 	gl_Position = pos;

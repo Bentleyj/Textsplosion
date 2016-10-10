@@ -16,6 +16,7 @@ Textsplosion::Textsplosion() {
 	brightnessModifier = 0.0;
 	distortFactor - 0.0;
 	lineWidth = 1.0;
+	shardSize = ofVec2f(1, 1);
 }
 
 void Textsplosion::update() {
@@ -42,25 +43,27 @@ void Textsplosion::draw() {
 
 	//ofDrawAxis(100);
 
-	//(*shaders)[1].begin();
-	//(*shaders)[1].setUniform1f("timeVal", ofGetElapsedTimef() * 0.1);
-	//(*shaders)[1].setUniform1f("distortAmount", distortFactor);
-	//(*shaders)[1].setUniform3f("camPosition", cam->getPosition());
-	//(*shaders)[1].setUniform1f("brightnessModifier", brightnessModifier);
-	//(*shaders)[1].setUniformTexture("texture0", *img, 0);
-	//backgroundMesh.setMode(OF_PRIMITIVE_TRIANGLES);
-	//backgroundMesh.draw();
-	//(*shaders)[1].end();
+	(*shaders)[1].begin();
+	(*shaders)[1].setUniform1f("timeVal", 0.01);
+	(*shaders)[1].setUniform1f("distortAmount", distortFactor);
+	(*shaders)[1].setUniform3f("camPosition", cam->getPosition());
+	(*shaders)[1].setUniform1f("brightnessModifier", brightnessModifier);
+	(*shaders)[1].setUniformTexture("texture0", *img, 0);
+	img->bind();
+	backgroundMesh.setMode(OF_PRIMITIVE_TRIANGLES);
+	backgroundMesh.draw();
+	img->unbind();
+	(*shaders)[1].end();
 
-	ofSetColor(color1);
-	(*shaders)[0].begin();
-	(*shaders)[0].setUniform1f("timeVal", ofGetElapsedTimef() * 0.01);
-	(*shaders)[0].setUniform1f("distortAmount", distortFactor);
-	(*shaders)[0].setUniform3f("camPosition", cam->getPosition());
-	(*shaders)[0].setUniform1f("brightnessModifier", brightnessModifier);
-	mesh.setMode(OF_PRIMITIVE_LINES);
-	mesh.draw();
-	(*shaders)[0].end();
+	//ofSetColor(color1);
+	//(*shaders)[0].begin();
+	//(*shaders)[0].setUniform1f("timeVal", ofGetElapsedTimef() * 0.01);
+	//(*shaders)[0].setUniform1f("distortAmount", distortFactor);
+	//(*shaders)[0].setUniform3f("camPosition", cam->getPosition());
+	//(*shaders)[0].setUniform1f("brightnessModifier", brightnessModifier);
+	//mesh.setMode(OF_PRIMITIVE_LINES);
+	//mesh.draw();
+	//(*shaders)[0].end();
 
     ofPopMatrix();
 }
@@ -135,10 +138,8 @@ void Textsplosion::setText(string _text) {
 
 	ofRectangle square = ofRectangle(-100, -100, 200, 200);
 
-	int w = 200;
-	int h = 200;
-
-	int meshSize = 6;
+	int w = 200;//img->getWidth();
+	int h = 200;//img->getHeight();//w * img->getWidth() / img->getHeight();
 
 	//backgroundMesh.addVertex(ofVec3f(-100, -100, 0));
 	//backgroundMesh.addVertex(ofVec3f(100, 100, 0));
@@ -146,33 +147,41 @@ void Textsplosion::setText(string _text) {
 	//backgroundMesh.addIndex(0);
 	//backgroundMesh.addIndex(1);
 
-	//int xStep = w / 10; // 20;
-	//int yStep = h / 10;
-	//for (int y = 0; y < h; y += xStep) {
-	//	for (int x = 0; x < w; x += yStep) {
-	//		backgroundMesh.addVertex(ofVec3f((x - w / 2) * meshSize, (y - h / 2) * meshSize, 0));
-	//		backgroundMesh.addTexCoord(ofVec3f(x * (img->getWidth() / w), y * (img->getHeight() / h)));
-	//		backgroundMesh.addVertex(ofVec3f((x + xStep - w / 2) * meshSize, (y - h / 2) * meshSize, 0));
-	//		backgroundMesh.addTexCoord(ofVec3f((x + xStep) * (img->getWidth() / w), y * (img->getHeight() / h)));
-	//		backgroundMesh.addVertex(ofVec3f((x - w / 2) * meshSize, (y + yStep - h / 2) * meshSize, 0));
-	//		backgroundMesh.addTexCoord(ofVec3f(x * (img->getWidth() / w), (y + yStep) * (img->getHeight() / h)));
-	//	}
-	//}
+	// Every bit is chosen
+	int xStep = shardSize.x;
+	int yStep = shardSize.y;
+	for (int y = 0; y < h; y += yStep) {
+		for (int x = 0; x < w; x += xStep) {
+			backgroundMesh.addVertex(ofVec3f((x - w / 2), (y - h / 2), 0));
+			//backgroundMesh.addColor(ofColor(255, 0, 0));
+			backgroundMesh.addTexCoord(ofVec3f(x * (img->getWidth() / w), img->getHeight() - y * (img->getHeight() / h)));
+			backgroundMesh.addVertex(ofVec3f((x + xStep - w / 2), (y - h / 2), 0));
+			//backgroundMesh.addColor(ofColor(255, 0, 0));
+			backgroundMesh.addTexCoord(ofVec3f((x + xStep) * (img->getWidth() / w), img->getHeight() -  y * (img->getHeight() / h)));
+			backgroundMesh.addVertex(ofVec3f((x - w / 2), (y + yStep - h / 2), 0));
+			//backgroundMesh.addColor(ofColor(255, 0, 0));
+			backgroundMesh.addTexCoord(ofVec3f(x * (img->getWidth() / w), img->getHeight() - (y + yStep) * (img->getHeight() / h)));
+		}
+	}
 
-	//for (int y = h; y > 0; y -= xStep) {
-	//	for (int x = w; x > 0; x -= yStep) {
-	//		backgroundMesh.addVertex(ofVec3f((x - w / 2) * meshSize, (y - h / 2) * meshSize, 0));
-	//		backgroundMesh.addTexCoord(ofVec3f(x * (img->getWidth() / w), y * (img->getHeight() / h)));
-	//		backgroundMesh.addVertex(ofVec3f((x - xStep - w / 2) * meshSize, (y - h / 2) * meshSize, 0));
-	//		backgroundMesh.addTexCoord(ofVec3f((x - xStep) * (img->getWidth() / w), y * (img->getHeight() / h)));
-	//		backgroundMesh.addVertex(ofVec3f((x - w / 2) * meshSize, (y - yStep - h / 2) * meshSize, 0));
-	//		backgroundMesh.addTexCoord(ofVec3f(x * (img->getWidth() / w), (y - yStep) * (img->getHeight() / h)));
-	//	}
-	//}
+	for (int y = h; y > 0; y -= yStep) {
+		for (int x = w; x > 0; x -= xStep) {
+			backgroundMesh.addVertex(ofVec3f((x - w / 2), (y - h / 2), 0));
+			//backgroundMesh.addColor(ofColor(0, 0, 255));
+			backgroundMesh.addTexCoord(ofVec3f(x * (img->getWidth() / w), img->getHeight() - y * (img->getHeight() / h)));
+			backgroundMesh.addVertex(ofVec3f((x - xStep - w / 2), (y - h / 2), 0));
+			//backgroundMesh.addColor(ofColor(0, 0, 255));
+			backgroundMesh.addTexCoord(ofVec3f((x - xStep) * (img->getWidth() / w), img->getHeight() - y * (img->getHeight() / h)));
+			backgroundMesh.addVertex(ofVec3f((x - w / 2), (y - yStep - h / 2), 0));
+			//backgroundMesh.addColor(ofColor(0, 0, 255));
+			backgroundMesh.addTexCoord(ofVec3f(x * (img->getWidth() / w), img->getHeight() - (y - yStep) * (img->getHeight() / h)));
+		}
+	}
+	//Heres a random version
 
 	// Get the text as a vector of ofTTFCharacters, these characters have a whole bunch of info about the text.
 	vector<ofTTFCharacter> characters = font->getStringAsPoints(text);
-	characters[0].draw();
+	//characters[0].draw();
 	// Go through all the characters
 	for (int j = 0; j < characters.size(); j++) {
 		// Get the outline of each character
@@ -190,12 +199,13 @@ void Textsplosion::setText(string _text) {
 			// Get the vertices of all the points in each of the lines
 			vector<ofPoint> points = lines[k].getVertices();
 
-			//Go through all the points and add them to the meshes
+			// Go through all the points and add them to the meshes
 			for (int i = 0; i < points.size(); i++) {
 				mesh.addVertex(ofVec3f(points[i].x - rect.width / 2, -points[i].y - rect.height / 2, 0));
-				mesh.addColor(color1);
+				mesh.addColor(color1.getLerped(color2, points[i].x / (rect.getWidth() + 10)));
 				mesh.addVertex(ofVec3f(points[(i + 1) % points.size()].x - rect.width / 2, -points[(i + 1) % points.size()].y - rect.height / 2, 0));
-				mesh.addColor(color2);
+				int index2 = ((i + 1) > points.size() - 1) ? points.size() - 1 : i + 1;
+				mesh.addColor(color1.getLerped(color2, points[index2].x / (rect.getWidth() + 10)));
 			}
 		}
 	}

@@ -6,6 +6,7 @@
 #include "Textsplosion.h"
 #include "ofxPostProcessing.h"
 #include "ofxEasing.h"
+#include "ofxNestedFileLoader.h"
 
 class ofApp : public ofBaseApp {
 
@@ -25,6 +26,8 @@ public:
 	void windowResized(int w, int h);
 	void dragEvent(ofDragInfo dragInfo);
 	void gotMessage(ofMessage msg);
+
+	void goToNextText();
 
 	vector<Textsplosion> texts;
 
@@ -57,14 +60,14 @@ public:
 	ofShader textNoise;
 	ofShader backgroundNoise;
 
-	ofImage img;
+	vector<ofImage> images;
 
 	ofxPostProcessing post;
 
 	float initTime;
 	float duration;
 
-	HorizontalTiltShifPass::Ptr tiltShiftHoriPass;
+	DofAltPass::Ptr tiltShiftHoriPass;
 
 	vector<ofShader> shaders;
 

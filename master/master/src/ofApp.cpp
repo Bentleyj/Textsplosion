@@ -9,6 +9,8 @@ void ofApp::setup() {
 
 	font = new ofTrueTypeFont();
 
+	ofSetLogLevel(OF_LOG_WARNING);
+
 	font->load("fonts/BebasNeue/BebasNeue.otf", 50, true, true, true);
 
 	//font->setLetterSpacing(10.0f);
@@ -17,7 +19,7 @@ void ofApp::setup() {
 
 	cam.lookAt(ofVec3f(0, 0, 0));
 
-	img.load("images/Charlotte+Rampling+style+hippie.jpg");
+	//img.load("images/Village split image.png");
 
 	gui.setup("GUI", "settings/settings.xml");
 	gui.add(distortFactor.set("Distort", 500.0, 0.0, 1000.0));
@@ -29,9 +31,11 @@ void ofApp::setup() {
 
 	post.init(ofGetWidth(), ofGetHeight());
 
-	tiltShiftHoriPass = post.createPass<HorizontalTiltShifPass>();
-	tiltShiftHoriPass->setEnabled(true);
-	tiltShiftHoriPass->setH(0.005);
+	post.createPass<HorizontalTiltShifPass>()->setEnabled(true);
+	post.createPass<GodRaysPass>()->setEnabled(true);
+
+	//tiltShiftHoriPass->setEnabled(true);
+	//tiltShiftHoriPass->setH(0.005);
 
 	noiseOffset1 = 0;
 	noiseOffset2 = 1000;
@@ -56,32 +60,68 @@ void ofApp::setup() {
 	shaders.push_back(textNoise);
 	shaders.push_back(backgroundNoise);
 
-	vector<string> names;
-	for (int i = 0; i < NUM_NAMES; i++) {
-		names.push_back("WELCOME");
-		names.push_back("TO");
-		names.push_back("VILLAGE");
-	    names.push_back("TV");
+	ofxNestedFileLoader loader;
+	vector<string> imageNames = loader.load("images/finalPNGS");
+
+	//vector<string> names;
+	//for (int i = 0; i < imageNames.size(; i++) {
+	//	names.push_back("A");
+	//	//names.push_back("VILLAGE");
+	//	//names.push_back("MEDIA");
+	//}
+
+	//texts.resize(imageNames.size() * NUM_NAMES);
+	images.resize(imageNames.size());
+
+	vector<ofVec2f> shardSizes;
+	for (int i = 0; i < images.size(); i++) {
+		shardSizes.push_back(ofVec2f(10, 10));
 	}
 
-	texts.resize(names.size());
+	shardSizes[0] = ofVec2f(10, 10); // Village White
+	shardSizes[1] = ofVec2f(1, 200); // Spring Summer 2017
+	shardSizes[2] = ofVec2f(200, 1); // Press Open Day Tue 1st & Wed 2nd Niovmeber 9am-6pm 2016
+	shardSizes[3] = ofVec2f(1, 1); // 140 Old St London EC1V 9BJ
+	shardSizes[4] = ofVec2f(5, 5); // RSVP hello@wearevillage.com
+	shardSizes[5] = ofVec2f(10, 10); // Village Gradient
 
-	for (int i = 0; i < names.size(); i++) {
-		texts[i].setFont(font);
-		texts[i].setCam(&cam);
-		texts[i].setColorGradient(ofRandom(127, 255), ofRandom(127, 255), ofRandom(127, 255), ofRandom(127, 255), ofRandom(127, 255), ofRandom(127, 255));
-		texts[i].setShaders(&shaders);
-		texts[i].setImg(&img);
-		texts[i].setText(names[i]);
+	for (int i = 0; i < imageNames.size(); i++) {
 		float theta = ofRandom(0.0, 180.0);
 		float phi = ofRandom(0.0, 360.0);
-		texts[i].setViewPositionSpherical(150.0, theta, phi);
-		texts[i].setCenter(ofVec3f(0, 0, 0));
+		images[i].load(imageNames[i]);
+		Textsplosion tempText;
+		tempText.setFont(font);
+		tempText.setCam(&cam);
+		tempText.setColorGradient(ofRandom(0, 127), ofRandom(127, 255), ofRandom(127, 255), ofRandom(0, 127), ofRandom(127, 255), ofRandom(127, 255));
+		tempText.setShaders(&shaders);
+		tempText.setImg(&(images[i]));
+		tempText.setShardSize(shardSizes[i]);
+		tempText.setText("A");
+		tempText.setViewPositionSpherical(150.0, theta, phi);
+		tempText.setCenter(ofVec3f(0, 0, 0));
+		texts.push_back(tempText);
+	}
+
+	for (int i = 0; i < NUM_NAMES; i++) {
+		float theta = ofRandom(0.0, 180.0);
+		float phi = ofRandom(0.0, 360.0);
+		Textsplosion tempText;
+		tempText.setFont(font);
+		tempText.setCam(&cam);
+		tempText.setColorGradient(ofRandom(0, 127), ofRandom(127, 255), ofRandom(127, 255), ofRandom(0, 127), ofRandom(127, 255), ofRandom(127, 255));
+		tempText.setShaders(&shaders);
+		tempText.setImg(&(images[i%imageNames.size()]));
+		tempText.setShardSize(ofRandom(1, 10), ofRandom(1, 10));
+		tempText.setText("A");
+		tempText.setViewPositionSpherical(150.0, theta, phi);
+		tempText.setCenter(ofVec3f(0, 0, 0));
+		texts.push_back(tempText);
 	}
 
 	ofEnableAntiAliasing();
 
 	initTime = 0.0f;
+
 }
 
 //--------------------------------------------------------------
@@ -103,6 +143,9 @@ void ofApp::update() {
 
 		cam.lookAt(ofVec3f(0, 0, 0), ofVec3f(newUpX, newUpY, newUpZ));
 	}
+	else if(animating) {
+		goToNextText();
+	}
 
 	for (int i = 0; i < texts.size(); i++) {
 		texts[i].setDistortFactor(distortFactor);
@@ -114,8 +157,8 @@ void ofApp::update() {
 //--------------------------------------------------------------
 void ofApp::draw() {
 
-	cam.begin();
-
+	//cam.begin();
+	post.begin(cam);
 
 	//float highestPercentage = -1.0;
 	//float lowestPercentage = 1.0;
@@ -135,21 +178,22 @@ void ofApp::draw() {
 	//}
 
 	//float distance = (cam.getPosition() - ofVec3f(0, 0, 0)).length();
-
+	//ofEnableDepthTest();
 	for (int i = 0; i < texts.size(); i++) {
 		texts[i].draw();
 	}
+	//texts[textIndex].draw();
+	//ofDisableDepthTest();
+	
+	post.end();
+	cam.begin();
 	for (int i = 0; i < texts.size(); i++) {
-		if (texts[i].getBrightnessModifier() > 0.01) {
+		if (texts[i].getBrightnessModifier() > 0.4) {
 			texts[i].draw();
 		}
 	}
-	
 	cam.end();
-
-	if (animating) {
-		noise += 0.01;
-	}
+	//cam.end();
 
 	if (showGui) {
 		ofPushStyle();
@@ -161,19 +205,24 @@ void ofApp::draw() {
 
 }
 
+void ofApp::goToNextText() {
+	cout << "Going!" << endl;
+	texts[textIndex].fadeOut(transitionDuration);
+	textIndex++;
+	textIndex %= images.size();
+	float distance = 125;
+	cameraPosTarget = texts[textIndex].getViewPosition() * distance;
+	camUpVectorTarget = texts[textIndex].getUpVector();
+	texts[textIndex].fadeIn(transitionDuration);
+	initTime = ofGetElapsedTimef();
+
+	camUpVectorTarget = texts[textIndex].getUpVector();
+}
+
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key) {
 	if (key == ' ') {
-		texts[textIndex].fadeOut(transitionDuration);
-		textIndex++;
-		textIndex %= texts.size();
-		float distance = (cam.getPosition() - ofVec3f(0, 0, 0)).length();
-		cameraPosTarget = texts[textIndex].getViewPosition() * distance;
-		camUpVectorTarget = texts[textIndex].getUpVector();
-		texts[textIndex].fadeIn(transitionDuration);
-		initTime = ofGetElapsedTimef();
-
-		camUpVectorTarget = texts[textIndex].getUpVector();
+		goToNextText();
 	}
 	if (key == 'a') {
 		animating = !animating;
@@ -182,6 +231,12 @@ void ofApp::keyPressed(int key) {
 		ofToggleFullscreen();
 	}
 	if (key == 'g') {
+		if (showGui) {
+			ofHideCursor();
+		}
+		else {
+			ofShowCursor();
+		}
 		showGui = !showGui;
 	}
 }
