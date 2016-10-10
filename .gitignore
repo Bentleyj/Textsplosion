@@ -75,3 +75,7 @@ ipch/
 
 # Folder config file
 Desktop.ini
+
+# data folders I don't want to track
+fonts/
+images/
