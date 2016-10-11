@@ -3,7 +3,7 @@
 #include "ofMain.h"
 #include "ofxFontStash.h"
 #include "ofxGui.h"
-#include "triangulate.h"
+#include "triangulator.h"
 
 
 class ofApp : public ofBaseApp{

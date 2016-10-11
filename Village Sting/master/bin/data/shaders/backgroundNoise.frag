@@ -19,7 +19,7 @@ void main() {
 	//we use the mod function to only draw pixels if they are every 2 in x or every 4 in y
 	//if( mod(xVal, 2.0) == 0.5 && mod(yVal, 4.0) == 0.5 ){
 
-	gl_FragColor = vec4(color0 /** percentColor*/);
+	gl_FragColor = vec4(color0 * percentColor);
 	//}else{
 		//gl_FragColor.a = 0.0;
 	//}

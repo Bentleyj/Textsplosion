@@ -15,19 +15,18 @@ Textsplosion::Textsplosion() {
 	fadeStartTime = 0.0;
 	fadeEndTime = 0.0;
 	brightnessModifier = 0.0;
-	distortFactor - 0.0;
+	distortFactor = 0.0;
 	lineWidth = 1.0;
 	shardSize = ofVec2f(1, 1);
+	tracker = 0.0;
 }
 
 void Textsplosion::update() {
 	// Update the noise
 	float now = ofGetElapsedTimef();
 
-	if (now < fadeEndTime) {
-		auto easingMethod = &ofxeasing::quart::easeIn;
-		brightnessModifier = ofxeasing::map(now, fadeStartTime, fadeEndTime, brightnessModifier, targetBrightness, easingMethod);
-	}
+	tracker = ofLerp(tracker, 1.2, 0.05);
+	brightnessModifier = ofLerp(brightnessModifier, targetBrightness, tracker);//ofxeasing::map(now, fadeStartTime, fadeEndTime, brightnessModifier, targetBrightness, easingMethod);
 }
 
 void Textsplosion::draw() {
@@ -70,15 +69,13 @@ void Textsplosion::draw() {
 }
 
 void Textsplosion::fadeIn(float duration) {
-	fadeStartTime = ofGetElapsedTimef();
-	fadeEndTime = fadeStartTime + duration;
 	targetBrightness = 1.0;
+	tracker = 0.0;
 }
 
 void Textsplosion::fadeOut(float duration) {
-	fadeStartTime = ofGetElapsedTimef();
-	fadeEndTime = fadeStartTime +duration;
 	targetBrightness = 0.0;
+	tracker = 0.0;
 }
 
 void Textsplosion::setViewPositionSpherical(float _r, float _theta, float _phi)

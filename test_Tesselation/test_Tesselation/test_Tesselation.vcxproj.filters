@@ -40,7 +40,7 @@
     <ClCompile Include="..\..\..\..\addons\ofxFontStash\libs\fontstash\src\stb_truetype.c">
       <Filter>addons\ofxFontStash\libs\fontstash\src</Filter>
     </ClCompile>
-    <ClCompile Include="src\triangulate.cpp">
+    <ClCompile Include="src\triangulator.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
@@ -128,7 +128,7 @@
     <ClInclude Include="..\..\..\..\addons\ofxFontStash\libs\fontstash\src\stb_truetype.h">
       <Filter>addons\ofxFontStash\libs\fontstash\src</Filter>
     </ClInclude>
-    <ClInclude Include="src\triangulate.h">
+    <ClInclude Include="src\triangulator.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>

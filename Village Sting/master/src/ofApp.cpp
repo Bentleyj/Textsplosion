@@ -15,16 +15,21 @@ void ofApp::setup() {
 
 	//font->setLetterSpacing(10.0f);
 
-	light.setPosition(0, 0, 0);
-
 	cam.lookAt(ofVec3f(0, 0, 0));
 
 	//img.load("images/Village split image.png");
+
+	buffer.allocate(ofGetWidth(), ofGetHeight());
 
 	gui.setup("GUI", "settings/settings.xml");
 	gui.add(distortFactor.set("Distort", 500.0, 0.0, 1000.0));
 	gui.add(transitionDuration.set("Duration", 20.0, 1.0, 30.0));
 	gui.add(lineWidth.set("Line Width", 3.0, 1.0, 10.0));
+	gui.add(zoomOutDist.set("zoomOutDist", 500.0, 100.0, 1000.0));
+	gui.add(tracker.set("Tracker", 0.0, 0.0, 1.01));
+	gui.add(animating.set("animating", false));
+	gui.add(fadingUp.set("fadingUp", false));
+	gui.add(fadeAmount.set("fadeAmount", 1.0, 0.0, 1.0));
 	gui.loadFromFile("settings/settings.xml");
 
 	//ofSetDataPathRoot("../Resources/data/");
@@ -54,8 +59,9 @@ void ofApp::setup() {
 	ofBackground(ofColor(0));
 	//ofBackgroundGradient(ofColor(10), ofColor(0), OF_GRADIENT_CIRCULAR);
 
-	textNoise.load("shaders/textNoise.vert", "shaders/textNoise.frag");
-	backgroundNoise.load("shaders/backgroundNoise.vert", "shaders/backgroundNoise.frag");
+	textNoise.load("shaders/textNoise");
+	backgroundNoise.load("shaders/backgroundNoise");
+	fadeShader.load("shaders/fade");
 
 	shaders.push_back(textNoise);
 	shaders.push_back(backgroundNoise);
@@ -120,32 +126,86 @@ void ofApp::setup() {
 
 	ofEnableAntiAliasing();
 
-	initTime = 0.0f;
-
 }
 
 //--------------------------------------------------------------
 void ofApp::update() {
-	float now = ofGetElapsedTimef();
-	float endTime = initTime + transitionDuration;
-
-	if (now < endTime) {
-		auto easingMethod = &ofxeasing::sine::easeInOut;
-		float newX = ofxeasing::map(now, initTime, endTime, cam.getPosition().x, cameraPosTarget.x, easingMethod);
-		float newY = ofxeasing::map(now, initTime, endTime, cam.getPosition().y, cameraPosTarget.y, easingMethod);
-		float newZ = ofxeasing::map(now, initTime, endTime, cam.getPosition().z, cameraPosTarget.z, easingMethod);
+	//float now = ofGetElapsedTimef();
+	//float endTime = initTime + transitionDuration;
+	if (fadingUp) {
+		fadeAmount = ofLerp(fadeAmount, 0.0, 0.1);
+	}
+	else {
+		fadeAmount = ofLerp(fadeAmount, 1.0, 0.1);
+	}
+	if (animating) {
+		tracker = ofLerp(tracker, 1.0, 0.05);
+		if(tracker > 0.999)
+			tracker = ofLerp(tracker, 1.05, 0.005);
+		//auto easingMethod = &ofxeasing::linear::easeIn;
+		float rate = tracker;
+		//tracker = ofLerp(tracker, 1.2, rate);
+		float newX = ofLerp(cameraPosOld.x, cameraPosTarget.x, rate);//ofxeasing::map(now, initTime, endTime, cam.getPosition().x, cameraPosTarget.x, easingMethod);
+		float newY = ofLerp(cameraPosOld.y, cameraPosTarget.y, rate); //ofxeasing::map(now, initTime, endTime, cam.getPosition().y, cameraPosTarget.y, easingMethod);
+		float newZ = ofLerp(cameraPosOld.z, cameraPosTarget.z, rate); //ofxeasing::map(now, initTime, endTime, cam.getPosition().z, cameraPosTarget.z, easingMethod);
 
 		cam.setPosition(newX, newY, newZ);
 
-		float newUpX = ofxeasing::map(now, initTime, endTime, cam.getUpDir().x, camUpVectorTarget.x, easingMethod);
-		float newUpY = ofxeasing::map(now, initTime, endTime, cam.getUpDir().y, camUpVectorTarget.y, easingMethod);
-		float newUpZ = ofxeasing::map(now, initTime, endTime, cam.getUpDir().z, camUpVectorTarget.z, easingMethod);
+		float newUpX = ofLerp(camUpVectorOld.x, camUpVectorTarget.x, rate);//ofxeasing::map(now, initTime, endTime, cam.getUpDir().x, camUpVectorTarget.x, easingMethod);
+		float newUpY = ofLerp(camUpVectorOld.y, camUpVectorTarget.y, rate);  //ofxeasing::map(now, initTime, endTime, cam.getUpDir().y, camUpVectorTarget.y, easingMethod);
+		float newUpZ = ofLerp(camUpVectorOld.z, camUpVectorTarget.z, rate);  //ofxeasing::map(now, initTime, endTime, cam.getUpDir().z, camUpVectorTarget.z, easingMethod);
 
 		cam.lookAt(ofVec3f(0, 0, 0), ofVec3f(newUpX, newUpY, newUpZ));
 	}
-	else if(animating) {
-		goToNextText();
+	else {
+		float rate = 0.01;
+		//tracker = ofLerp(tracker, 1.2, rate);
+		cameraPosOld = cam.getPosition();
+		camUpVectorOld = cam.getUpDir();
+
+		cameraPosTarget.rotate(1.0, ofVec3f(1, 1, 1));
+		camUpVectorTarget.rotate(1.0, ofVec3f(1, 1, 1));
+
+		float newX = ofLerp(cameraPosOld.x, cameraPosTarget.x, rate);//ofxeasing::map(now, initTime, endTime, cam.getPosition().x, cameraPosTarget.x, easingMethod);
+		float newY = ofLerp(cameraPosOld.y, cameraPosTarget.y, rate); //ofxeasing::map(now, initTime, endTime, cam.getPosition().y, cameraPosTarget.y, easingMethod);
+		float newZ = ofLerp(cameraPosOld.z, cameraPosTarget.z, rate); //ofxeasing::map(now, initTime, endTime, cam.getPosition().z, cameraPosTarget.z, easingMethod);
+
+		float newUpX = ofLerp(camUpVectorOld.x, camUpVectorTarget.x, rate);//ofxeasing::map(now, initTime, endTime, cam.getUpDir().x, camUpVectorTarget.x, easingMethod);
+		float newUpY = ofLerp(camUpVectorOld.y, camUpVectorTarget.y, rate);  //ofxeasing::map(now, initTime, endTime, cam.getUpDir().y, camUpVectorTarget.y, easingMethod);
+		float newUpZ = ofLerp(camUpVectorOld.z, camUpVectorTarget.z, rate);
+
+		cam.setPosition(newX, newY, newZ);
+
+		cam.lookAt(ofVec3f(0, 0, 0), ofVec3f(newUpX, newUpY, newUpZ));
 	}
+	//}
+	//else {
+	//	goToNextText();
+	//}
+	/*else if (drifting) {
+		auto easingMethod = &ofxeasing::linear::easeOut;
+		float slowFactor = 10.0f;
+		float newX = ofxeasing::map(now, initTime, endTime*slowFactor, cam.getPosition().x, cameraPosTarget.x, easingMethod);
+		float newY = ofxeasing::map(now, initTime, endTime*slowFactor, cam.getPosition().y, cameraPosTarget.y, easingMethod);
+		float newZ = ofxeasing::map(now, initTime, endTime*slowFactor, cam.getPosition().z, cameraPosTarget.z, easingMethod);
+
+		cam.setPosition(newX, newY, newZ);
+
+		float newUpX = ofxeasing::map(now, initTime, endTime*slowFactor, cam.getUpDir().x, camUpVectorTarget.x, easingMethod);
+		float newUpY = ofxeasing::map(now, initTime, endTime*slowFactor, cam.getUpDir().y, camUpVectorTarget.y, easingMethod);
+		float newUpZ = ofxeasing::map(now, initTime, endTime*slowFactor, cam.getUpDir().z, camUpVectorTarget.z, easingMethod);
+
+		cam.lookAt(ofVec3f(0, 0, 0), ofVec3f(newUpX, newUpY, newUpZ));
+	}*/
+
+	//if (!(now < endTime)) {
+	////	if (going && now < endTime + 0.1) {
+	////		drift();
+	////	}
+	////	else {
+	//		goToNextText();
+	//	//}
+	//}
 
 	for (int i = 0; i < texts.size(); i++) {
 		texts[i].setDistortFactor(distortFactor);
@@ -158,34 +218,15 @@ void ofApp::update() {
 void ofApp::draw() {
 
 	//cam.begin();
+	//buffer.begin();
 	post.begin(cam);
 
-	//float highestPercentage = -1.0;
-	//float lowestPercentage = 1.0;
-	//int highestPercentageIndex;
-	//for (int i = 0; i < texts.size(); i++) {
-	//	ofVec3f currentViewPos = cam.getPosition().normalize();
-	//	ofVec3f textViewPos = texts[i].getViewPosition().normalize();
-	//	float diff = (currentViewPos - textViewPos).length();
-	//	float percent = ofMap(diff, 0.0, 2.0, 1.0, 0.0, true);
-	//	if (percent > highestPercentage) {
-	//		highestPercentage = percent;
-	//		highestPercentageIndex = i;
-	//	}
-	//	else if (percent < lowestPercentage) {
-	//		lowestPercentage = percent;
-	//	}
-	//}
-
-	//float distance = (cam.getPosition() - ofVec3f(0, 0, 0)).length();
-	//ofEnableDepthTest();
 	for (int i = 0; i < texts.size(); i++) {
 		texts[i].draw();
 	}
-	//texts[textIndex].draw();
-	//ofDisableDepthTest();
 	
 	post.end();
+
 	cam.begin();
 	for (int i = 0; i < texts.size(); i++) {
 		if (texts[i].getBrightnessModifier() > 0.4) {
@@ -193,27 +234,59 @@ void ofApp::draw() {
 		}
 	}
 	cam.end();
-	//cam.end();
+
+	fadeShader.begin();
+	ofSetColor(255, 0, 0);
+	fadeShader.setUniform1f("u_Amount", fadeAmount);
+	fadeShader.setUniformTexture("u_Tex", buffer.getTexture(), 0);
+	//buffer.draw(0, 0);
+	ofDrawRectangle(0, 0, ofGetWidth(), ofGetHeight());
+	fadeShader.end();
+
+	//buffer.end();
+
+	//buffer.draw(0, 0);
+
+	//fadeShader.begin();
+	//fadeShader.setUniformTexture("texOut", images[1].getTextureReference(), 0);
+	//fadeShader.setUniformTexture("texIn", images[0].getTextureReference(), 1);
+	//fadeShader.setUniform1f("u_Amount", fadeAmount);
+	//cout << fadeAmount << endl;
+	//ofDrawRectangle(0, 0, ofGetWidth(), ofGetHeight());
+	//buffer.draw(0, 0);
+	//images[0].draw(0, 0, ofGetWidth(), ofGetHeight());
+	//            if( displayImgs[currImg].width < displayImgs[(currImg+1)%2].width)
+	//                displayImgs[currImg].draw(0, 0, WIDTH, HEIGHT);
+	//            else
+	//                displayImgs[(currImg+1)%2].draw(0, 0, WIDTH, HEIGHT);
+
+	//fadeShader.end();
 
 	if (showGui) {
 		ofPushStyle();
 		ofSetColor(255);
 		gui.draw();
 		ofDrawBitmapString(ofToString(ofGetFrameRate()), 10, ofGetHeight() - 10);
+		ofDrawBitmapString("Width: " + ofToString(ofGetWindowWidth()), 10, ofGetHeight() - 20);
+		ofDrawBitmapString("Height: " + ofToString(ofGetWindowHeight()), 10, ofGetHeight() - 30);
+
 		ofPopStyle();
 	}
 
 }
 
 void ofApp::goToNextText() {
+	float distance = 125;
+	cameraPosOld = cam.getPosition();//texts[textIndex].getViewPosition() * distance;
+	camUpVectorOld = cam.getUpDir();//texts[textIndex].getUpVector();
 	texts[textIndex].fadeOut(transitionDuration);
 	textIndex++;
 	textIndex %= images.size();
-	float distance = 125;
 	cameraPosTarget = texts[textIndex].getViewPosition() * distance;
 	camUpVectorTarget = texts[textIndex].getUpVector();
 	texts[textIndex].fadeIn(transitionDuration);
-	initTime = ofGetElapsedTimef();
+
+	tracker = 0.0;
 
 	camUpVectorTarget = texts[textIndex].getUpVector();
 }
@@ -224,10 +297,17 @@ void ofApp::keyPressed(int key) {
 		goToNextText();
 	}
 	if (key == 'a') {
+		if (animating) {
+			cameraPosTarget = cameraPosTarget.getNormalized() * zoomOutDist;
+			cameraPosOld = cameraPosOld.getNormalized() * zoomOutDist;
+		}
 		animating = !animating;
 	}
 	if (key == 'f') {
 		ofToggleFullscreen();
+	}
+	if (key == 's') {
+		fadingUp = !fadingUp;
 	}
 	if (key == 'g') {
 		if (showGui) {
