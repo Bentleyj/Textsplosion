@@ -14,7 +14,7 @@ Textsplosion::Textsplosion() {
 	//Set everything up by default (real simple)
 	fadeStartTime = 0.0;
 	fadeEndTime = 0.0;
-	brightnessModifier = 0.0;
+	brightnessModifier = 0.3;
 	distortFactor - 0.0;
 	lineWidth = 1.0;
 	shardSize = ofVec2f(1, 1);
@@ -44,27 +44,27 @@ void Textsplosion::draw() {
 
 	//ofDrawAxis(100);
 
-	(*shaders)[1].begin();
-	(*shaders)[1].setUniform1f("timeVal", 0.01);
-	(*shaders)[1].setUniform1f("distortAmount", distortFactor);
-	(*shaders)[1].setUniform3f("camPosition", cam->getPosition());
-	(*shaders)[1].setUniform1f("brightnessModifier", brightnessModifier);
-	(*shaders)[1].setUniformTexture("texture0", *img, 0);
-	img->bind();
-	backgroundMesh.setMode(OF_PRIMITIVE_TRIANGLES);
-	backgroundMesh.draw();
-	img->unbind();
-	(*shaders)[1].end();
-
-	//ofSetColor(color1);
 	//(*shaders)[1].begin();
-	//(*shaders)[1].setUniform1f("timeVal", ofGetElapsedTimef() * 0.01);
+	//(*shaders)[1].setUniform1f("timeVal", 0.01);
 	//(*shaders)[1].setUniform1f("distortAmount", distortFactor);
 	//(*shaders)[1].setUniform3f("camPosition", cam->getPosition());
-	//(*shaders)[1].setUniform1f("brightnessModifier", 1.0 /*brightnessModifier*/);
-	//mesh.setMode(OF_PRIMITIVE_TRIANGLES);
-	//mesh.draw();
+	//(*shaders)[1].setUniform1f("brightnessModifier", brightnessModifier);
+	//(*shaders)[1].setUniformTexture("texture0", *img, 0);
+	//img->bind();
+	//backgroundMesh.setMode(OF_PRIMITIVE_TRIANGLES);
+	//backgroundMesh.draw();
+	//img->unbind();
 	//(*shaders)[1].end();
+
+	//ofSetColor(color1);
+	(*shaders)[0].begin();
+	(*shaders)[0].setUniform1f("timeVal", ofGetElapsedTimef() * 0.01);
+	(*shaders)[0].setUniform1f("distortAmount", distortFactor);
+	(*shaders)[0].setUniform3f("camPosition", cam->getPosition());
+	(*shaders)[0].setUniform1f("brightnessModifier", brightnessModifier);
+	mesh.setMode(OF_PRIMITIVE_TRIANGLES);
+	mesh.draw();
+	(*shaders)[0].end();
 
     ofPopMatrix();
 }
@@ -78,7 +78,7 @@ void Textsplosion::fadeIn(float duration) {
 void Textsplosion::fadeOut(float duration) {
 	fadeStartTime = ofGetElapsedTimef();
 	fadeEndTime = fadeStartTime +duration;
-	targetBrightness = 0.0;
+	targetBrightness = 0.2;
 }
 
 void Textsplosion::setViewPositionSpherical(float _r, float _theta, float _phi)
@@ -195,11 +195,17 @@ void Textsplosion::setText(string _text) {
 		//	mesh.addColor(ofColor(255, 255, 255));
 		//}
 
-		Triangulator::generateTriangulation(&inputMesh, &mesh);
-		for (int i = 0; i < mesh.getNumVertices(); i++) {
-			mesh.addColor(color1.getLerped(color2, mesh.getVertex(i).x / (rect.getWidth() + 10)));
+		for (int i = 0; i < inputMesh.getNumVertices(); i++) {
+			ofPoint vertex = inputMesh.getVertex(i);
+			inputMesh.setVertex(i, ofPoint(vertex.x - rect.width / 2, -vertex.y - rect.height / 2, 0));
+			float amount = (vertex.x) / (rect.getWidth());
+			amount = (amount > 1.0) ? 1.0 : amount;
+			amount = (amount < 0.0) ? 0.0 : amount;
 
+			inputMesh.addColor(color1.getLerped(color2, amount));
 		}
+
+		Triangulator::generateTriangulation(&inputMesh, &mesh);
 
 		//for (int k = 0; k < lines.size(); k++) {
 

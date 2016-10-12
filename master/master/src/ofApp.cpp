@@ -1,6 +1,6 @@
 #include "ofApp.h"
 
-#define NUM_NAMES 10
+#define NUM_NAMES 100
 
 //--------------------------------------------------------------
 void ofApp::setup() {
@@ -61,7 +61,15 @@ void ofApp::setup() {
 	shaders.push_back(backgroundNoise);
 
 	ofxNestedFileLoader loader;
-	vector<string> imageNames = loader.load("images/finalPNGS");
+	vector<string> imageNames; // = loader.load("images/finalPNGS");
+
+	imageNames.push_back("Edmond Safra");
+	imageNames.push_back("Sam Roe");
+	imageNames.push_back("Norman Foster");
+	imageNames.push_back("Margaux Esclapez");
+	imageNames.push_back("Amalie Englesson");
+	imageNames.push_back("James Bentley");
+	imageNames.push_back("Lilly Safra");
 
 	//vector<string> names;
 	//for (int i = 0; i < imageNames.size(; i++) {
@@ -80,7 +88,7 @@ void ofApp::setup() {
 
 	shardSizes[0] = ofVec2f(10, 10); // Village White
 	shardSizes[1] = ofVec2f(1, 200); // Spring Summer 2017
-	shardSizes[2] = ofVec2f(200, 1); // Press Open Day Tue 1st & Wed 2nd Niovmeber 9am-6pm 2016
+	shardSizes[2] = ofVec2f(200, 1); // Press Open Day Tue 1st & Wed 2nd Novmeber 9am-6pm 2016
 	shardSizes[3] = ofVec2f(1, 1); // 140 Old St London EC1V 9BJ
 	shardSizes[4] = ofVec2f(5, 5); // RSVP hello@wearevillage.com
 	shardSizes[5] = ofVec2f(10, 10); // Village Gradient
@@ -88,15 +96,17 @@ void ofApp::setup() {
 	for (int i = 0; i < imageNames.size(); i++) {
 		float theta = ofRandom(0.0, 180.0);
 		float phi = ofRandom(0.0, 360.0);
-		images[i].load(imageNames[i]);
+		images[i].load(imageNames[i]); 
 		Textsplosion tempText;
 		tempText.setFont(font);
 		tempText.setCam(&cam);
-		tempText.setColorGradient(ofRandom(0, 127), ofRandom(127, 255), ofRandom(127, 255), ofRandom(0, 127), ofRandom(127, 255), ofRandom(127, 255));
+		tempText.setColorGradient(255, 128, 0, 255, 217, 51);
+		//tempText.setColorGradient(51, 153, 191, 229, 153, 153);
+		//tempText.setColorGradient(ofRandom(127, 255), ofRandom(127, 255), ofRandom(127, 255), ofRandom(127, 255), ofRandom(127, 255), ofRandom(127, 255));
 		tempText.setShaders(&shaders);
 		tempText.setImg(&(images[i]));
 		tempText.setShardSize(shardSizes[i]);
-		tempText.setText("TESTING");
+		tempText.setText(imageNames[i]);
 		tempText.setViewPositionSpherical(150.0, theta, phi);
 		tempText.setCenter(ofVec3f(0, 0, 0));
 		texts.push_back(tempText);
@@ -108,11 +118,12 @@ void ofApp::setup() {
 		Textsplosion tempText;
 		tempText.setFont(font);
 		tempText.setCam(&cam);
-		tempText.setColorGradient(ofRandom(0, 127), ofRandom(127, 255), ofRandom(127, 255), ofRandom(0, 127), ofRandom(127, 255), ofRandom(127, 255));
+		//tempText.setColorGradient(ofRandom(0, 127), ofRandom(127, 255), ofRandom(127, 255), ofRandom(0, 127), ofRandom(127, 255), ofRandom(127, 255));
+		tempText.setColorGradient(127, 127, 127, 127, 127, 127);
 		tempText.setShaders(&shaders);
 		tempText.setImg(&(images[i%imageNames.size()]));
 		tempText.setShardSize(ofRandom(1, 10), ofRandom(1, 10));
-		tempText.setText("A");
+		tempText.setText(imageNames[i%imageNames.size()]);
 		tempText.setViewPositionSpherical(150.0, theta, phi);
 		tempText.setCenter(ofVec3f(0, 0, 0));
 		texts.push_back(tempText);
@@ -123,14 +134,16 @@ void ofApp::setup() {
 	initTime = 0.0f;
 
 }
-
+ 
 //--------------------------------------------------------------
 void ofApp::update() {
 	float now = ofGetElapsedTimef();
-	float endTime = initTime + transitionDuration;
+	float endTime = initTime + transitionDuration*100;
+
+	float distance = (cam.getPosition() - ofVec3f(0, 0, 0)).length();
 
 	if (now < endTime) {
-		auto easingMethod = &ofxeasing::sine::easeInOut;
+		auto easingMethod = &ofxeasing::linear::easeIn;
 		float newX = ofxeasing::map(now, initTime, endTime, cam.getPosition().x, cameraPosTarget.x, easingMethod);
 		float newY = ofxeasing::map(now, initTime, endTime, cam.getPosition().y, cameraPosTarget.y, easingMethod);
 		float newZ = ofxeasing::map(now, initTime, endTime, cam.getPosition().z, cameraPosTarget.z, easingMethod);
@@ -143,8 +156,8 @@ void ofApp::update() {
 
 		cam.lookAt(ofVec3f(0, 0, 0), ofVec3f(newUpX, newUpY, newUpZ));
 	}
-	else if(animating) {
-		goToNextText();
+	else if(distance > 500) {
+		goToNextText(150);
 	}
 
 	for (int i = 0; i < texts.size(); i++) {
@@ -205,11 +218,13 @@ void ofApp::draw() {
 
 }
 
-void ofApp::goToNextText() {
+void ofApp::goToNextText(float distance) {
 	texts[textIndex].fadeOut(transitionDuration);
 	textIndex++;
 	textIndex %= images.size();
-	float distance = 125;
+	//float distance = 500;//(cam.getPosition() - ofVec3f(0, 0, 0)).length();//125;
+	//ofVec3f randomFarTarget = ofVec3f(ofRandom(1.0), ofRandom(1.0), ofRandom(1.0));
+	//randomFarTarget = 
 	cameraPosTarget = texts[textIndex].getViewPosition() * distance;
 	camUpVectorTarget = texts[textIndex].getUpVector();
 	texts[textIndex].fadeIn(transitionDuration);
@@ -221,7 +236,7 @@ void ofApp::goToNextText() {
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key) {
 	if (key == ' ') {
-		goToNextText();
+		goToNextText(500);
 	}
 	if (key == 'a') {
 		animating = !animating;

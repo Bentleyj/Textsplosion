@@ -27,7 +27,7 @@ public:
 	void dragEvent(ofDragInfo dragInfo);
 	void gotMessage(ofMessage msg);
 
-	void goToNextText();
+	void goToNextText(float distance);
 
 	vector<Textsplosion> texts;
 

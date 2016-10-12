@@ -95,13 +95,16 @@ void main(){
 
 	float cappedDistortAmount = min(distortAmount, distanceToTarget);
 
-  float percentColor;
+	float percentColor;
 
-	if(gl_VertexID%2 == 0) {
-		noiseAmntZ = snoise( vec2(timeVal + gl_VertexID%1000, 1.0f)) * cappedDistortAmount;
-	} else {
-		noiseAmntZ = snoise( vec2(timeVal + gl_VertexID%1000 - 1, 1.0f)) * cappedDistortAmount;
-
+	if (gl_VertexID % 3 == 0) {
+		noiseAmntZ = snoise(vec2(timeVal + gl_VertexID, 1.0f)) * cappedDistortAmount;
+	}
+	else if (gl_VertexID % 3 == 1) {
+		noiseAmntZ = snoise(vec2(timeVal + gl_VertexID - 1, 1.0f)) * cappedDistortAmount;
+	}
+	else {
+		noiseAmntZ = snoise(vec2(timeVal + gl_VertexID - 2, 1.0f)) * cappedDistortAmount;
 	}
 
 	pos.z += noiseAmntZ;//cos(pos.x * timeVal);//noiseAmntZ;
@@ -132,12 +135,12 @@ void main(){
     //if(percentColor < 0.1) {
    //     gl_FrontColor = vec4(0.0, 0.0, 0.0, 1.0);///*gl_Color*/(colorClose * percentColor + colorFar * (1-percentColor));
     //} else {
-	vec4 col1 = vec4(0.200, 0.600, 0.750, 1.0);
-	vec4 col2 = vec4(0.900, 0.600, 0.600, 1.0);
+	vec4 col2 = vec4(78.0/255.0, 122.0/255.0, 191.0/255.0, 1.0/*0.200, 0.600, 0.750, 1.0*/);
+	vec4 col1 = vec4(22.0/255.0, 25.0/255.0, 59.0/255.0, 1.0/*0.900, 0.600, 0.600, 1.0*/);
 
 	vec4 newCol = mix(col2, col1, normalizedDist);
 
-    gl_FrontColor = vec4((gl_Color * percentColor + newCol * (1 - percentColor)).xyz, 0.5 + percentColor);///*gl_Color*/(colorClose * percentColor + colorFar * (1-percentColor));
+	gl_FrontColor = vec4((gl_Color * percentColor + newCol * (1 - percentColor)).xyz, 0.5 + percentColor);///*gl_Color*/(colorClose * percentColor + colorFar * (1-percentColor));
     //}
 	
 	gl_Position = pos;

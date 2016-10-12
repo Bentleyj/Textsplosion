@@ -9,7 +9,4 @@ public:
 	//Functionality
 	static bool generateTriangulation(ofMesh* input, ofMesh* output);
 private:
-	ofMesh* inputMesh;
-	ofMesh generatedMesh;
-	ofMesh* outputMesh;
 };
