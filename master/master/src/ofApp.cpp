@@ -93,24 +93,24 @@ void ofApp::setup() {
 	shardSizes[4] = ofVec2f(5, 5); // RSVP hello@wearevillage.com
 	shardSizes[5] = ofVec2f(10, 10); // Village Gradient
 
-	for (int i = 0; i < imageNames.size(); i++) {
-		float theta = ofRandom(0.0, 180.0);
-		float phi = ofRandom(0.0, 360.0);
-		images[i].load(imageNames[i]); 
-		Textsplosion tempText;
-		tempText.setFont(font);
-		tempText.setCam(&cam);
-		tempText.setColorGradient(255, 128, 0, 255, 217, 51);
-		//tempText.setColorGradient(51, 153, 191, 229, 153, 153);
-		//tempText.setColorGradient(ofRandom(127, 255), ofRandom(127, 255), ofRandom(127, 255), ofRandom(127, 255), ofRandom(127, 255), ofRandom(127, 255));
-		tempText.setShaders(&shaders);
-		tempText.setImg(&(images[i]));
-		tempText.setShardSize(shardSizes[i]);
-		tempText.setText(imageNames[i]);
-		tempText.setViewPositionSpherical(150.0, theta, phi);
-		tempText.setCenter(ofVec3f(0, 0, 0));
-		texts.push_back(tempText);
-	}
+	//for (int i = 0; i < imageNames.size(); i++) {
+	//	float theta = ofRandom(0.0, 180.0);
+	//	float phi = ofRandom(0.0, 360.0);
+	//	images[i].load(imageNames[i]); 
+	//	Textsplosion tempText;
+	//	tempText.setFont(font);
+	//	tempText.setCam(&cam);
+	//	tempText.setColorGradient(255, 128, 0, 255, 217, 51);
+	//	tempText.setColorGradient(51, 153, 191, 229, 153, 153);
+	//	tempText.setColorGradient(ofRandom(127, 255), ofRandom(127, 255), ofRandom(127, 255), ofRandom(127, 255), ofRandom(127, 255), ofRandom(127, 255));
+	//	tempText.setShaders(&shaders);
+	//	tempText.setImg(&(images[i]));
+	//	tempText.setShardSize(shardSizes[i]);
+	//	tempText.setText(imageNames[i]);
+	//	tempText.setViewPositionSpherical(150.0, theta, phi);
+	//	tempText.setCenter(ofVec3f(0, 0, 0));
+	//	texts.push_back(tempText);
+	//}
 
 	for (int i = 0; i < NUM_NAMES; i++) {
 		float theta = ofRandom(0.0, 180.0);

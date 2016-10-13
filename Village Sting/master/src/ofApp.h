@@ -27,7 +27,7 @@ public:
 	void dragEvent(ofDragInfo dragInfo);
 	void gotMessage(ofMessage msg);
 
-	void goToNextText();
+	void goToNextText(float distanceb);
 
 	vector<Textsplosion> texts;
 
@@ -64,8 +64,6 @@ public:
 
 	ofShader textNoise;
 	ofShader backgroundNoise;
-
-	ofFbo buffer;
 
 	vector<ofImage> images;
 

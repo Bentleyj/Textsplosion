@@ -113,22 +113,16 @@ void main(){
 
 	float scale = distanceToObject / distanceToTarget;
 
-  pos.x *= scale;
-  pos.y *= scale;
+	pos.x *= scale;
+	pos.y *= scale;
 
-  float distToVertexFromCenter = length(pos.xyz - center);
+	float distToVertexFromCenter = length(pos.xyz - center);
 
+	float normalizedDist =  map(distToVertexFromCenter, 0.0, 300.0/*distanceToTarget*/, 0.0, 1.0);
 
-  //if(percentColor < 1.0) {
-  float normalizedDist =  map(distToVertexFromCenter, 0.0, 300.0/*distanceToTarget*/, 0.0, 1.0);
+	percentColor = brightnessModifier;
 
-  percentColor = brightnessModifier;
-
-  if(percentColor > 1.0) percentColor = 1.0;
-  // //}
-  // if(snoise(vec2(gl_VertexID - 1, 100.0f)) > 0.7) {
-  //   percentColor = 1.0;
-  // }
+	if(percentColor > 1.0) percentColor = 1.0;
 
 	pos = gl_ProjectionMatrix * gl_ModelViewMatrix * pos;
 

@@ -1,6 +1,6 @@
 #include "ofApp.h"
 
-#define NUM_NAMES 10
+#define NUM_NAMES 0
 
 //--------------------------------------------------------------
 void ofApp::setup() {
@@ -18,8 +18,6 @@ void ofApp::setup() {
 	cam.lookAt(ofVec3f(0, 0, 0));
 
 	//img.load("images/Village split image.png");
-
-	buffer.allocate(ofGetWidth(), ofGetHeight());
 
 	gui.setup("GUI", "settings/settings.xml");
 	gui.add(distortFactor.set("Distort", 500.0, 0.0, 1000.0));
@@ -89,9 +87,9 @@ void ofApp::setup() {
 	shardSizes[2] = ofVec2f(200, 1); // Press Open Day Tue 1st & Wed 2nd Niovmeber 9am-6pm 2016
 	shardSizes[3] = ofVec2f(1, 1); // 140 Old St London EC1V 9BJ
 	shardSizes[4] = ofVec2f(5, 5); // RSVP hello@wearevillage.com
-	shardSizes[5] = ofVec2f(10, 10); // Village Gradient
+	//shardSizes[5] = ofVec2f(10, 10); // Village Gradient
 
-	for (int i = 0; i < imageNames.size(); i++) {
+	for (int i = 0; i < imageNames.size()-1; i++) {
 		float theta = ofRandom(0.0, 180.0);
 		float phi = ofRandom(0.0, 360.0);
 		images[i].load(imageNames[i]);
@@ -108,21 +106,21 @@ void ofApp::setup() {
 		texts.push_back(tempText);
 	}
 
-	for (int i = 0; i < NUM_NAMES; i++) {
-		float theta = ofRandom(0.0, 180.0);
-		float phi = ofRandom(0.0, 360.0);
-		Textsplosion tempText;
-		tempText.setFont(font);
-		tempText.setCam(&cam);
-		tempText.setColorGradient(ofRandom(0, 127), ofRandom(127, 255), ofRandom(127, 255), ofRandom(0, 127), ofRandom(127, 255), ofRandom(127, 255));
-		tempText.setShaders(&shaders);
-		tempText.setImg(&(images[i%imageNames.size()]));
-		tempText.setShardSize(ofRandom(1, 10), ofRandom(1, 10));
-		tempText.setText("A");
-		tempText.setViewPositionSpherical(150.0, theta, phi);
-		tempText.setCenter(ofVec3f(0, 0, 0));
-		texts.push_back(tempText);
-	}
+	//for (int i = 0; i < NUM_NAMES; i++) {
+	//	float theta = ofRandom(0.0, 180.0);
+	//	float phi = ofRandom(0.0, 360.0);
+	//	Textsplosion tempText;
+	//	tempText.setFont(font);
+	//	tempText.setCam(&cam);
+	//	tempText.setColorGradient(ofRandom(0, 127), ofRandom(127, 255), ofRandom(127, 255), ofRandom(0, 127), ofRandom(127, 255), ofRandom(127, 255));
+	//	tempText.setShaders(&shaders);
+	//	tempText.setImg(&(images[i%(imageNames.size()-1)]));
+	//	tempText.setShardSize(ofRandom(1, 10), ofRandom(1, 10));
+	//	tempText.setText("A");
+	//	tempText.setViewPositionSpherical(150.0, theta, phi);
+	//	tempText.setCenter(ofVec3f(0, 0, 0));
+	//	texts.push_back(tempText);
+	//}
 
 	ofEnableAntiAliasing();
 
@@ -132,16 +130,8 @@ void ofApp::setup() {
 void ofApp::update() {
 	//float now = ofGetElapsedTimef();
 	//float endTime = initTime + transitionDuration;
-	if (fadingUp) {
-		fadeAmount = ofLerp(fadeAmount, 0.0, 0.1);
-	}
-	else {
-		fadeAmount = ofLerp(fadeAmount, 1.0, 0.1);
-	}
 	if (animating) {
 		tracker = ofLerp(tracker, 1.0, 0.05);
-		if(tracker > 0.999)
-			tracker = ofLerp(tracker, 1.05, 0.005);
 		//auto easingMethod = &ofxeasing::linear::easeIn;
 		float rate = tracker;
 		//tracker = ofLerp(tracker, 1.2, rate);
@@ -159,7 +149,7 @@ void ofApp::update() {
 	}
 	else {
 		float rate = 0.01;
-		//tracker = ofLerp(tracker, 1.2, rate);
+		tracker = ofLerp(tracker, 1.0, rate);
 		cameraPosOld = cam.getPosition();
 		camUpVectorOld = cam.getUpDir();
 
@@ -224,7 +214,7 @@ void ofApp::draw() {
 	for (int i = 0; i < texts.size(); i++) {
 		texts[i].draw();
 	}
-	
+	//
 	post.end();
 
 	cam.begin();
@@ -235,13 +225,13 @@ void ofApp::draw() {
 	}
 	cam.end();
 
-	fadeShader.begin();
-	ofSetColor(255, 0, 0);
-	fadeShader.setUniform1f("u_Amount", fadeAmount);
-	fadeShader.setUniformTexture("u_Tex", buffer.getTexture(), 0);
+	//fadeShader.begin();
+	//ofSetColor(255, 0, 0);
+	//fadeShader.setUniform1f("u_Amount", fadeAmount);
+	//fadeShader.setUniformTexture("u_Tex", buffer.getTexture(), 0);
 	//buffer.draw(0, 0);
-	ofDrawRectangle(0, 0, ofGetWidth(), ofGetHeight());
-	fadeShader.end();
+	//ofDrawRectangle(0, 0, ofGetWidth(), ofGetHeight());
+	//fadeShader.end();
 
 	//buffer.end();
 
@@ -275,13 +265,13 @@ void ofApp::draw() {
 
 }
 
-void ofApp::goToNextText() {
-	float distance = 125;
+void ofApp::goToNextText(float distance) {
+	//float distance = 125;
 	cameraPosOld = cam.getPosition();//texts[textIndex].getViewPosition() * distance;
 	camUpVectorOld = cam.getUpDir();//texts[textIndex].getUpVector();
 	texts[textIndex].fadeOut(transitionDuration);
 	textIndex++;
-	textIndex %= images.size();
+	textIndex %= texts.size();
 	cameraPosTarget = texts[textIndex].getViewPosition() * distance;
 	camUpVectorTarget = texts[textIndex].getUpVector();
 	texts[textIndex].fadeIn(transitionDuration);
@@ -294,7 +284,7 @@ void ofApp::goToNextText() {
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key) {
 	if (key == ' ') {
-		goToNextText();
+		goToNextText(125);
 	}
 	if (key == 'a') {
 		if (animating) {
