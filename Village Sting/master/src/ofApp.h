@@ -27,7 +27,7 @@ public:
 	void dragEvent(ofDragInfo dragInfo);
 	void gotMessage(ofMessage msg);
 
-	void goToNextText(float distanceb);
+	void goToNextText();
 
 	vector<Textsplosion> texts;
 
@@ -43,6 +43,9 @@ public:
 	ofParameter<float> fadeAmount;
 	ofParameter<bool> animating = false;
 	ofParameter<bool> fadingUp = false;
+	ofParameterGroup viewDistancesGroup;
+	vector<ofParameter<float>> viewDistances;
+
 	bool showGui = true;
 
 	ofVec3f cameraPosTarget;

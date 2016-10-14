@@ -38,10 +38,22 @@ public:
 	void setColor2(int r, int g, int b, int a) { color2 = ofColor(r, g, b, a); };
     void setColor(int r, int g, int b) { 
 		setColor1(r, g, b, 255);
-		setColor1(r, g, b, 255);
+		setColor2(r, g, b, 255);
 	};
+	void setBackgroundColor1(int r, int g, int b, int a) { backgroundColor1 = ofColor(r, g, b, a); };
+	void setBackgroundColor2(int r, int g, int b, int a) { backgroundColor2 = ofColor(r, g, b, a); };
+	void setBackgroundColor(int r, int g, int b) {
+		setBackgroundColor1(r, g, b, 255);
+		setBackgroundColor2(r, g, b, 255);
+	};
+	void setBackgroundColor1(ofColor col) { backgroundColor1 = col; };
+	void setBackgroundColor2(ofColor col) { backgroundColor2 = col; };
+	void setColor1(ofColor col) { color1 = col; };
+	void setColor2(ofColor col) { color2 = col; };
+
 	void setColorGradient(int r1, int g1, int b1, int a1, int r2, int g2, int b2, int a2) { setColor1(r1, g1, b1, a1); setColor2(r2, g2, b2, a2); };
 	void setColorGradient(int r1, int g1, int b1, int r2, int g2, int b2) { setColor1(r1, g1, b1, 255.0); setColor2(r2, g2, b2, 255.0); };
+
 	void setCenter(ofVec3f _pos) { textCenter = _pos; };
 	void setShaders(vector<ofShader>* _shaders) { shaders = _shaders; };
 	void setDistortFactor(float _distortFactor) { distortFactor = _distortFactor; };
@@ -68,6 +80,7 @@ public:
 		//}
 		shardSize = _size;
 	};
+	void setTextColor();
 	void setShardSize(float _x, float _y) { setShardSize(ofVec2f(_x, _y)); };
 
     //Getters
@@ -108,6 +121,8 @@ private:
 	//Looks stuff
     ofColor color1;
 	ofColor color2;
+	ofColor backgroundColor1;
+	ofColor backgroundColor2;
 	float brightnessModifier;
 	float fadeStartTime;
 	float fadeEndTime;

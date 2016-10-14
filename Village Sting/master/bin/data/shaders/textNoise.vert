@@ -137,7 +137,7 @@ void main(){
 
 	vec4 newCol = mix(col2, col1, normalizedDist);
 
-    gl_FrontColor = vec4((gl_Color * percentColor + newCol * (1 - percentColor)).xyz, 0.5 + percentColor);///*gl_Color*/(colorClose * percentColor + colorFar * (1-percentColor));
+    gl_FrontColor = vec4((gl_Color * percentColor + newCol * (1 - percentColor)).xyz, 0.2 + percentColor);///*gl_Color*/(colorClose * percentColor + colorFar * (1-percentColor));
     //}
 	
 	gl_Position = pos;

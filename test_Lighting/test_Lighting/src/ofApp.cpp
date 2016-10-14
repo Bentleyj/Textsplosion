@@ -8,8 +8,9 @@ void ofApp::setup(){
 	cam.setPosition(ofVec3f(0, 0, 300));
 
 	gui.setup("gui", "settings/settings.xml");
-	gui.add(lightPos.set("lightPos", ofPoint(0, 0, 0), ofPoint(-100, -100, -100), ofPoint(100, 100, 100)));
+	gui.add(lightPos.set("lightPos", ofPoint(0, 0, 0), ofPoint(-200, -200, -200), ofPoint(200, 200, 200)));
 	gui.add(diffuse.set("diffuse", ofVec4f(0.5, 0.5, 0.5, 0.5), ofVec4f(0, 0, 0, 0), ofVec4f(1, 1, 1, 1)));
+
 }
 
 //--------------------------------------------------------------
@@ -19,17 +20,20 @@ void ofApp::update(){
 
 //--------------------------------------------------------------
 void ofApp::draw(){
+	glCullFace(GL_BACK);
 
 	ofEnableDepthTest();
 	cam.begin();
 	lighting.begin();
 	lighting.setUniform4f("diffuse", diffuse);
 	lighting.setUniform3f("lightSourcePosition", lightPos);
-	ofDrawSphere(lightPos, 10);
 	ofSetColor(255);
-	ofDrawSphere(50);
+	ofDrawSphere(0, 0, 0, 50);
 	lighting.end();
 	ofDrawAxis(100);
+	ofSetColor(255);
+	ofDrawLine(lightPos, ofVec3f(0, 0, 0));
+	ofDrawSphere(lightPos, 10);
 	cam.end();
 
 	ofDisableDepthTest();

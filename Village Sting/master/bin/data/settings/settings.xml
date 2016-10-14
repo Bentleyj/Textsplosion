@@ -3,4 +3,17 @@
 	<Duration>3.03</Duration>
 	<Line_Width>3</Line_Width>
 <GUI/>
+<zoomOutDist>500</zoomOutDist>
+	<Tracker>0.999989</Tracker>
+	<animating>1</animating>
+	<fadingUp>0</fadingUp>
+	<fadeAmount>1</fadeAmount>
+	<View_Distances>
+		<View_Distance_0>97.2449</View_Distance_0>
+		<View_Distance_1>53.6224</View_Distance_1>
+		<View_Distance_2>107.908</View_Distance_2>
+		<View_Distance_3>70.102</View_Distance_3>
+		<View_Distance_4>69.1327</View_Distance_4>
+		<View_Distance_5>125</View_Distance_5>
+	</View_Distances>
 </GUI>

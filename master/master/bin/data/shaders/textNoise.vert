@@ -6,6 +6,8 @@ uniform float distortAmount = 100.0;
 uniform vec3 camPosition;// = vec3(0.0, 0.0, 1.0);
 uniform vec3 center = vec3(0.0, 0.0, 0.0);
 uniform float brightnessModifier = 0.0;
+uniform vec4 col1;
+uniform vec4 col2;
 
 //
 // Description : Array and textureless GLSL 2D simplex noise function.
@@ -129,8 +131,8 @@ void main(){
     //if(percentColor < 0.1) {
    //     gl_FrontColor = vec4(0.0, 0.0, 0.0, 1.0);///*gl_Color*/(colorClose * percentColor + colorFar * (1-percentColor));
     //} else {
-	vec4 col2 = vec4(78.0/255.0, 122.0/255.0, 191.0/255.0, 1.0/*0.200, 0.600, 0.750, 1.0*/);
-	vec4 col1 = vec4(22.0/255.0, 25.0/255.0, 59.0/255.0, 1.0/*0.900, 0.600, 0.600, 1.0*/);
+	//vec4 col1 = vec4(0.000, 0.000, 0.000, 1.0);
+	//vec4 col2 = vec4(1.000, 1.000, 1.000, 1.0);
 
 	vec4 newCol = mix(col2, col1, normalizedDist);
 

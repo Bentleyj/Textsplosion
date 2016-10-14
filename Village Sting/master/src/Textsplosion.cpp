@@ -19,6 +19,7 @@ Textsplosion::Textsplosion() {
 	lineWidth = 1.0;
 	shardSize = ofVec2f(1, 1);
 	tracker = 0.0;
+	viewDistance = 125;
 }
 
 void Textsplosion::update() {
@@ -44,8 +45,8 @@ void Textsplosion::draw() {
 	//ofDrawAxis(100);
 
 	(*shaders)[1].begin();
-	(*shaders)[1].setUniform1f("timeVal", 0.01);
-	(*shaders)[1].setUniform1f("distortAmount", distortFactor);
+	(*shaders)[1].setUniform1f("timeVal", 0.01 * ofGetElapsedTimef());
+	(*shaders)[1].setUniform1f("distortAmount", viewDistance);
 	(*shaders)[1].setUniform3f("camPosition", cam->getPosition());
 	(*shaders)[1].setUniform1f("brightnessModifier", brightnessModifier);
 	(*shaders)[1].setUniformTexture("texture0", *img, 0);

@@ -62,6 +62,8 @@ void Textsplosion::draw() {
 	(*shaders)[0].setUniform1f("distortAmount", distortFactor);
 	(*shaders)[0].setUniform3f("camPosition", cam->getPosition());
 	(*shaders)[0].setUniform1f("brightnessModifier", brightnessModifier);
+	(*shaders)[0].setUniform4f("col1", ofVec4f(backgroundColor1.r / 255.0, backgroundColor1.g / 255.0, backgroundColor1.b / 255.0, backgroundColor1.a / 255.0));
+	(*shaders)[0].setUniform4f("col2", ofVec4f(backgroundColor2.r / 255.0, backgroundColor2.g / 255.0, backgroundColor2.b / 255.0, backgroundColor1.a / 255.0));
 	mesh.setMode(OF_PRIMITIVE_TRIANGLES);
 	mesh.draw();
 	(*shaders)[0].end();
@@ -112,6 +114,18 @@ void Textsplosion::setViewPositionSpherical(float _r, float _theta, float _phi)
 	ofVec3f upVectorTemp = ofVec3f(0.0, 0.0, -1.0);
 
 	upVector = quat * upVectorTemp;
+}
+
+void Textsplosion::setTextColor() {
+	//ofRectangle rect = font->getStringBoundingBox(text, 0, 0);
+	//for (int i = 0; i < mesh.getNumColors(); i++) {
+	//	ofPoint vertex = mesh.getVertex(i);
+	//	float amount = (vertex.x) / (rect.getWidth());
+	//	amount = (amount > 1.0) ? 1.0 : amount;
+	//	amount = (amount < 0.0) ? 0.0 : amount;
+
+	//	mesh.setColor(i, color1.getLerped(color2, amount));
+	//}
 }
 
 void Textsplosion::setText(string _text) {

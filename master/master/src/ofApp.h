@@ -38,7 +38,10 @@ public:
 	ofParameter<float> distortFactor;
 	ofParameter<float> transitionDuration;
 	ofParameter<float> lineWidth;
-
+	ofParameter<ofColor> backgroundColor1;
+	ofParameter<ofColor> backgroundColor2;
+	ofParameter<ofColor> foregroundColor1;
+	ofParameter<ofColor> foregroundColor2;
 
 	ofVec3f cameraPosTarget;
 	ofVec3f camUpVectorTarget;

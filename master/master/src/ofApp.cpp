@@ -25,6 +25,11 @@ void ofApp::setup() {
 	gui.add(distortFactor.set("Distort", 500.0, 0.0, 1000.0));
 	gui.add(transitionDuration.set("Duration", 20.0, 1.0, 30.0));
 	gui.add(lineWidth.set("Line Width", 3.0, 1.0, 10.0));
+	gui.add(foregroundColor1.set("foreGroundColor1", ofColor(255, 255, 255)));
+	gui.add(foregroundColor2.set("foreGroundColor1", ofColor(255, 255, 255)));
+	gui.add(backgroundColor1.set("backgroundColor1", ofColor(255, 255, 255)));
+	gui.add(backgroundColor2.set("backgroundColor2", ofColor(255, 255, 255)));
+
 	gui.loadFromFile("settings/settings.xml");
 
 	//ofSetDataPathRoot("../Resources/data/");
@@ -64,11 +69,6 @@ void ofApp::setup() {
 	vector<string> imageNames; // = loader.load("images/finalPNGS");
 
 	imageNames.push_back("Edmond Safra");
-	imageNames.push_back("Sam Roe");
-	imageNames.push_back("Norman Foster");
-	imageNames.push_back("Margaux Esclapez");
-	imageNames.push_back("Amalie Englesson");
-	imageNames.push_back("James Bentley");
 	imageNames.push_back("Lilly Safra");
 
 	//vector<string> names;
@@ -88,10 +88,10 @@ void ofApp::setup() {
 
 	shardSizes[0] = ofVec2f(10, 10); // Village White
 	shardSizes[1] = ofVec2f(1, 200); // Spring Summer 2017
-	shardSizes[2] = ofVec2f(200, 1); // Press Open Day Tue 1st & Wed 2nd Novmeber 9am-6pm 2016
-	shardSizes[3] = ofVec2f(1, 1); // 140 Old St London EC1V 9BJ
-	shardSizes[4] = ofVec2f(5, 5); // RSVP hello@wearevillage.com
-	shardSizes[5] = ofVec2f(10, 10); // Village Gradient
+	//shardSizes[2] = ofVec2f(200, 1); // Press Open Day Tue 1st & Wed 2nd Novmeber 9am-6pm 2016
+	//shardSizes[3] = ofVec2f(1, 1); // 140 Old St London EC1V 9BJ
+	//shardSizes[4] = ofVec2f(5, 5); // RSVP hello@wearevillage.com
+	//shardSizes[5] = ofVec2f(10, 10); // Village Gradient
 
 	//for (int i = 0; i < imageNames.size(); i++) {
 	//	float theta = ofRandom(0.0, 180.0);
@@ -119,7 +119,7 @@ void ofApp::setup() {
 		tempText.setFont(font);
 		tempText.setCam(&cam);
 		//tempText.setColorGradient(ofRandom(0, 127), ofRandom(127, 255), ofRandom(127, 255), ofRandom(0, 127), ofRandom(127, 255), ofRandom(127, 255));
-		tempText.setColorGradient(127, 127, 127, 127, 127, 127);
+		tempText.setColorGradient(255, 255, 255, 255, 255, 255);
 		tempText.setShaders(&shaders);
 		tempText.setImg(&(images[i%imageNames.size()]));
 		tempText.setShardSize(ofRandom(1, 10), ofRandom(1, 10));
@@ -131,39 +131,48 @@ void ofApp::setup() {
 
 	ofEnableAntiAliasing();
 
+	animating = true;
+
 	initTime = 0.0f;
 
 }
  
 //--------------------------------------------------------------
 void ofApp::update() {
-	float now = ofGetElapsedTimef();
-	float endTime = initTime + transitionDuration*100;
+	if (animating) {
+		float now = ofGetElapsedTimef();
+		float endTime = initTime + transitionDuration * 100;
 
-	float distance = (cam.getPosition() - ofVec3f(0, 0, 0)).length();
+		float distance = (cam.getPosition() - ofVec3f(0, 0, 0)).length();
 
-	if (now < endTime) {
-		auto easingMethod = &ofxeasing::linear::easeIn;
-		float newX = ofxeasing::map(now, initTime, endTime, cam.getPosition().x, cameraPosTarget.x, easingMethod);
-		float newY = ofxeasing::map(now, initTime, endTime, cam.getPosition().y, cameraPosTarget.y, easingMethod);
-		float newZ = ofxeasing::map(now, initTime, endTime, cam.getPosition().z, cameraPosTarget.z, easingMethod);
+		if (now < endTime) {
+			auto easingMethod = &ofxeasing::linear::easeIn;
+			float newX = ofxeasing::map(now, initTime, endTime, cam.getPosition().x, cameraPosTarget.x, easingMethod);
+			float newY = ofxeasing::map(now, initTime, endTime, cam.getPosition().y, cameraPosTarget.y, easingMethod);
+			float newZ = ofxeasing::map(now, initTime, endTime, cam.getPosition().z, cameraPosTarget.z, easingMethod);
 
-		cam.setPosition(newX, newY, newZ);
+			cam.setPosition(newX, newY, newZ);
 
-		float newUpX = ofxeasing::map(now, initTime, endTime, cam.getUpDir().x, camUpVectorTarget.x, easingMethod);
-		float newUpY = ofxeasing::map(now, initTime, endTime, cam.getUpDir().y, camUpVectorTarget.y, easingMethod);
-		float newUpZ = ofxeasing::map(now, initTime, endTime, cam.getUpDir().z, camUpVectorTarget.z, easingMethod);
+			float newUpX = ofxeasing::map(now, initTime, endTime, cam.getUpDir().x, camUpVectorTarget.x, easingMethod);
+			float newUpY = ofxeasing::map(now, initTime, endTime, cam.getUpDir().y, camUpVectorTarget.y, easingMethod);
+			float newUpZ = ofxeasing::map(now, initTime, endTime, cam.getUpDir().z, camUpVectorTarget.z, easingMethod);
 
-		cam.lookAt(ofVec3f(0, 0, 0), ofVec3f(newUpX, newUpY, newUpZ));
-	}
-	else if(distance > 500) {
-		goToNextText(150);
+			cam.lookAt(ofVec3f(0, 0, 0), ofVec3f(newUpX, newUpY, newUpZ));
+		}
+		else if (distance > 500) {
+			//goToNextText(150);
+		}
 	}
 
 	for (int i = 0; i < texts.size(); i++) {
 		texts[i].setDistortFactor(distortFactor);
 		texts[i].setLineWidth(lineWidth);
 		texts[i].update();
+		texts[i].setBackgroundColor1(backgroundColor1.get());
+		texts[i].setBackgroundColor2(backgroundColor2.get());
+		texts[i].setColor1(backgroundColor1.get());
+		texts[i].setColor2(backgroundColor2.get());
+		texts[i].setTextColor();
 	}
 }
 

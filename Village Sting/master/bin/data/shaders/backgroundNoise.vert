@@ -93,16 +93,16 @@ void main() {
 
 	float noiseAmntZ;
 
-	float cappedDistortAmount = min(distortAmount, distanceToTarget);
+	float cappedDistortAmount = distortAmount - 10;//min(distortAmount, distanceToTarget);
 
 	if (gl_VertexID % 3 == 0) {
-		noiseAmntZ = snoise(vec2(timeVal + gl_VertexID, 1.0f)) * cappedDistortAmount;
+		noiseAmntZ = snoise(vec2(timeVal + gl_VertexID%5010, 1.0f)) * cappedDistortAmount;
 	}
 	else if (gl_VertexID % 3 == 1) {
-		noiseAmntZ = snoise(vec2(timeVal + gl_VertexID - 1, 1.0f)) * cappedDistortAmount;
+		noiseAmntZ = snoise(vec2(timeVal + gl_VertexID%5010 - 1, 1.0f)) * cappedDistortAmount;
 	}
 	else {
-		noiseAmntZ = snoise(vec2(timeVal + gl_VertexID - 2, 1.0f)) * cappedDistortAmount;
+		noiseAmntZ = snoise(vec2(timeVal + gl_VertexID%5010 - 2, 1.0f)) * cappedDistortAmount;
 	}
 
 	pos.z += noiseAmntZ;//cos(pos.x * timeVal);//noiseAmntZ;
@@ -117,7 +117,7 @@ void main() {
 	float distToVertexFromCenter = length(pos.xyz - center);
 
 	//if(percentColor < 1.0) {
-	percentColor = brightnessModifier + map(distToVertexFromCenter, 0.0, distortAmount, 0.9, 0.4);
+	percentColor = brightnessModifier + max(map(distToVertexFromCenter, 0.0, distortAmount, 0.9, 0.4), 0.0);
 	if (percentColor > 1.0) percentColor = 1.0;
 	// //}
 	// if(snoise(vec2(gl_VertexID - 1, 100.0f)) > 0.7) {

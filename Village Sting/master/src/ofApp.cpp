@@ -19,6 +19,7 @@ void ofApp::setup() {
 
 	//img.load("images/Village split image.png");
 
+
 	gui.setup("GUI", "settings/settings.xml");
 	gui.add(distortFactor.set("Distort", 500.0, 0.0, 1000.0));
 	gui.add(transitionDuration.set("Duration", 20.0, 1.0, 30.0));
@@ -28,13 +29,12 @@ void ofApp::setup() {
 	gui.add(animating.set("animating", false));
 	gui.add(fadingUp.set("fadingUp", false));
 	gui.add(fadeAmount.set("fadeAmount", 1.0, 0.0, 1.0));
-	gui.loadFromFile("settings/settings.xml");
 
 	//ofSetDataPathRoot("../Resources/data/");
 
 	post.init(ofGetWidth(), ofGetHeight());
 
-	post.createPass<HorizontalTiltShifPass>()->setEnabled(true);
+	//post.createPass<HorizontalTiltShifPass>()->setEnabled(true);
 	post.createPass<GodRaysPass>()->setEnabled(true);
 
 	//tiltShiftHoriPass->setEnabled(true);
@@ -65,7 +65,7 @@ void ofApp::setup() {
 	shaders.push_back(backgroundNoise);
 
 	ofxNestedFileLoader loader;
-	vector<string> imageNames = loader.load("images/finalPNGS");
+	vector<string> imageNames = loader.load("images/SquarePNGs");
 
 	//vector<string> names;
 	//for (int i = 0; i < imageNames.size(; i++) {
@@ -76,8 +76,20 @@ void ofApp::setup() {
 
 	//texts.resize(imageNames.size() * NUM_NAMES);
 	images.resize(imageNames.size());
+	viewDistances.resize(imageNames.size());
+
+	viewDistancesGroup.setName("View Distances");
+
+	for (int i = 0; i < viewDistances.size(); i++) {
+		viewDistancesGroup.add(viewDistances[i].set("View Distance " + ofToString(i), 125.0, 10.0, 200.0));
+	}
+
+	gui.add(viewDistancesGroup);
+	gui.loadFromFile("settings/settings.xml");
+
 
 	vector<ofVec2f> shardSizes;
+
 	for (int i = 0; i < images.size(); i++) {
 		shardSizes.push_back(ofVec2f(10, 10));
 	}
@@ -201,6 +213,7 @@ void ofApp::update() {
 		texts[i].setDistortFactor(distortFactor);
 		texts[i].setLineWidth(lineWidth);
 		texts[i].update();
+		texts[i].setViewDistance(viewDistances[i]);
 	}
 }
 
@@ -265,14 +278,14 @@ void ofApp::draw() {
 
 }
 
-void ofApp::goToNextText(float distance) {
+void ofApp::goToNextText() {
 	//float distance = 125;
 	cameraPosOld = cam.getPosition();//texts[textIndex].getViewPosition() * distance;
 	camUpVectorOld = cam.getUpDir();//texts[textIndex].getUpVector();
 	texts[textIndex].fadeOut(transitionDuration);
 	textIndex++;
 	textIndex %= texts.size();
-	cameraPosTarget = texts[textIndex].getViewPosition() * distance;
+	cameraPosTarget = texts[textIndex].getViewPosition() * texts[textIndex].getViewDistance();
 	camUpVectorTarget = texts[textIndex].getUpVector();
 	texts[textIndex].fadeIn(transitionDuration);
 
@@ -284,7 +297,7 @@ void ofApp::goToNextText(float distance) {
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key) {
 	if (key == ' ') {
-		goToNextText(125);
+		goToNextText();
 	}
 	if (key == 'a') {
 		if (animating) {

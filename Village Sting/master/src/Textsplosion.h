@@ -53,6 +53,7 @@ public:
 	};
 	void setShardSize(float _x, float _y) { setShardSize(ofVec2f(_x, _y)); };
 	void setBrightnessModifier(float _bm) { brightnessModifier = _bm; };
+	void setViewDistance(float _vd) { viewDistance = _vd; };
 
     //Getters
     string getText() { return text; };
@@ -62,6 +63,7 @@ public:
 	float getBrightnessModifier() { return brightnessModifier; };
 	float getDistortFactor() { return distortFactor; };
 	ofVec2f getShardSize() { return shardSize; };
+	float getViewDistance() { return viewDistance; };
     
     //Functionality
     void draw();
@@ -98,6 +100,7 @@ private:
 	float targetBrightness;
 	float lineWidth;
 	float tracker;
+	float viewDistance;
 
 	//References to outside things used for calculations
 	ofEasyCam* cam;
