@@ -33,17 +33,24 @@ void Textsplosion::update() {
 void Textsplosion::draw() {
 	// We'll draw our display mesh each frame
     ofPushMatrix();
-
+    
+    // Set our line width in case we are drawing with lines, we aren't anymore but I think it did look pretty cool so may go back to it
     ofSetLineWidth(lineWidth);
-
+    
+    // annoyingly, ofRotate only takes an axis and some angles so we need to get the rotation from the quaternion we calculated when we initialized the view position and angle. Really stupid, ofRotate should have a quaternion overload.
+    // Maybe I will write this at some point.
 	float angle;
 	ofVec3f axis;
+    //Get those euler angles!
 	quat.getRotate(angle, axis);
+    // rotate by our saved rotation
 	ofRotate(angle, axis.x, axis.y, axis.z);
+    // I don't know why I need to do this but I do, need to investigate further, if you comment it out all the angles are off.
 	ofRotate(-90.0, 1.0, 0.0, 0.0);
 
-	//ofDrawAxis(100);
+	//ofDrawAxis(100); // use this for debugging
 
+    //This is our code for drawing imageswhich we don't really want to use, what we really want to be able to switch between these seemlessly either by combining the shaders or adding some logic to the textsplosion.
 	//(*shaders)[1].begin();
 	//(*shaders)[1].setUniform1f("timeVal", 0.01);
 	//(*shaders)[1].setUniform1f("distortAmount", distortFactor);
@@ -55,15 +62,21 @@ void Textsplosion::draw() {
 	//backgroundMesh.draw();
 	//img->unbind();
 	//(*shaders)[1].end();
-
-	ofSetColor(color1);
+    
+    // This is the shader you use for drawing text. I want to combine the image and text shaders in to 1 but havn't gotten around to it et. Not even sure if it's a great idea.
 	(*shaders)[0].begin();
+    // This tells the shader what time it is and the scalar multiplied by ofGetElapsedTimef() can be used to control the speed of the noise.
 	(*shaders)[0].setUniform1f("timeVal", ofGetElapsedTimef() * 0.01);
+    // This tells the shader what the maximum distortion factor should be, ie the furthest from the origin that the shards are allowed to wobble
 	(*shaders)[0].setUniform1f("distortAmount", distortFactor);
+    // Need to tell the shader about the position of the camera
 	(*shaders)[0].setUniform3f("camPosition", cam->getPosition());
+    // Also tell the shader about how bright our text is. This is used for highlighing, a value of 0 goes to black and value of 1 goes to white, default is set in the constructor
+    // Of Textsplosion objects to be 0.3
 	(*shaders)[0].setUniform1f("brightnessModifier", brightnessModifier);
-	(*shaders)[0].setUniform4f("col1", ofVec4f(backgroundColor1.r / 255.0, backgroundColor1.g / 255.0, backgroundColor1.b / 255.0, backgroundColor1.a / 255.0));
-	(*shaders)[0].setUniform4f("col2", ofVec4f(backgroundColor2.r / 255.0, backgroundColor2.g / 255.0, backgroundColor2.b / 255.0, backgroundColor1.a / 255.0));
+    // Set the two colors for the background shards, ***I'm going to write a helper method that converts these now and will delete this text when I've done it.*** Did it!! See below! it's called ColorToUniformRange
+	(*shaders)[0].setUniform4f("col1", ColorToUniformRange(backgroundColor1));
+	(*shaders)[0].setUniform4f("col2", ColorToUniformRange(backgroundColor1));
 	mesh.setMode(OF_PRIMITIVE_TRIANGLES);
 	mesh.draw();
 	(*shaders)[0].end();
@@ -71,17 +84,27 @@ void Textsplosion::draw() {
     ofPopMatrix();
 }
 
+// This method takes an ofColor and converts all it values to a ofVec4f with values between 0 and 1 so we can pass it in to the shader and don't have the rescale it per vertex or per pixel.
+ofVec4f Textsplosion::ColorToUniformRange(ofColor col) {
+    return ofVec4f(col.r / 255.0, col.g / 255.0, col.b / 255.0, col.a / 255.0);
+}
+
+//This fades in the Text by setting it's targetBrightness to 1.0
 void Textsplosion::fadeIn() {
-	//fadeStartTime = ofGetElapsedTimef();
-	//fadeEndTime = fadeStartTime + duration;
 	targetBrightness = 1.0;
 }
 
+//This fades out the text by setting its target brightness to the default which is currently 0.3
 void Textsplosion::fadeOut() {
-	//fadeStartTime = ofGetElapsedTimef();
-	//fadeEndTime = fadeStartTime +duration;
-	targetBrightness = 0.2;
+	targetBrightness = 0.3;
 }
+
+/* 
+ This is the most important method in the WHOLE class, basically you set a view position for the object based on spherical coordinates, so you move the amera to a random point on the sphere and this calculates all the important stuff:
+ viewPosition -> Where the camera needs to sit in Cartesian coordinates (simple conversion from spherical to cartesian)
+ quat -> the quternion representing the rotation that needs to happen in order to point the text at the correct viewPosition
+ upVector -> the upwards facing vector for the text or image after we've rotated with the quaternion
+ */
 
 void Textsplosion::setViewPositionSpherical(float _r, float _theta, float _phi)
 {

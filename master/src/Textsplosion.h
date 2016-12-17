@@ -96,6 +96,8 @@ public:
     void update();
 	void fadeIn();
 	void fadeOut();
+    ofVec4f ColorToUniformRange(ofColor col);
+
 
 private:
 	//Core variables
