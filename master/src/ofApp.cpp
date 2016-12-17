@@ -1,6 +1,6 @@
 #include "ofApp.h"
 
-#define NUM_NAMES 100
+#define NUM_NAMES 3
 
 //--------------------------------------------------------------
 void ofApp::setup() {
@@ -34,10 +34,10 @@ void ofApp::setup() {
 
 	//ofSetDataPathRoot("../Resources/data/");
 
-	post.init(ofGetWidth(), ofGetHeight());
-
-	post.createPass<HorizontalTiltShifPass>()->setEnabled(true);
-	post.createPass<GodRaysPass>()->setEnabled(true);
+//	post.init(ofGetWidth(), ofGetHeight());
+//
+//	post.createPass<HorizontalTiltShifPass>()->setEnabled(true);
+//	post.createPass<GodRaysPass>()->setEnabled(true);
 
 	//tiltShiftHoriPass->setEnabled(true);
 	//tiltShiftHoriPass->setH(0.005);
@@ -98,34 +98,35 @@ void ofApp::setup() {
 	//	float phi = ofRandom(0.0, 360.0);
 	//	images[i].load(imageNames[i]); 
 	//	Textsplosion tempText;
-	//	tempText.setFont(font);
-	//	tempText.setCam(&cam);
-	//	tempText.setColorGradient(255, 128, 0, 255, 217, 51);
-	//	tempText.setColorGradient(51, 153, 191, 229, 153, 153);
-	//	tempText.setColorGradient(ofRandom(127, 255), ofRandom(127, 255), ofRandom(127, 255), ofRandom(127, 255), ofRandom(127, 255), ofRandom(127, 255));
-	//	tempText.setShaders(&shaders);
-	//	tempText.setImg(&(images[i]));
-	//	tempText.setShardSize(shardSizes[i]);
-	//	tempText.setText(imageNames[i]);
-	//	tempText.setViewPositionSpherical(150.0, theta, phi);
-	//	tempText.setCenter(ofVec3f(0, 0, 0));
+	//	tempText->setFont(font);
+	//	tempText->setCam(&cam);
+	//	tempText->setColorGradient(255, 128, 0, 255, 217, 51);
+	//	tempText->setColorGradient(51, 153, 191, 229, 153, 153);
+	//	tempText->setColorGradient(ofRandom(127, 255), ofRandom(127, 255), ofRandom(127, 255), ofRandom(127, 255), ofRandom(127, 255), ofRandom(127, 255));
+	//	tempText->setShaders(&shaders);
+	//	tempText->setImg(&(images[i]));
+	//	tempText->setShardSize(shardSizes[i]);
+	//	tempText->setText(imageNames[i]);
+	//	tempText->setViewPositionSpherical(150.0, theta, phi);
+	//	tempText->setCenter(ofVec3f(0, 0, 0));
 	//	texts.push_back(tempText);
 	//}
 
 	for (int i = 0; i < NUM_NAMES; i++) {
 		float theta = ofRandom(0.0, 180.0);
 		float phi = ofRandom(0.0, 360.0);
-		Textsplosion tempText;
-		tempText.setFont(font);
-		tempText.setCam(&cam);
-		//tempText.setColorGradient(ofRandom(0, 127), ofRandom(127, 255), ofRandom(127, 255), ofRandom(0, 127), ofRandom(127, 255), ofRandom(127, 255));
-		tempText.setColorGradient(255, 255, 255, 255, 255, 255);
-		tempText.setShaders(&shaders);
-		tempText.setImg(&(images[i%imageNames.size()]));
-		tempText.setShardSize(ofRandom(1, 10), ofRandom(1, 10));
-		tempText.setText(imageNames[i%imageNames.size()]);
-		tempText.setViewPositionSpherical(150.0, theta, phi);
-		tempText.setCenter(ofVec3f(0, 0, 0));
+		Textsplosion* tempText;
+        tempText = new Textsplosion();
+		tempText->setFont(font);
+		tempText->setCam(&cam);
+		//tempText->setColorGradient(ofRandom(0, 127), ofRandom(127, 255), ofRandom(127, 255), ofRandom(0, 127), ofRandom(127, 255), ofRandom(127, 255));
+		tempText->setColorGradient(255, 255, 255, 255, 255, 255);
+		tempText->setShaders(&shaders);
+		tempText->setImg(&(images[i%imageNames.size()]));
+		tempText->setShardSize(ofRandom(1, 10), ofRandom(1, 10));
+		tempText->setText(imageNames[i%imageNames.size()]);
+		tempText->setViewPositionSpherical(150.0, theta, phi);
+		//tempText->setCenter(ofVec3f(0, 0, 0));
 		texts.push_back(tempText);
 	}
 
@@ -146,16 +147,16 @@ void ofApp::update() {
 		float distance = (cam.getPosition() - ofVec3f(0, 0, 0)).length();
 
 		if (now < endTime) {
-			auto easingMethod = &ofxeasing::linear::easeIn;
-			float newX = ofxeasing::map(now, initTime, endTime, cam.getPosition().x, cameraPosTarget.x, easingMethod);
-			float newY = ofxeasing::map(now, initTime, endTime, cam.getPosition().y, cameraPosTarget.y, easingMethod);
-			float newZ = ofxeasing::map(now, initTime, endTime, cam.getPosition().z, cameraPosTarget.z, easingMethod);
+			//auto easingMethod = &ofxeasing::linear::easeIn;
+            float newX = ofLerp(cam.getPosition().x, cameraPosTarget.x, 0.1);//ofxeasing::map(now, initTime, endTime, cam.getPosition().x, cameraPosTarget.x, easingMethod);
+			float newY = ofLerp(cam.getPosition().y, cameraPosTarget.y, 0.1);//ofxeasing::map(now, initTime, endTime, cam.getPosition().y, cameraPosTarget.y, easingMethod);
+			float newZ = ofLerp(cam.getPosition().z, cameraPosTarget.z, 0.1);//ofxeasing::map(now, initTime, endTime, cam.getPosition().z, cameraPosTarget.z, easingMethod);
 
 			cam.setPosition(newX, newY, newZ);
 
-			float newUpX = ofxeasing::map(now, initTime, endTime, cam.getUpDir().x, camUpVectorTarget.x, easingMethod);
-			float newUpY = ofxeasing::map(now, initTime, endTime, cam.getUpDir().y, camUpVectorTarget.y, easingMethod);
-			float newUpZ = ofxeasing::map(now, initTime, endTime, cam.getUpDir().z, camUpVectorTarget.z, easingMethod);
+			float newUpX = ofLerp(cam.getUpDir().x, camUpVectorTarget.x, 0.1);//ofxeasing::map(now, initTime, endTime, cam.getUpDir().x, camUpVectorTarget.x, easingMethod);
+			float newUpY = ofLerp(cam.getUpDir().y, camUpVectorTarget.y, 0.1);// ofxeasing::map(now, initTime, endTime, cam.getUpDir().y, camUpVectorTarget.y, easingMethod);
+			float newUpZ = ofLerp(cam.getUpDir().z, camUpVectorTarget.z, 0.1);//ofxeasing::map(now, initTime, endTime, cam.getUpDir().z, camUpVectorTarget.z, easingMethod);
 
 			cam.lookAt(ofVec3f(0, 0, 0), ofVec3f(newUpX, newUpY, newUpZ));
 		}
@@ -165,14 +166,14 @@ void ofApp::update() {
 	}
 
 	for (int i = 0; i < texts.size(); i++) {
-		texts[i].setDistortFactor(distortFactor);
-		texts[i].setLineWidth(lineWidth);
-		texts[i].update();
-		texts[i].setBackgroundColor1(backgroundColor1.get());
-		texts[i].setBackgroundColor2(backgroundColor2.get());
-		texts[i].setColor1(backgroundColor1.get());
-		texts[i].setColor2(backgroundColor2.get());
-		texts[i].setTextColor();
+		texts[i]->setDistortFactor(distortFactor);
+		texts[i]->setLineWidth(lineWidth);
+		texts[i]->update();
+		texts[i]->setBackgroundColor1(backgroundColor1.get());
+		texts[i]->setBackgroundColor2(backgroundColor2.get());
+		texts[i]->setColor1(backgroundColor1.get());
+		texts[i]->setColor2(backgroundColor2.get());
+		//texts[i]->setTextColor();
 	}
 }
 
@@ -180,14 +181,14 @@ void ofApp::update() {
 void ofApp::draw() {
 
 	//cam.begin();
-	post.begin(cam);
+	//post.begin(cam);
 
 	//float highestPercentage = -1.0;
 	//float lowestPercentage = 1.0;
 	//int highestPercentageIndex;
 	//for (int i = 0; i < texts.size(); i++) {
 	//	ofVec3f currentViewPos = cam.getPosition().normalize();
-	//	ofVec3f textViewPos = texts[i].getViewPosition().normalize();
+	//	ofVec3f textViewPos = texts[i]->getViewPosition().normalize();
 	//	float diff = (currentViewPos - textViewPos).length();
 	//	float percent = ofMap(diff, 0.0, 2.0, 1.0, 0.0, true);
 	//	if (percent > highestPercentage) {
@@ -201,19 +202,24 @@ void ofApp::draw() {
 
 	//float distance = (cam.getPosition() - ofVec3f(0, 0, 0)).length();
 	//ofEnableDepthTest();
-	for (int i = 0; i < texts.size(); i++) {
-		texts[i].draw();
-	}
+//	for (int i = 0; i < texts.size(); i++) {
+//		texts[i]->draw();
+//	}
 	//texts[textIndex].draw();
 	//ofDisableDepthTest();
 	
-	post.end();
+	//post.end();
 	cam.begin();
+    vector<Textsplosion*> brightTexts;
 	for (int i = 0; i < texts.size(); i++) {
-		if (texts[i].getBrightnessModifier() > 0.4) {
-			texts[i].draw();
-		}
+        texts[i]->draw();
+//        if(texts[i]->getBrightnessModifier() > 0.3) {
+//            brightTexts.push_back(texts[i]);
+//        }
 	}
+//    for(int i = 0; i < brightTexts.size(); i++) {
+//        brighttexts[i]->draw
+//    }
 	cam.end();
 	//cam.end();
 
@@ -228,18 +234,17 @@ void ofApp::draw() {
 }
 
 void ofApp::goToNextText(float distance) {
-	texts[textIndex].fadeOut(transitionDuration);
+	texts[texts.size() - 1]->fadeOut();
 	textIndex++;
 	textIndex %= images.size();
-	//float distance = 500;//(cam.getPosition() - ofVec3f(0, 0, 0)).length();//125;
-	//ofVec3f randomFarTarget = ofVec3f(ofRandom(1.0), ofRandom(1.0), ofRandom(1.0));
-	//randomFarTarget = 
-	cameraPosTarget = texts[textIndex].getViewPosition() * distance;
-	camUpVectorTarget = texts[textIndex].getUpVector();
-	texts[textIndex].fadeIn(transitionDuration);
+	cameraPosTarget = texts[textIndex]->getViewPosition() * distance;
+	camUpVectorTarget = texts[textIndex]->getUpVector();
+	texts[textIndex]->fadeIn();
+    texts.push_back(texts[textIndex]);
+    camUpVectorTarget = texts[textIndex]->getUpVector();
+    texts.erase(texts.begin() + textIndex);
 	initTime = ofGetElapsedTimef();
 
-	camUpVectorTarget = texts[textIndex].getUpVector();
 }
 
 //--------------------------------------------------------------
@@ -301,7 +306,7 @@ void ofApp::mouseExited(int x, int y) {
 
 //--------------------------------------------------------------
 void ofApp::windowResized(int w, int h) {
-	post.init(w, h);
+	//post.init(w, h);
 }
 
 //--------------------------------------------------------------

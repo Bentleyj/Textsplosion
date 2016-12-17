@@ -7,13 +7,13 @@
 //
 
 #include "Textsplosion.h"
-#include "ofxEasing.h"
+//#include "ofxEasing.h"
 #include "triangulator.h"
 
 Textsplosion::Textsplosion() {
 	//Set everything up by default (real simple)
-	fadeStartTime = 0.0;
-	fadeEndTime = 0.0;
+	//fadeStartTime = 0.0;
+	//fadeEndTime = 0.0;
 	brightnessModifier = 0.3;
 	distortFactor - 0.0;
 	lineWidth = 1.0;
@@ -24,10 +24,10 @@ void Textsplosion::update() {
 	// Update the noise
 	float now = ofGetElapsedTimef();
 
-	if (now < fadeEndTime) {
-		auto easingMethod = &ofxeasing::quart::easeIn;
-		brightnessModifier = ofxeasing::map(now, fadeStartTime, fadeEndTime, brightnessModifier, targetBrightness, easingMethod);
-	}
+	//if (now < fadeEndTime) {
+		//auto easingMethod = &ofxeasing::quart::easeIn;
+        brightnessModifier = ofLerp(brightnessModifier, targetBrightness, 0.1);//ofxeasing::map(now, fadeStartTime, fadeEndTime, brightnessModifier, targetBrightness, easingMethod);
+	//}
 }
 
 void Textsplosion::draw() {
@@ -56,7 +56,7 @@ void Textsplosion::draw() {
 	//img->unbind();
 	//(*shaders)[1].end();
 
-	//ofSetColor(color1);
+	ofSetColor(color1);
 	(*shaders)[0].begin();
 	(*shaders)[0].setUniform1f("timeVal", ofGetElapsedTimef() * 0.01);
 	(*shaders)[0].setUniform1f("distortAmount", distortFactor);
@@ -71,15 +71,15 @@ void Textsplosion::draw() {
     ofPopMatrix();
 }
 
-void Textsplosion::fadeIn(float duration) {
-	fadeStartTime = ofGetElapsedTimef();
-	fadeEndTime = fadeStartTime + duration;
+void Textsplosion::fadeIn() {
+	//fadeStartTime = ofGetElapsedTimef();
+	//fadeEndTime = fadeStartTime + duration;
 	targetBrightness = 1.0;
 }
 
-void Textsplosion::fadeOut(float duration) {
-	fadeStartTime = ofGetElapsedTimef();
-	fadeEndTime = fadeStartTime +duration;
+void Textsplosion::fadeOut() {
+	//fadeStartTime = ofGetElapsedTimef();
+	//fadeEndTime = fadeStartTime +duration;
 	targetBrightness = 0.2;
 }
 
@@ -114,18 +114,6 @@ void Textsplosion::setViewPositionSpherical(float _r, float _theta, float _phi)
 	ofVec3f upVectorTemp = ofVec3f(0.0, 0.0, -1.0);
 
 	upVector = quat * upVectorTemp;
-}
-
-void Textsplosion::setTextColor() {
-	//ofRectangle rect = font->getStringBoundingBox(text, 0, 0);
-	//for (int i = 0; i < mesh.getNumColors(); i++) {
-	//	ofPoint vertex = mesh.getVertex(i);
-	//	float amount = (vertex.x) / (rect.getWidth());
-	//	amount = (amount > 1.0) ? 1.0 : amount;
-	//	amount = (amount < 0.0) ? 0.0 : amount;
-
-	//	mesh.setColor(i, color1.getLerped(color2, amount));
-	//}
 }
 
 void Textsplosion::setText(string _text) {

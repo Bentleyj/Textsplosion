@@ -1,4 +1,4 @@
-#include "triangulator.h"
+#include "Triangulator.h"
 
 bool Triangulator::generateTriangulation(ofMesh * input, ofMesh * output)
 {

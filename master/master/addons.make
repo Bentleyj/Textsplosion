@@ -1,5 +1,0 @@
-ofxGui
-ofxEasing
-ofxFontStash
-ofxNestedFileLoader
-ofxPostProcessing

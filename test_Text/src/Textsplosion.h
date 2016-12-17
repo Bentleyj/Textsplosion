@@ -34,7 +34,7 @@ public:
     
     //Functionality
     void draw();
-    void update();
+    void update();  
 private:
     string text;
     ofColor color;

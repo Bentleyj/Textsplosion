@@ -21,7 +21,6 @@
 #define Textsplosion_h
 
 #include "ofMain.h"
-#include "ofTessellator.h"
 
 class Textsplosion {
 public:
@@ -80,7 +79,7 @@ public:
 		//}
 		shardSize = _size;
 	};
-	void setTextColor();
+    
 	void setShardSize(float _x, float _y) { setShardSize(ofVec2f(_x, _y)); };
 
     //Getters
@@ -95,8 +94,8 @@ public:
     //Functionality
     void draw();
     void update();
-	void fadeIn(float duration);
-	void fadeOut(float duration);
+	void fadeIn();
+	void fadeOut();
 
 private:
 	//Core variables
@@ -124,8 +123,6 @@ private:
 	ofColor backgroundColor1;
 	ofColor backgroundColor2;
 	float brightnessModifier;
-	float fadeStartTime;
-	float fadeEndTime;
 	float targetBrightness;
 	float lineWidth;
 

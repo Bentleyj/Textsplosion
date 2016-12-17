@@ -1,0 +1,3 @@
+ofxFontStash
+ofxGui
+ofxNestedFileLoader

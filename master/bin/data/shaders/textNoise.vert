@@ -81,8 +81,8 @@ float snoise(vec2 v)
   return 130.0 * dot(m, g);
 }
 
-float map(float input, float input_start, float input_end, float output_start, float output_end) {
-	return output_start + ((output_end - output_start) / (input_end - input_start)) * (input - input_start);
+float map(float input_value, float input_start, float input_end, float output_start, float output_end) {
+	return output_start + ((output_end - output_start) / (input_end - input_start)) * (input_value - input_start);
 }
 
 
@@ -90,7 +90,7 @@ float map(float input, float input_start, float input_end, float output_start, f
 void main(){
 	// get original vertex postion
 	vec4 pos = gl_Vertex;
-
+    
 	float distanceToTarget = length(camPosition - center);
 
 	float noiseAmntZ;
@@ -128,16 +128,9 @@ void main(){
 
 	pos = gl_ProjectionMatrix * gl_ModelViewMatrix * pos;
 
-    //if(percentColor < 0.1) {
-   //     gl_FrontColor = vec4(0.0, 0.0, 0.0, 1.0);///*gl_Color*/(colorClose * percentColor + colorFar * (1-percentColor));
-    //} else {
-	//vec4 col1 = vec4(0.000, 0.000, 0.000, 1.0);
-	//vec4 col2 = vec4(1.000, 1.000, 1.000, 1.0);
-
 	vec4 newCol = mix(col2, col1, normalizedDist);
 
-	gl_FrontColor = vec4((gl_Color * percentColor + newCol * (1 - percentColor)).xyz, 0.5 + percentColor);///*gl_Color*/(colorClose * percentColor + colorFar * (1-percentColor));
-    //}
+	gl_FrontColor = vec4((gl_Color * percentColor + newCol * (1 - percentColor)).xyz, 0.5 + percentColor);
 	
 	gl_Position = pos;
 	gl_TexCoord[0] = gl_MultiTexCoord0;

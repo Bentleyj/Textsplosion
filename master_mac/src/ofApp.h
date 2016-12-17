@@ -4,9 +4,6 @@
 #include "ofxFontStash.h"
 #include "ofxGui.h"
 #include "Textsplosion.h"
-#include "ofxPostProcessing.h"
-#include "ofxEasing.h"
-#include "ofxNestedFileLoader.h"
 
 class ofApp : public ofBaseApp {
 
@@ -27,21 +24,17 @@ public:
 	void dragEvent(ofDragInfo dragInfo);
 	void gotMessage(ofMessage msg);
 
-	void goToNextText(float distance);
+	void drawSquares();
+	ofVec3f drawText(string text, ofVec3f viewPositionNorm);
 
 	vector<Textsplosion> texts;
 
 	ofxPanel gui;
 
-	vector<ofVec2f> positions;
+	ofParameter<float> xScale;
+	ofParameter<float> yScale;
 
-	ofParameter<float> distortFactor;
-	ofParameter<float> transitionDuration;
-	ofParameter<float> lineWidth;
-	ofParameter<ofColor> backgroundColor1;
-	ofParameter<ofColor> backgroundColor2;
-	ofParameter<ofColor> foregroundColor1;
-	ofParameter<ofColor> foregroundColor2;
+	vector<ofVec2f> positions;
 
 	ofVec3f cameraPosTarget;
 	ofVec3f camUpVectorTarget;
@@ -56,23 +49,10 @@ public:
 	int textIndex;
 
 	bool animating = false;
-	bool showGui = true;
 
 	ofTrueTypeFont* font;
 
-	ofShader textNoise;
-	ofShader backgroundNoise;
-
-	vector<ofImage> images;
-
-	ofxPostProcessing post;
-
-	float initTime;
-	float duration;
-
-	DofAltPass::Ptr tiltShiftHoriPass;
-
-	vector<ofShader> shaders;
+	ofShader noiseShader;
 
 	ofLight light;
 
