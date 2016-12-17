@@ -49,7 +49,7 @@ void ofApp::setup() {
 
 	noise = 0;
 
-	textIndex = 0;
+//	textIndex = 0;
 
 	ofSetLogLevel(OF_LOG_ERROR);
 
@@ -134,7 +134,6 @@ void ofApp::setup() {
 
 	animating = true;
 
-	initTime = 0.0f;
 
 }
  
@@ -142,11 +141,9 @@ void ofApp::setup() {
 void ofApp::update() {
 	if (animating) {
 		float now = ofGetElapsedTimef();
-		float endTime = initTime + transitionDuration * 100;
 
 		float distance = (cam.getPosition() - ofVec3f(0, 0, 0)).length();
 
-		if (now < endTime) {
 			//auto easingMethod = &ofxeasing::linear::easeIn;
             float newX = ofLerp(cam.getPosition().x, cameraPosTarget.x, 0.1);//ofxeasing::map(now, initTime, endTime, cam.getPosition().x, cameraPosTarget.x, easingMethod);
 			float newY = ofLerp(cam.getPosition().y, cameraPosTarget.y, 0.1);//ofxeasing::map(now, initTime, endTime, cam.getPosition().y, cameraPosTarget.y, easingMethod);
@@ -159,10 +156,6 @@ void ofApp::update() {
 			float newUpZ = ofLerp(cam.getUpDir().z, camUpVectorTarget.z, 0.1);//ofxeasing::map(now, initTime, endTime, cam.getUpDir().z, camUpVectorTarget.z, easingMethod);
 
 			cam.lookAt(ofVec3f(0, 0, 0), ofVec3f(newUpX, newUpY, newUpZ));
-		}
-		else if (distance > 500) {
-			//goToNextText(150);
-		}
 	}
 
 	for (int i = 0; i < texts.size(); i++) {
@@ -235,15 +228,12 @@ void ofApp::draw() {
 
 void ofApp::goToNextText(float distance) {
 	texts[texts.size() - 1]->fadeOut();
-	textIndex++;
-	textIndex %= images.size();
-	cameraPosTarget = texts[textIndex]->getViewPosition() * distance;
-	camUpVectorTarget = texts[textIndex]->getUpVector();
-	texts[textIndex]->fadeIn();
-    texts.push_back(texts[textIndex]);
-    camUpVectorTarget = texts[textIndex]->getUpVector();
-    texts.erase(texts.begin() + textIndex);
-	initTime = ofGetElapsedTimef();
+	cameraPosTarget = texts[0]->getViewPosition() * distance;
+	camUpVectorTarget = texts[0]->getUpVector();
+	texts[0]->fadeIn();
+    texts.push_back(texts[0]);
+    camUpVectorTarget = texts[0]->getUpVector();
+    texts.erase(texts.begin());
 
 }
 

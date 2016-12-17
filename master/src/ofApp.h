@@ -53,8 +53,6 @@ public:
 
 	float noise;
 
-	int textIndex;
-
 	bool animating = false;
 	bool showGui = true;
 
@@ -64,13 +62,6 @@ public:
 	ofShader backgroundNoise;
 
 	vector<ofImage> images;
-
-	//ofxPostProcessing post;
-
-	float initTime;
-	float duration;
-
-	//DofAltPass::Ptr tiltShiftHoriPass;
 
 	vector<ofShader> shaders;
 
