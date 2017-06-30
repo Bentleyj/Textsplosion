@@ -1,6 +1,6 @@
 #include "ofApp.h"
 
-#define NUM_NAMES 3
+#define NUM_NAMES 20
 
 //--------------------------------------------------------------
 void ofApp::setup() {
@@ -68,8 +68,10 @@ void ofApp::setup() {
 	ofxNestedFileLoader loader;
 	vector<string> imageNames; // = loader.load("images/finalPNGS");
 
-	imageNames.push_back("Edmond Safra");
-	imageNames.push_back("Lilly Safra");
+	imageNames.push_back("Jacinta Francis");
+	imageNames.push_back("Kelly Addison");
+    imageNames.push_back("Mathilde Steen");
+    imageNames.push_back("James Bentley");
 
 	//vector<string> names;
 	//for (int i = 0; i < imageNames.size(; i++) {

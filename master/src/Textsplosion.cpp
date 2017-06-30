@@ -76,7 +76,7 @@ void Textsplosion::draw() {
 	(*shaders)[0].setUniform1f("brightnessModifier", brightnessModifier);
     // Set the two colors for the background shards, ***I'm going to write a helper method that converts these now and will delete this text when I've done it.*** Did it!! See below! it's called ColorToUniformRange
 	(*shaders)[0].setUniform4f("col1", ColorToUniformRange(backgroundColor1));
-	(*shaders)[0].setUniform4f("col2", ColorToUniformRange(backgroundColor1));
+	(*shaders)[0].setUniform4f("col2", ColorToUniformRange(backgroundColor2));
 	mesh.setMode(OF_PRIMITIVE_TRIANGLES);
 	mesh.draw();
 	(*shaders)[0].end();
