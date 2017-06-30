@@ -63,7 +63,7 @@ void Textsplosion::draw() {
 	//img->unbind();
 	//(*shaders)[1].end();
     
-    // This is the shader you use for drawing text. I want to combine the image and text shaders in to 1 but havn't gotten around to it et. Not even sure if it's a great idea.
+    // This is the shader you use for drawing text. I want to combine the image and text shaders in to 1 but haven't gotten around to it yet. Not even sure if it's a great idea.
 	(*shaders)[0].begin();
     // This tells the shader what time it is and the scalar multiplied by ofGetElapsedTimef() can be used to control the speed of the noise.
 	(*shaders)[0].setUniform1f("timeVal", ofGetElapsedTimef() * 0.01);

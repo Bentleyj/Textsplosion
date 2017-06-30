@@ -144,18 +144,18 @@ void ofApp::update() {
 
 		float distance = (cam.getPosition() - ofVec3f(0, 0, 0)).length();
 
-			//auto easingMethod = &ofxeasing::linear::easeIn;
-            float newX = ofLerp(cam.getPosition().x, cameraPosTarget.x, 0.1);//ofxeasing::map(now, initTime, endTime, cam.getPosition().x, cameraPosTarget.x, easingMethod);
-			float newY = ofLerp(cam.getPosition().y, cameraPosTarget.y, 0.1);//ofxeasing::map(now, initTime, endTime, cam.getPosition().y, cameraPosTarget.y, easingMethod);
-			float newZ = ofLerp(cam.getPosition().z, cameraPosTarget.z, 0.1);//ofxeasing::map(now, initTime, endTime, cam.getPosition().z, cameraPosTarget.z, easingMethod);
+        //auto easingMethod = &ofxeasing::linear::easeIn;
+        float newX = ofLerp(cam.getPosition().x, cameraPosTarget.x, 0.1);//ofxeasing::map(now, initTime, endTime, cam.getPosition().x, cameraPosTarget.x, easingMethod);
+        float newY = ofLerp(cam.getPosition().y, cameraPosTarget.y, 0.1);//ofxeasing::map(now, initTime, endTime, cam.getPosition().y, cameraPosTarget.y, easingMethod);
+        float newZ = ofLerp(cam.getPosition().z, cameraPosTarget.z, 0.1);//ofxeasing::map(now, initTime, endTime, cam.getPosition().z, cameraPosTarget.z, easingMethod);
 
-			cam.setPosition(newX, newY, newZ);
+        cam.setPosition(newX, newY, newZ);
 
-			float newUpX = ofLerp(cam.getUpDir().x, camUpVectorTarget.x, 0.1);//ofxeasing::map(now, initTime, endTime, cam.getUpDir().x, camUpVectorTarget.x, easingMethod);
-			float newUpY = ofLerp(cam.getUpDir().y, camUpVectorTarget.y, 0.1);// ofxeasing::map(now, initTime, endTime, cam.getUpDir().y, camUpVectorTarget.y, easingMethod);
-			float newUpZ = ofLerp(cam.getUpDir().z, camUpVectorTarget.z, 0.1);//ofxeasing::map(now, initTime, endTime, cam.getUpDir().z, camUpVectorTarget.z, easingMethod);
+        float newUpX = ofLerp(cam.getUpDir().x, camUpVectorTarget.x, 0.1);//ofxeasing::map(now, initTime, endTime, cam.getUpDir().x, camUpVectorTarget.x, easingMethod);
+        float newUpY = ofLerp(cam.getUpDir().y, camUpVectorTarget.y, 0.1);// ofxeasing::map(now, initTime, endTime, cam.getUpDir().y, camUpVectorTarget.y, easingMethod);
+        float newUpZ = ofLerp(cam.getUpDir().z, camUpVectorTarget.z, 0.1);//ofxeasing::map(now, initTime, endTime, cam.getUpDir().z, camUpVectorTarget.z, easingMethod);
 
-			cam.lookAt(ofVec3f(0, 0, 0), ofVec3f(newUpX, newUpY, newUpZ));
+        cam.lookAt(ofVec3f(0, 0, 0), ofVec3f(newUpX, newUpY, newUpZ));
 	}
 
 	for (int i = 0; i < texts.size(); i++) {
@@ -204,6 +204,7 @@ void ofApp::draw() {
 	//post.end();
 	cam.begin();
     vector<Textsplosion*> brightTexts;
+    ofSetColor(255, 0, 0);
 	for (int i = 0; i < texts.size(); i++) {
         texts[i]->draw();
 //        if(texts[i]->getBrightnessModifier() > 0.3) {
