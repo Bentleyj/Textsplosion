@@ -4,6 +4,8 @@
 
 //--------------------------------------------------------------
 void ofApp::setup() {
+    
+    ofLogToFile("log.txt", true);
 
 	ofSetWindowPosition(ofGetScreenWidth() + 10, 30);
 
