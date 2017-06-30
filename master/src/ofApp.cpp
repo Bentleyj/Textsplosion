@@ -68,8 +68,10 @@ void ofApp::setup() {
 	ofxNestedFileLoader loader;
 	vector<string> imageNames; // = loader.load("images/finalPNGS");
 
-	imageNames.push_back("Edmond Safra");
-	imageNames.push_back("Lilly Safra");
+	imageNames.push_back("Tatiana");
+	imageNames.push_back("James");
+    imageNames.push_back("Matthew");
+
 
 	//vector<string> names;
 	//for (int i = 0; i < imageNames.size(; i++) {

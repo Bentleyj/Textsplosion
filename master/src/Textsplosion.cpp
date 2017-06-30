@@ -12,17 +12,16 @@
 
 Textsplosion::Textsplosion() {
 	//Set everything up by default (real simple)
-	//fadeStartTime = 0.0;
-	//fadeEndTime = 0.0;
+    Explosion();
 	brightnessModifier = 0.3;
-	distortFactor - 0.0;
+	distortFactor = 0.0;
 	lineWidth = 1.0;
 	shardSize = ofVec2f(1, 1);
 }
 
 void Textsplosion::update() {
 	// Update the noise
-	float now = ofGetElapsedTimef();
+	//float now = ofGetElapsedTimef();
 
 	//if (now < fadeEndTime) {
 		//auto easingMethod = &ofxeasing::quart::easeIn;
@@ -89,16 +88,6 @@ ofVec4f Textsplosion::ColorToUniformRange(ofColor col) {
     return ofVec4f(col.r / 255.0, col.g / 255.0, col.b / 255.0, col.a / 255.0);
 }
 
-//This fades in the Text by setting it's targetBrightness to 1.0
-void Textsplosion::fadeIn() {
-	targetBrightness = 1.0;
-}
-
-//This fades out the text by setting its target brightness to the default which is currently 0.3
-void Textsplosion::fadeOut() {
-	targetBrightness = 0.3;
-}
-
 /* 
  This is the most important method in the WHOLE class, basically you set a view position for the object based on spherical coordinates, so you move the amera to a random point on the sphere and this calculates all the important stuff:
  viewPosition -> Where the camera needs to sit in Cartesian coordinates (simple conversion from spherical to cartesian)
@@ -118,27 +107,38 @@ void Textsplosion::setViewPositionSpherical(float _r, float _theta, float _phi)
 	float ypos = r * cos(theta * PI / 180.0);
 	float zpos = r * sin(theta * PI / 180.0) * cos(phi * PI / 180.0);
 
+    //save the view position, the idea here is that we can set the cameras position to this point times so scalar and as long as we're looking at 0, 0, 0 we're good!
 	viewPosition = ofVec3f(xpos, ypos, zpos);
-
+    
+    //normalize the view position
 	viewPosition.normalize();
 
+    // Convert theta and phi to radians
 	float thetaRad = theta * PI / 180.0;
 	float phiRad = phi * PI / 180.0;
-
+    
+    //set a local variable with the original forward direction. This is the default forward direction before we call this method.
 	ofVec3f originalForward = ofVec3f(0.0, 1.0, 0.0);
 
+    // If our view position just happend to be exactly the same as our original forward direction the math is going to be wonky later so if that's the case just set the view position to a different, fixed, point
 	if (viewPosition == originalForward || viewPosition == originalForward * -1) {
 		viewPosition = ofVec3f(1.0, 1.0, 1.0);
 		viewPosition.normalize();
 	}
 
+    // get the rotation from the original position to the view position, this will allow us to rotate our text to th correct place
 	quat.makeRotate(originalForward, viewPosition);
-
+    
+    // set the up vector toit's original value if no rotation occured.
 	ofVec3f upVectorTemp = ofVec3f(0.0, 0.0, -1.0);
 
+    // rotate the up vector by the quaternion
 	upVector = quat * upVectorTemp;
 }
 
+/*
+ This is also an important method, it generates the mesh that we want to draw.
+ */
 void Textsplosion::setText(string _text) {
     text = _text;
 
@@ -161,8 +161,6 @@ void Textsplosion::setText(string _text) {
 	//backgroundMesh.addVertex(boundingBox.getBottomRight());
 	//backgroundMesh.addVertex(boundingBox.getTopLeft());
 	//backgroundMesh.addVertex(boundingBox.getBottomRight());
-
-	ofRectangle square = ofRectangle(-100, -100, 200, 200);
 
 	int w = 200;//img->getWidth();
 	int h = 200;//img->getHeight();//w * img->getWidth() / img->getHeight();

@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		0F996BC299B197D0BB0F729B /* ofxNestedFileLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23A1C37E36041498070B7E4D /* ofxNestedFileLoader.cpp */; };
+		1A8A41041E09513000361976 /* Imagesplosion.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1A8A41021E09513000361976 /* Imagesplosion.cpp */; };
+		1A8A41071E09539E00361976 /* Explosion.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1A8A41051E09539E00361976 /* Explosion.cpp */; };
 		1CD33E884D9E3358252E82A1 /* ofxToggle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 907C5B5E104864A2D3A25745 /* ofxToggle.cpp */; };
 		483908258D00B98B4BE69F07 /* ofxLabel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 78D67A00EB899FAC09430597 /* ofxLabel.cpp */; };
 		522FFFB6EB3DA57CCB07EF9A /* stb_truetype.c in Sources */ = {isa = PBXBuildFile; fileRef = DC55FEC740DD28FBDD2D4406 /* stb_truetype.c */; };
@@ -60,6 +62,10 @@
 		0A1DAC09F322AE313A40706D /* ofxToggle.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxToggle.h; path = ../../../addons/ofxGui/src/ofxToggle.h; sourceTree = SOURCE_ROOT; };
 		15F2C6477A769C03A56D1401 /* ofxSlider.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxSlider.cpp; path = ../../../addons/ofxGui/src/ofxSlider.cpp; sourceTree = SOURCE_ROOT; };
 		17E65988300FBD9AAA2CD0CA /* ofxGui.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxGui.h; path = ../../../addons/ofxGui/src/ofxGui.h; sourceTree = SOURCE_ROOT; };
+		1A8A41021E09513000361976 /* Imagesplosion.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Imagesplosion.cpp; sourceTree = "<group>"; };
+		1A8A41031E09513000361976 /* Imagesplosion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Imagesplosion.h; sourceTree = "<group>"; };
+		1A8A41051E09539E00361976 /* Explosion.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Explosion.cpp; sourceTree = "<group>"; };
+		1A8A41061E09539E00361976 /* Explosion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Explosion.h; sourceTree = "<group>"; };
 		1AAF927B1E059AAB00E2429A /* backgroundNoise.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = backgroundNoise.frag; path = bin/data/shaders/backgroundNoise.frag; sourceTree = "<group>"; };
 		1AAF927C1E059AAB00E2429A /* backgroundNoise.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = backgroundNoise.vert; path = bin/data/shaders/backgroundNoise.vert; sourceTree = "<group>"; };
 		1AAF927F1E059AAB00E2429A /* textNoise.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = textNoise.frag; path = bin/data/shaders/textNoise.frag; sourceTree = "<group>"; };
@@ -264,6 +270,10 @@
 				604C92B927AAC5EE471C42DC /* Textsplosion.h */,
 				FF4F36ADBD04569AE1A5231B /* Triangulator.cpp */,
 				2D7BB3902F62C63510C6E617 /* Triangulator.h */,
+				1A8A41021E09513000361976 /* Imagesplosion.cpp */,
+				1A8A41031E09513000361976 /* Imagesplosion.h */,
+				1A8A41051E09539E00361976 /* Explosion.cpp */,
+				1A8A41061E09539E00361976 /* Explosion.h */,
 			);
 			path = src;
 			sourceTree = SOURCE_ROOT;
@@ -378,6 +388,7 @@
 				64A391133B8BDC1EEE21AB4F /* Textsplosion.cpp in Sources */,
 				88D9C247940F30F1703C9BA9 /* Triangulator.cpp in Sources */,
 				7B388D550037229D99E7F52A /* ofxFontStash.cpp in Sources */,
+				1A8A41041E09513000361976 /* Imagesplosion.cpp in Sources */,
 				801397981E78A4CBDE809376 /* fontstash.c in Sources */,
 				522FFFB6EB3DA57CCB07EF9A /* stb_truetype.c in Sources */,
 				856AA354D08AB4B323081444 /* ofxBaseGui.cpp in Sources */,
@@ -389,6 +400,7 @@
 				B56FE57CC35806596D38118C /* ofxSliderGroup.cpp in Sources */,
 				1CD33E884D9E3358252E82A1 /* ofxToggle.cpp in Sources */,
 				0F996BC299B197D0BB0F729B /* ofxNestedFileLoader.cpp in Sources */,
+				1A8A41071E09539E00361976 /* Explosion.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

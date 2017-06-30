@@ -20,9 +20,9 @@
 #ifndef Textsplosion_h
 #define Textsplosion_h
 
-#include "ofMain.h"
+#include "Explosion.h"
 
-class Textsplosion {
+class Textsplosion : public Explosion {
 public:
     //Initializer
     Textsplosion();
