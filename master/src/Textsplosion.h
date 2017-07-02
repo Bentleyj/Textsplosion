@@ -114,7 +114,7 @@ private:
 	float distortFactor;
 
 
-	//ofRectangle boundingBox;
+	ofRectangle boundingBox;
 	ofVec3f textCenter;
 	float rotationTheta;
 	ofVec3f rotationAxis;

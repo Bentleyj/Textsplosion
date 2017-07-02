@@ -1,6 +1,9 @@
 <GUI>
-	<Distort>500</Distort>
+	<Distort>350</Distort>
 	<Duration>1</Duration>
 	<Line_Width>3</Line_Width>
 <GUI/>
+<foreGroundColor1>255, 255, 255, 255</foreGroundColor1>
+	<backgroundColor1>0, 0, 0, 255</backgroundColor1>
+	<backgroundColor2>58, 97, 192, 255</backgroundColor2>
 </GUI>

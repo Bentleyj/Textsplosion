@@ -133,6 +133,7 @@ void ofApp::setup() {
 		tempText->setShardSize(ofRandom(1, 10), ofRandom(1, 10));
 		tempText->setText(imageNames[i%imageNames.size()]);
 		tempText->setViewPositionSpherical(150.0, theta, phi);
+        tempText->fadeOut();
 		//tempText->setCenter(ofVec3f(0, 0, 0));
 		texts.push_back(tempText);
 	}
@@ -171,8 +172,8 @@ void ofApp::update() {
 		texts[i]->update();
 		texts[i]->setBackgroundColor1(backgroundColor1.get());
 		texts[i]->setBackgroundColor2(backgroundColor2.get());
-		texts[i]->setColor1(backgroundColor1.get());
-		texts[i]->setColor2(backgroundColor2.get());
+		texts[i]->setColor1(foregroundColor1.get());
+		texts[i]->setColor2(foregroundColor2.get());
 		//texts[i]->setTextColor();
 	}
 }
@@ -242,7 +243,6 @@ void ofApp::goToNextText(float distance) {
     texts.push_back(texts[0]);
     camUpVectorTarget = texts[0]->getUpVector();
     texts.erase(texts.begin());
-
 }
 
 //--------------------------------------------------------------

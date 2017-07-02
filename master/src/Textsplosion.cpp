@@ -62,7 +62,7 @@ void Textsplosion::draw() {
 	//backgroundMesh.draw();
 	//img->unbind();
 	//(*shaders)[1].end();
-    
+        
     // This is the shader you use for drawing text. I want to combine the image and text shaders in to 1 but haven't gotten around to it yet. Not even sure if it's a great idea.
 	(*shaders)[0].begin();
     // This tells the shader what time it is and the scalar multiplied by ofGetElapsedTimef() can be used to control the speed of the noise.
@@ -75,8 +75,11 @@ void Textsplosion::draw() {
     // Of Textsplosion objects to be 0.3
 	(*shaders)[0].setUniform1f("brightnessModifier", brightnessModifier);
     // Set the two colors for the background shards, ***I'm going to write a helper method that converts these now and will delete this text when I've done it.*** Did it!! See below! it's called ColorToUniformRange
-	(*shaders)[0].setUniform4f("col1", ColorToUniformRange(backgroundColor1));
-	(*shaders)[0].setUniform4f("col2", ColorToUniformRange(backgroundColor2));
+	(*shaders)[0].setUniform4f("bcol1", ColorToUniformRange(backgroundColor1));
+	(*shaders)[0].setUniform4f("bcol2", ColorToUniformRange(backgroundColor2));
+    (*shaders)[0].setUniform4f("col1", ColorToUniformRange(color1));
+    (*shaders)[0].setUniform4f("col2", ColorToUniformRange(color2));
+    (*shaders)[0].setUniform4f("boundingBox", ofVec4f(boundingBox.x, boundingBox.y, boundingBox.width, boundingBox.height));
 	mesh.setMode(OF_PRIMITIVE_LINES);
 	mesh.draw();
 	(*shaders)[0].end();
@@ -96,7 +99,7 @@ void Textsplosion::fadeIn() {
 
 //This fades out the text by setting its target brightness to the default which is currently 0.3
 void Textsplosion::fadeOut() {
-	targetBrightness = 0.3;
+	targetBrightness = 0.0;
 }
 
 /* 
@@ -143,7 +146,7 @@ void Textsplosion::setText(string _text) {
     text = _text;
 
 	// Find the string bounding box for our font about the particular text we want to write.
-	ofRectangle rect = font->getStringBoundingBox(text, 0, 0);
+    boundingBox = font->getStringBoundingBox(text, 0, 0);
 	//ofRectangle boundingBox = rect;
 	//boundingBox.y = -boundingBox.y;
 	//boundingBox.y -= boundingBox.height;
@@ -235,11 +238,11 @@ void Textsplosion::setText(string _text) {
 
 			// Go through all the points and add them to the meshes
 			for (int i = 0; i < points.size(); i++) {
-				mesh.addVertex(ofVec3f(points[i].x - rect.width / 2, -points[i].y - rect.height / 2, 0));
-				mesh.addColor(color1.getLerped(color2, points[i].x / (rect.getWidth() + 10)));
-				mesh.addVertex(ofVec3f(points[(i + 1) % points.size()].x - rect.width / 2, -points[(i + 1) % points.size()].y - rect.height / 2, 0));
+				mesh.addVertex(ofVec3f(points[i].x - boundingBox.width / 2, -points[i].y - boundingBox.height / 2, 0));
+				mesh.addColor(color1.getLerped(color2, points[i].x / (boundingBox.getWidth() + 10)));
+				mesh.addVertex(ofVec3f(points[(i + 1) % points.size()].x - boundingBox.width / 2, -points[(i + 1) % points.size()].y - boundingBox.height / 2, 0));
 				int index2 = ((i + 1) > points.size() - 1) ? points.size() - 1 : i + 1;
-				mesh.addColor(color1.getLerped(color2, points[index2].x / (rect.getWidth() + 10)));
+				mesh.addColor(color1.getLerped(color2, points[index2].x / (boundingBox.getWidth() + 10)));
 			}
 		}
 	}
