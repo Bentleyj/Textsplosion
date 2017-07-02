@@ -99,15 +99,15 @@ void main(){
 
 	float percentColor;
 
-	if (gl_VertexID % 3 == 0) {
+	if (gl_VertexID % 2 == 0) {
 		noiseAmntZ = snoise(vec2(timeVal + gl_VertexID, 1.0f)) * cappedDistortAmount;
 	}
-	else if (gl_VertexID % 3 == 1) {
+	else if (gl_VertexID % 2 == 1) {
 		noiseAmntZ = snoise(vec2(timeVal + gl_VertexID - 1, 1.0f)) * cappedDistortAmount;
 	}
-	else {
-		noiseAmntZ = snoise(vec2(timeVal + gl_VertexID - 2, 1.0f)) * cappedDistortAmount;
-	}
+//	else {
+//		noiseAmntZ = snoise(vec2(timeVal + gl_VertexID - 2, 1.0f)) * cappedDistortAmount;
+//	}
 
 	pos.z += noiseAmntZ;//cos(pos.x * timeVal);//noiseAmntZ;
 

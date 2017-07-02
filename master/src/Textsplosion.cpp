@@ -77,7 +77,7 @@ void Textsplosion::draw() {
     // Set the two colors for the background shards, ***I'm going to write a helper method that converts these now and will delete this text when I've done it.*** Did it!! See below! it's called ColorToUniformRange
 	(*shaders)[0].setUniform4f("col1", ColorToUniformRange(backgroundColor1));
 	(*shaders)[0].setUniform4f("col2", ColorToUniformRange(backgroundColor2));
-	mesh.setMode(OF_PRIMITIVE_TRIANGLES);
+	mesh.setMode(OF_PRIMITIVE_LINES);
 	mesh.draw();
 	(*shaders)[0].end();
 
@@ -211,40 +211,36 @@ void Textsplosion::setText(string _text) {
 	// Go through all the characters
 	for (int j = 0; j < characters.size(); j++) {
 		// Get the outline of each character
-		ofMesh inputMesh = characters[j].getTessellation();
-		//ofTessellator tess;
+        
+        vector<ofPolyline> lines = characters[j].getOutline();
+//		ofMesh inputMesh = characters[j].getTessellation();
+//
+//
+//		for (int i = 0; i < inputMesh.getNumVertices(); i++) {
+//			ofPoint vertex = inputMesh.getVertex(i);
+//			inputMesh.setVertex(i, ofPoint(vertex.x - rect.width / 2, -vertex.y - rect.height / 2, 0));
+//			float amount = (vertex.x) / (rect.getWidth());
+//			amount = (amount > 1.0) ? 1.0 : amount;
+//			amount = (amount < 0.0) ? 0.0 : amount;
+//
+//			inputMesh.addColor(color1.getLerped(color2, amount));
+//		}
+//
+//		Triangulator::generateTriangulation(&inputMesh, &mesh);
 
+		for (int k = 0; k < lines.size(); k++) {
 
-		//for (int i = 0; i < tessMesh.getNumVertices(); i++) {
-		//	mesh.addVertex(tessMesh.getVertex(i));
-		//	mesh.addColor(ofColor(255, 255, 255));
-		//}
+			// Get the vertices of all the points in each of the lines
+			vector<ofPoint> points = lines[k].getVertices();
 
-		for (int i = 0; i < inputMesh.getNumVertices(); i++) {
-			ofPoint vertex = inputMesh.getVertex(i);
-			inputMesh.setVertex(i, ofPoint(vertex.x - rect.width / 2, -vertex.y - rect.height / 2, 0));
-			float amount = (vertex.x) / (rect.getWidth());
-			amount = (amount > 1.0) ? 1.0 : amount;
-			amount = (amount < 0.0) ? 0.0 : amount;
-
-			inputMesh.addColor(color1.getLerped(color2, amount));
+			// Go through all the points and add them to the meshes
+			for (int i = 0; i < points.size(); i++) {
+				mesh.addVertex(ofVec3f(points[i].x - rect.width / 2, -points[i].y - rect.height / 2, 0));
+				mesh.addColor(color1.getLerped(color2, points[i].x / (rect.getWidth() + 10)));
+				mesh.addVertex(ofVec3f(points[(i + 1) % points.size()].x - rect.width / 2, -points[(i + 1) % points.size()].y - rect.height / 2, 0));
+				int index2 = ((i + 1) > points.size() - 1) ? points.size() - 1 : i + 1;
+				mesh.addColor(color1.getLerped(color2, points[index2].x / (rect.getWidth() + 10)));
+			}
 		}
-
-		Triangulator::generateTriangulation(&inputMesh, &mesh);
-
-		//for (int k = 0; k < lines.size(); k++) {
-
-		//	// Get the vertices of all the points in each of the lines
-		//	vector<ofPoint> points = lines[k].getVertices();
-
-		//	// Go through all the points and add them to the meshes
-		//	for (int i = 0; i < points.size(); i++) {
-		//		mesh.addVertex(ofVec3f(points[i].x - rect.width / 2, -points[i].y - rect.height / 2, 0));
-		//		mesh.addColor(color1.getLerped(color2, points[i].x / (rect.getWidth() + 10)));
-		//		mesh.addVertex(ofVec3f(points[(i + 1) % points.size()].x - rect.width / 2, -points[(i + 1) % points.size()].y - rect.height / 2, 0));
-		//		int index2 = ((i + 1) > points.size() - 1) ? points.size() - 1 : i + 1;
-		//		mesh.addColor(color1.getLerped(color2, points[index2].x / (rect.getWidth() + 10)));
-		//	}
-		//}
 	}
 };

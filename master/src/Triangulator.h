@@ -7,6 +7,6 @@ public:
 	//Setters
 	//Getters
 	//Functionality
-	static bool generateTriangulation(ofMesh* input, ofMesh* output);
+	static void generateTriangulation(ofMesh* input, ofMesh* output);
 private:
 };

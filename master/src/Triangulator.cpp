@@ -1,6 +1,6 @@
 #include "Triangulator.h"
 
-bool Triangulator::generateTriangulation(ofMesh * input, ofMesh * output)
+void Triangulator::generateTriangulation(ofMesh * input, ofMesh * output)
 {
 	//output->clear();
 
@@ -13,5 +13,5 @@ bool Triangulator::generateTriangulation(ofMesh * input, ofMesh * output)
 		output->addColor(inputColors[inputIndices[i]]);
 	}
 
-	return true;
+//	return true;
 }
