@@ -100,15 +100,18 @@ void main(){
 
 	float cappedDistortAmount = min(distortAmount, distanceToTarget);
 
-	if (gl_VertexID % 2 == 0) {
+    int numPointsPerPoly = 3; //  Change this to 2 for outline and 3 for filled.
+	if (gl_VertexID % numPointsPerPoly == 0) {
 		noiseAmntZ = snoise(vec2(timeVal + gl_VertexID, 1.0f)) * cappedDistortAmount;
 	}
-	else if (gl_VertexID % 2 == 1) {
+	else if (gl_VertexID % numPointsPerPoly == 1) {
 		noiseAmntZ = snoise(vec2(timeVal + gl_VertexID - 1, 1.0f)) * cappedDistortAmount;
 	}
-//	else {
-//		noiseAmntZ = snoise(vec2(timeVal + gl_VertexID - 2, 1.0f)) * cappedDistortAmount;
-//	}
+	else {
+		noiseAmntZ = snoise(vec2(timeVal + gl_VertexID - 2, 1.0f)) * cappedDistortAmount;
+	} // Comment this out for lines
+    
+    
 
 	pos.z += noiseAmntZ;//cos(pos.x * timeVal);//noiseAmntZ;
 
@@ -125,9 +128,14 @@ void main(){
     
 	pos = gl_ProjectionMatrix * gl_ModelViewMatrix * pos;
     
-    vec4 hCol = col1;//mix(col2, col1, map(pos.x, boundingBox.x, boundingBox.z, 0.0, 1.0));
+    vec4 hCol = mix(col2, col1, map(pos.x, boundingBox.x, boundingBox.z, 0.0, 1.0));
+
 
 	vec4 bCol = mix(bcol2, bcol1, normalizedDist);
+    
+    if (gl_VertexID % 30 == 0 || gl_VertexID % 30 == 1 || gl_VertexID % 30 == 2) {
+        bCol = vec4(250.0/255.0, 194.0/255.0, 44.0/255.0, 255);
+    }
     
     vec4 finalCol = mix(bCol, hCol, brightnessModifier);
 

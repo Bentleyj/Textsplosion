@@ -66,7 +66,7 @@ void Textsplosion::draw() {
     // This is the shader you use for drawing text. I want to combine the image and text shaders in to 1 but haven't gotten around to it yet. Not even sure if it's a great idea.
 	(*shaders)[0].begin();
     // This tells the shader what time it is and the scalar multiplied by ofGetElapsedTimef() can be used to control the speed of the noise.
-	(*shaders)[0].setUniform1f("timeVal", ofGetElapsedTimef() * 0.01);
+	(*shaders)[0].setUniform1f("timeVal", /*ofGetElapsedTimef() * */0.01);
     // This tells the shader what the maximum distortion factor should be, ie the furthest from the origin that the shards are allowed to wobble
 	(*shaders)[0].setUniform1f("distortAmount", distortFactor);
     // Need to tell the shader about the position of the camera
@@ -80,7 +80,7 @@ void Textsplosion::draw() {
     (*shaders)[0].setUniform4f("col1", ColorToUniformRange(color1));
     (*shaders)[0].setUniform4f("col2", ColorToUniformRange(color2));
     (*shaders)[0].setUniform4f("boundingBox", ofVec4f(boundingBox.x, boundingBox.y, boundingBox.width, boundingBox.height));
-	mesh.setMode(OF_PRIMITIVE_LINES);
+	mesh.setMode(OF_PRIMITIVE_TRIANGLES);
 	mesh.draw();
 	(*shaders)[0].end();
 
@@ -215,35 +215,36 @@ void Textsplosion::setText(string _text) {
 	for (int j = 0; j < characters.size(); j++) {
 		// Get the outline of each character
         
-        vector<ofPolyline> lines = characters[j].getOutline();
-//		ofMesh inputMesh = characters[j].getTessellation();
-//
-//
-//		for (int i = 0; i < inputMesh.getNumVertices(); i++) {
-//			ofPoint vertex = inputMesh.getVertex(i);
-//			inputMesh.setVertex(i, ofPoint(vertex.x - rect.width / 2, -vertex.y - rect.height / 2, 0));
-//			float amount = (vertex.x) / (rect.getWidth());
-//			amount = (amount > 1.0) ? 1.0 : amount;
-//			amount = (amount < 0.0) ? 0.0 : amount;
-//
-//			inputMesh.addColor(color1.getLerped(color2, amount));
-//		}
-//
-//		Triangulator::generateTriangulation(&inputMesh, &mesh);
+        //vector<ofPolyline> lines = characters[j].getOutline();
+		ofMesh inputMesh = characters[j].getTessellation();
 
-		for (int k = 0; k < lines.size(); k++) {
 
-			// Get the vertices of all the points in each of the lines
-			vector<ofPoint> points = lines[k].getVertices();
+		for (int i = 0; i < inputMesh.getNumVertices(); i++) {
+			ofPoint vertex = inputMesh.getVertex(i);
+			inputMesh.setVertex(i, ofPoint(vertex.x - boundingBox.width / 2, -vertex.y - boundingBox.height / 2, 0));
+            //inputMesh.setColor(i, color1);
+			float amount = (vertex.x) / (boundingBox.getWidth());
+			amount = (amount > 1.0) ? 1.0 : amount;
+			amount = (amount < 0.0) ? 0.0 : amount;
 
-			// Go through all the points and add them to the meshes
-			for (int i = 0; i < points.size(); i++) {
-				mesh.addVertex(ofVec3f(points[i].x - boundingBox.width / 2, -points[i].y - boundingBox.height / 2, 0));
-				mesh.addColor(color1.getLerped(color2, points[i].x / (boundingBox.getWidth() + 10)));
-				mesh.addVertex(ofVec3f(points[(i + 1) % points.size()].x - boundingBox.width / 2, -points[(i + 1) % points.size()].y - boundingBox.height / 2, 0));
-				int index2 = ((i + 1) > points.size() - 1) ? points.size() - 1 : i + 1;
-				mesh.addColor(color1.getLerped(color2, points[index2].x / (boundingBox.getWidth() + 10)));
-			}
+			inputMesh.addColor(color1);
 		}
+
+		Triangulator::generateTriangulation(&inputMesh, &mesh);
+
+//		for (int k = 0; k < lines.size(); k++) {
+//
+//			// Get the vertices of all the points in each of the lines
+//			vector<ofPoint> points = lines[k].getVertices();
+//
+//			// Go through all the points and add them to the meshes
+//			for (int i = 0; i < points.size(); i++) {
+//				mesh.addVertex(ofVec3f(points[i].x - boundingBox.width / 2, -points[i].y - boundingBox.height / 2, 0));
+//				mesh.addColor(color1.getLerped(color2, points[i].x / (boundingBox.getWidth() + 10)));
+//				mesh.addVertex(ofVec3f(points[(i + 1) % points.size()].x - boundingBox.width / 2, -points[(i + 1) % points.size()].y - boundingBox.height / 2, 0));
+//				int index2 = ((i + 1) > points.size() - 1) ? points.size() - 1 : i + 1;
+//				mesh.addColor(color1.getLerped(color2, points[index2].x / (boundingBox.getWidth() + 10)));
+//			}
+//		}
 	}
 };

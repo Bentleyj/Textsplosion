@@ -1,6 +1,6 @@
 #include "ofApp.h"
 
-#define NUM_NAMES 20
+#define NUM_NAMES 50
 
 //--------------------------------------------------------------
 void ofApp::setup() {
@@ -13,7 +13,7 @@ void ofApp::setup() {
 
 	ofSetLogLevel(OF_LOG_WARNING);
 
-	font->load("fonts/BebasNeue/BebasNeue.otf", 50, true, true, true);
+	font->load("fonts/AlteHaasGroteskBold.ttf", 55, true, true, true);
 
 	//font->setLetterSpacing(10.0f);
 
@@ -58,7 +58,7 @@ void ofApp::setup() {
 	cameraPosTarget = ofVec3f(0, 0, 600);
 	camUpVectorTarget = ofVec3f(0, 1, 0);
 
-	ofBackground(ofColor(0));
+	ofBackground(ofColor(17, 30, 86));
 	//ofBackgroundGradient(ofColor(10), ofColor(0), OF_GRADIENT_CIRCULAR);
 
 	textNoise.load("shaders/textNoise.vert", "shaders/textNoise.frag");
