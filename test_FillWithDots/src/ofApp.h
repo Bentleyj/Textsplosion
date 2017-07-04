@@ -25,9 +25,15 @@ class ofApp : public ofBaseApp{
 		bool isInsideOnlyFirstLine(vector<ofPolyline>* lines, ofPoint p);
 		bool isInsideAnyLines(vector<ofPolyline>* lines, ofPoint p);
 
+		void saveCharacter(char c);
+
+		string characters;
+
 		void savePoints();
 
 		ofTrueTypeFont* font;
+
+		string fontName;
 
 		string text;
 

@@ -4,17 +4,33 @@
 void ofApp::setup(){
 	font = new ofTrueTypeFont();
 
-	font->load("fonts/AlteHaasGroteskBold.ttf", 200, true, true, true);
+	string fontName = "AlteHaasGroteskBold";
+	
+	bool loaded = font->load("fonts/" + fontName +".ttf", 200, true, true, true);
+	cout << "fontLoaded: " + loaded << endl;
+	if (!loaded) {
+		return;
+	}
 
 	mesh.setMode(OF_PRIMITIVE_POINTS);
 	ofBackground(0);
 
 	glPointSize(4);
 	cout << ofGetElapsedTimef() << endl;
-	positions.loadFile("positions.xml");
+	loaded = positions.loadFile(fontName + "positions.xml");
 	cout << ofGetElapsedTimef() << endl;
-	cout << positions.tagExists("Letters")<<endl;
+	cout << "Found File: " + loaded << endl;
+	if (!positions.tagExists("Letters")) {
+		positions.addTag("Letters");
+	}
 	positions.pushTag("Letters");
+
+	characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+	for (char& c : characters) {
+		saveCharacter(c);
+	}
+
 }
 
 //--------------------------------------------------------------
@@ -54,6 +70,53 @@ bool ofApp::isInsideAnyLines(vector<ofPolyline>* lines, ofPoint p) {
 		}
 	}
 	return false;
+}
+
+//--------------------------------------------------------------
+void ofApp::saveCharacter(char c) {
+	mesh.clear();
+
+	text = ofToString(c);
+
+	// Find the string bounding box for our font about the particular text we want to write.
+	ofRectangle boundingBox = font->getStringBoundingBox(text, 0, 0);
+
+	vector<ofTTFCharacter> characters = font->getStringAsPoints(text);
+
+	// Go through all the characters
+	for (int j = 0; j < characters.size(); j++) {
+		// Get the outline of each character
+
+		vector<ofPolyline> lines = characters[j].getOutline();
+		ofRectangle charBoundingBox = boundingBox;
+		charBoundingBox.x = charBoundingBox.x - boundingBox.width / 2;
+		charBoundingBox.y = -charBoundingBox.y - boundingBox.height / 2;
+		charBoundingBox.y -= charBoundingBox.height;
+
+		vector<ofPolyline> newLines;
+		newLines.resize(lines.size());
+
+		for (int i = 0; i < lines.size(); i++) {
+			vector<ofPoint> points = lines[i].getVertices();
+			for (int j = 0; j < points.size(); j++) {
+				newLines[i].addVertex(ofVec3f(points[j].x - boundingBox.width / 2, -points[j].y - boundingBox.height / 2, 0));
+			}
+		}
+
+		int numLines = newLines.size();
+
+		for (int i = 0; i < 5000; i++) {
+			ofPoint testPoint = ofPoint(ofRandom(charBoundingBox.x, charBoundingBox.x + charBoundingBox.width), ofRandom(charBoundingBox.y, charBoundingBox.y + charBoundingBox.height));
+			while (!isInsideOnlyFirstLine(&newLines, testPoint)) {
+				testPoint = ofPoint(ofRandom(charBoundingBox.x, charBoundingBox.x + charBoundingBox.width), ofRandom(charBoundingBox.y, charBoundingBox.y + charBoundingBox.height));
+			}
+			testPoint.y = charBoundingBox.y - testPoint.y + charBoundingBox.height / 2;
+			mesh.addVertex(testPoint);
+			mesh.addColor(ofColor(255));
+		}
+	}
+	savePoints();
+	cout << "Done Saving :" + text << endl;
 }
 
 //--------------------------------------------------------------
@@ -97,9 +160,17 @@ void ofApp::keyPressed(int key){
 
 			for (int i = 0; i < 5000; i++) {
 				ofPoint testPoint = ofPoint(ofRandom(charBoundingBox.x, charBoundingBox.x + charBoundingBox.width), ofRandom(charBoundingBox.y, charBoundingBox.y + charBoundingBox.height));
-				while (!isInsideOnlyFirstLine(&newLines, testPoint)) {
-					testPoint = ofPoint(ofRandom(charBoundingBox.x, charBoundingBox.x + charBoundingBox.width), ofRandom(charBoundingBox.y, charBoundingBox.y + charBoundingBox.height));
+				if (text == "i" || text == "j") {
+					while (!isInsideAnyLines(&newLines, testPoint)) {
+						testPoint = ofPoint(ofRandom(charBoundingBox.x, charBoundingBox.x + charBoundingBox.width), ofRandom(charBoundingBox.y, charBoundingBox.y + charBoundingBox.height));
+					}
 				}
+				else {
+					while (!isInsideOnlyFirstLine(&newLines, testPoint)) {
+						testPoint = ofPoint(ofRandom(charBoundingBox.x, charBoundingBox.x + charBoundingBox.width), ofRandom(charBoundingBox.y, charBoundingBox.y + charBoundingBox.height));
+					}
+				}
+
 				testPoint.y = charBoundingBox.y - testPoint.y + charBoundingBox.height / 2;
 				mesh.addVertex(testPoint);
 				mesh.addColor(ofColor(255));

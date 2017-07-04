@@ -148,9 +148,54 @@ void Textsplosion::setViewPositionSpherical(float _r, float _theta, float _phi)
 }
 
 void Textsplosion::setTextLines(string _text) {
+	boundingBox = font->getStringBoundingBox(text, 0, 0);
+	// Get the text as a vector of ofTTFCharacters, these characters have a whole bunch of info about the text.
+	vector<ofTTFCharacter> characters = font->getStringAsPoints(text);
+
+	// Go through all the characters
+	for (int j = 0; j < characters.size(); j++) {
+		// Get the outline of each character
+
+		vector<ofPolyline> lines = characters[j].getOutline();
+
+		for (int k = 0; k < lines.size(); k++) {
+		
+			// Get the vertices of all the points in each of the lines
+			vector<ofPoint> points = lines[k].getVertices();
+		
+			// Go through all the points and add them to the meshes
+			for (int i = 0; i < points.size(); i++) {
+				mesh.addVertex(ofVec3f(points[i].x - boundingBox.width / 2, -points[i].y - boundingBox.height / 2, 0));
+				mesh.addColor(color1.getLerped(color2, points[i].x / (boundingBox.getWidth() + 10)));
+				mesh.addVertex(ofVec3f(points[(i + 1) % points.size()].x - boundingBox.width / 2, -points[(i + 1) % points.size()].y - boundingBox.height / 2, 0));
+				int index2 = ((i + 1) > points.size() - 1) ? points.size() - 1 : i + 1;
+				mesh.addColor(color1.getLerped(color2, points[index2].x / (boundingBox.getWidth() + 10)));
+			}
+		}
+	}
 }
 
 void Textsplosion::setTextTris(string _text) {
+	boundingBox = font->getStringBoundingBox(text, 0, 0);
+	// Get the text as a vector of ofTTFCharacters, these characters have a whole bunch of info about the text.
+	vector<ofTTFCharacter> characters = font->getStringAsPoints(text);
+	// Go through all the characters
+	for (int j = 0; j < characters.size(); j++) {
+		// Get the outline of each character
+		ofMesh inputMesh = characters[j].getTessellation();
+
+		for (int i = 0; i < inputMesh.getNumVertices(); i++) {
+			ofPoint vertex = inputMesh.getVertex(i);
+			inputMesh.setVertex(i, ofPoint(vertex.x - boundingBox.width / 2, -vertex.y - boundingBox.height / 2, 0));
+			float amount = (vertex.x) / (boundingBox.getWidth());
+			amount = (amount > 1.0) ? 1.0 : amount;
+			amount = (amount < 0.0) ? 0.0 : amount;
+
+			inputMesh.addColor(color1);
+		}
+
+		Triangulator::generateTriangulation(&inputMesh, &mesh);
+	}
 }
 
 
@@ -177,10 +222,9 @@ void Textsplosion::setTextPoints(string _text) {
 	//backgroundMesh.addVertex(boundingBox.getTopLeft());
 	//backgroundMesh.addVertex(boundingBox.getBottomRight());
 
-	ofRectangle square = ofRectangle(-100, -100, 200, 200);
 
-	int w = 200;//img->getWidth();
-	int h = 200;//img->getHeight();//w * img->getWidth() / img->getHeight();
+	//int w = 200;//img->getWidth();
+	//int h = 200;//img->getHeight();//w * img->getWidth() / img->getHeight();
 
 	//backgroundMesh.addVertex(ofVec3f(-100, -100, 0));
 	//backgroundMesh.addVertex(ofVec3f(100, 100, 0));
@@ -241,40 +285,9 @@ void Textsplosion::setTextPoints(string _text) {
 			for (int j = 0; j < points.size(); j++) {
 				newLines[i].addVertex(ofVec3f(points[j].x - boundingBox.width / 2, -points[j].y - boundingBox.height / 2, 0));
 			}
-
 		}
 
 		int numLines = newLines.size();
-		//ofMesh inputMesh = characters[j].getTessellation();
-
-
-		//for (int i = 0; i < inputMesh.getNumVertices(); i++) {
-		//	ofPoint vertex = inputMesh.getVertex(i);
-		//	inputMesh.setVertex(i, ofPoint(vertex.x - boundingBox.width / 2, -vertex.y - boundingBox.height / 2, 0));
-  //          //inputMesh.setColor(i, color1);
-		//	float amount = (vertex.x) / (boundingBox.getWidth());
-		//	amount = (amount > 1.0) ? 1.0 : amount;
-		//	amount = (amount < 0.0) ? 0.0 : amount;
-
-		//	inputMesh.addColor(color1);
-		//}
-
-		//Triangulator::generateTriangulation(&inputMesh, &mesh);
-
-//		for (int k = 0; k < lines.size(); k++) {
-//
-//			// Get the vertices of all the points in each of the lines
-//			vector<ofPoint> points = lines[k].getVertices();
-//
-//			// Go through all the points and add them to the meshes
-//			for (int i = 0; i < points.size(); i++) {
-//				mesh.addVertex(ofVec3f(points[i].x - boundingBox.width / 2, -points[i].y - boundingBox.height / 2, 0));
-//				mesh.addColor(color1.getLerped(color2, points[i].x / (boundingBox.getWidth() + 10)));
-//				mesh.addVertex(ofVec3f(points[(i + 1) % points.size()].x - boundingBox.width / 2, -points[(i + 1) % points.size()].y - boundingBox.height / 2, 0));
-//				int index2 = ((i + 1) > points.size() - 1) ? points.size() - 1 : i + 1;
-//				mesh.addColor(color1.getLerped(color2, points[index2].x / (boundingBox.getWidth() + 10)));
-//			}
-//		}
 
 		for (int i = 0; i < 5000; i++) {
 			ofPoint testPoint = ofPoint(ofRandom(charBoundingBox.x, charBoundingBox.x + charBoundingBox.width), ofRandom(charBoundingBox.y, charBoundingBox.y + charBoundingBox.height));
