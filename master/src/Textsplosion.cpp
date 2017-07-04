@@ -80,9 +80,14 @@ void Textsplosion::draw() {
     (*shaders)[0].setUniform4f("col1", ColorToUniformRange(color1));
     (*shaders)[0].setUniform4f("col2", ColorToUniformRange(color2));
     (*shaders)[0].setUniform4f("boundingBox", ofVec4f(boundingBox.x, boundingBox.y, boundingBox.width, boundingBox.height));
-	mesh.setMode(OF_PRIMITIVE_TRIANGLES);
+	mesh.setMode(OF_PRIMITIVE_POINTS);
+	ofEnableDepthTest();
 	mesh.draw();
+	ofDisableDepthTest();
 	(*shaders)[0].end();
+
+	ofSetColor(255);
+	ofDrawRectangle(charBoundingBox);
 
     ofPopMatrix();
 }
@@ -142,7 +147,14 @@ void Textsplosion::setViewPositionSpherical(float _r, float _theta, float _phi)
 	upVector = quat * upVectorTemp;
 }
 
-void Textsplosion::setText(string _text) {
+void Textsplosion::setTextLines(string _text) {
+}
+
+void Textsplosion::setTextTris(string _text) {
+}
+
+
+void Textsplosion::setTextPoints(string _text) {
     text = _text;
 
 	// Find the string bounding box for our font about the particular text we want to write.
@@ -177,35 +189,35 @@ void Textsplosion::setText(string _text) {
 	//backgroundMesh.addIndex(1);
 
 	// Every bit is chosen
-	int xStep = shardSize.x;
-	int yStep = shardSize.y;
-	for (int y = 0; y < h; y += yStep) {
-		for (int x = 0; x < w; x += xStep) {
-			backgroundMesh.addVertex(ofVec3f((x - w / 2), (y - h / 2), 0));
-			//backgroundMesh.addColor(ofColor(255, 0, 0));
-			backgroundMesh.addTexCoord(ofVec3f(x * (img->getWidth() / w), img->getHeight() - y * (img->getHeight() / h)));
-			backgroundMesh.addVertex(ofVec3f((x + xStep - w / 2), (y - h / 2), 0));
-			//backgroundMesh.addColor(ofColor(255, 0, 0));
-			backgroundMesh.addTexCoord(ofVec3f((x + xStep) * (img->getWidth() / w), img->getHeight() -  y * (img->getHeight() / h)));
-			backgroundMesh.addVertex(ofVec3f((x - w / 2), (y + yStep - h / 2), 0));
-			//backgroundMesh.addColor(ofColor(255, 0, 0));
-			backgroundMesh.addTexCoord(ofVec3f(x * (img->getWidth() / w), img->getHeight() - (y + yStep) * (img->getHeight() / h)));
-		}
-	}
+	//int xStep = shardSize.x;
+	//int yStep = shardSize.y;
+	//for (int y = 0; y < h; y += yStep) {
+	//	for (int x = 0; x < w; x += xStep) {
+	//		backgroundMesh.addVertex(ofVec3f((x - w / 2), (y - h / 2), 0));
+	//		//backgroundMesh.addColor(ofColor(255, 0, 0));
+	//		backgroundMesh.addTexCoord(ofVec3f(x * (img->getWidth() / w), img->getHeight() - y * (img->getHeight() / h)));
+	//		backgroundMesh.addVertex(ofVec3f((x + xStep - w / 2), (y - h / 2), 0));
+	//		//backgroundMesh.addColor(ofColor(255, 0, 0));
+	//		backgroundMesh.addTexCoord(ofVec3f((x + xStep) * (img->getWidth() / w), img->getHeight() -  y * (img->getHeight() / h)));
+	//		backgroundMesh.addVertex(ofVec3f((x - w / 2), (y + yStep - h / 2), 0));
+	//		//backgroundMesh.addColor(ofColor(255, 0, 0));
+	//		backgroundMesh.addTexCoord(ofVec3f(x * (img->getWidth() / w), img->getHeight() - (y + yStep) * (img->getHeight() / h)));
+	//	}
+	//}
 
-	for (int y = h; y > 0; y -= yStep) {
-		for (int x = w; x > 0; x -= xStep) {
-			backgroundMesh.addVertex(ofVec3f((x - w / 2), (y - h / 2), 0));
-			//backgroundMesh.addColor(ofColor(0, 0, 255));
-			backgroundMesh.addTexCoord(ofVec3f(x * (img->getWidth() / w), img->getHeight() - y * (img->getHeight() / h)));
-			backgroundMesh.addVertex(ofVec3f((x - xStep - w / 2), (y - h / 2), 0));
-			//backgroundMesh.addColor(ofColor(0, 0, 255));
-			backgroundMesh.addTexCoord(ofVec3f((x - xStep) * (img->getWidth() / w), img->getHeight() - y * (img->getHeight() / h)));
-			backgroundMesh.addVertex(ofVec3f((x - w / 2), (y - yStep - h / 2), 0));
-			//backgroundMesh.addColor(ofColor(0, 0, 255));
-			backgroundMesh.addTexCoord(ofVec3f(x * (img->getWidth() / w), img->getHeight() - (y - yStep) * (img->getHeight() / h)));
-		}
-	}
+	//for (int y = h; y > 0; y -= yStep) {
+	//	for (int x = w; x > 0; x -= xStep) {
+	//		backgroundMesh.addVertex(ofVec3f((x - w / 2), (y - h / 2), 0));
+	//		//backgroundMesh.addColor(ofColor(0, 0, 255));
+	//		backgroundMesh.addTexCoord(ofVec3f(x * (img->getWidth() / w), img->getHeight() - y * (img->getHeight() / h)));
+	//		backgroundMesh.addVertex(ofVec3f((x - xStep - w / 2), (y - h / 2), 0));
+	//		//backgroundMesh.addColor(ofColor(0, 0, 255));
+	//		backgroundMesh.addTexCoord(ofVec3f((x - xStep) * (img->getWidth() / w), img->getHeight() - y * (img->getHeight() / h)));
+	//		backgroundMesh.addVertex(ofVec3f((x - w / 2), (y - yStep - h / 2), 0));
+	//		//backgroundMesh.addColor(ofColor(0, 0, 255));
+	//		backgroundMesh.addTexCoord(ofVec3f(x * (img->getWidth() / w), img->getHeight() - (y - yStep) * (img->getHeight() / h)));
+	//	}
+	//}
 	//Heres a random version
 
 	// Get the text as a vector of ofTTFCharacters, these characters have a whole bunch of info about the text.
@@ -215,22 +227,39 @@ void Textsplosion::setText(string _text) {
 	for (int j = 0; j < characters.size(); j++) {
 		// Get the outline of each character
         
-        //vector<ofPolyline> lines = characters[j].getOutline();
-		ofMesh inputMesh = characters[j].getTessellation();
+        vector<ofPolyline> lines = characters[j].getOutline();
+		charBoundingBox = lines[0].getBoundingBox();
+		charBoundingBox.x = charBoundingBox.x - boundingBox.width / 2;
+		charBoundingBox.y = -charBoundingBox.y - boundingBox.height / 2;
+		charBoundingBox.y -= charBoundingBox.height;
 
+		vector<ofPolyline> newLines;
+		newLines.resize(lines.size());
 
-		for (int i = 0; i < inputMesh.getNumVertices(); i++) {
-			ofPoint vertex = inputMesh.getVertex(i);
-			inputMesh.setVertex(i, ofPoint(vertex.x - boundingBox.width / 2, -vertex.y - boundingBox.height / 2, 0));
-            //inputMesh.setColor(i, color1);
-			float amount = (vertex.x) / (boundingBox.getWidth());
-			amount = (amount > 1.0) ? 1.0 : amount;
-			amount = (amount < 0.0) ? 0.0 : amount;
+		for (int i = 0; i < lines.size(); i++) {
+			vector<ofPoint> points = lines[i].getVertices();
+			for (int j = 0; j < points.size(); j++) {
+				newLines[i].addVertex(ofVec3f(points[j].x - boundingBox.width / 2, -points[j].y - boundingBox.height / 2, 0));
+			}
 
-			inputMesh.addColor(color1);
 		}
 
-		Triangulator::generateTriangulation(&inputMesh, &mesh);
+		int numLines = newLines.size();
+		//ofMesh inputMesh = characters[j].getTessellation();
+
+
+		//for (int i = 0; i < inputMesh.getNumVertices(); i++) {
+		//	ofPoint vertex = inputMesh.getVertex(i);
+		//	inputMesh.setVertex(i, ofPoint(vertex.x - boundingBox.width / 2, -vertex.y - boundingBox.height / 2, 0));
+  //          //inputMesh.setColor(i, color1);
+		//	float amount = (vertex.x) / (boundingBox.getWidth());
+		//	amount = (amount > 1.0) ? 1.0 : amount;
+		//	amount = (amount < 0.0) ? 0.0 : amount;
+
+		//	inputMesh.addColor(color1);
+		//}
+
+		//Triangulator::generateTriangulation(&inputMesh, &mesh);
 
 //		for (int k = 0; k < lines.size(); k++) {
 //
@@ -246,5 +275,28 @@ void Textsplosion::setText(string _text) {
 //				mesh.addColor(color1.getLerped(color2, points[index2].x / (boundingBox.getWidth() + 10)));
 //			}
 //		}
+
+		for (int i = 0; i < 5000; i++) {
+			ofPoint testPoint = ofPoint(ofRandom(charBoundingBox.x, charBoundingBox.x + charBoundingBox.width), ofRandom(charBoundingBox.y, charBoundingBox.y + charBoundingBox.height));
+			while (!isInsideOnlyFirstLine(&newLines, testPoint)) {
+				testPoint = ofPoint(ofRandom(charBoundingBox.x, charBoundingBox.x + charBoundingBox.width), ofRandom(charBoundingBox.y, charBoundingBox.y + charBoundingBox.height));
+			}
+			mesh.addVertex(testPoint);
+			mesh.addColor(ofColor(255));
+		}
 	}
-};
+}
+
+bool Textsplosion::isInsideOnlyFirstLine(vector<ofPolyline>* lines, ofPoint p) {
+	int numLines = lines->size();
+	ofPolyline firstLine = (*lines)[0];
+	if (firstLine.inside(p)) {
+		for (int i = 1; i < numLines; i++) {
+			if ((*lines)[i].inside(p)) {
+				return false;
+			}
+		}
+		return true;
+	}
+	return false;
+}

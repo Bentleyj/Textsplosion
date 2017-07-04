@@ -1,13 +1,13 @@
 #include "ofApp.h"
 
-#define NUM_NAMES 50
+#define NUM_NAMES 1
 
 //--------------------------------------------------------------
 void ofApp::setup() {
     
     ofLogToFile("log.txt", true);
 
-	ofSetWindowPosition(ofGetScreenWidth() + 10, 30);
+	//ofSetWindowPosition(ofGetScreenWidth() + 10, 30);
 
 	font = new ofTrueTypeFont();
 
@@ -70,7 +70,34 @@ void ofApp::setup() {
 	ofxNestedFileLoader loader;
 	vector<string> imageNames; // = loader.load("images/finalPNGS");
 
-    imageNames.push_back("Mathilde Steen");
+	//imageNames.push_back("AB");
+	//imageNames.push_back("B");
+	//imageNames.push_back("C");
+	//imageNames.push_back("D");
+	//imageNames.push_back("E");
+	//imageNames.push_back("F");
+	//imageNames.push_back("G");
+	//imageNames.push_back("H");
+	//imageNames.push_back("I");
+	//imageNames.push_back("J");
+	//imageNames.push_back("K");
+	//imageNames.push_back("L");
+	//imageNames.push_back("M");
+	//imageNames.push_back("N");
+	//imageNames.push_back("O");
+	//imageNames.push_back("P");
+	//imageNames.push_back("Q");
+	//imageNames.push_back("R");
+	//imageNames.push_back("S");
+	//imageNames.push_back("T");
+	//imageNames.push_back("U");
+	//imageNames.push_back("V");
+	//imageNames.push_back("W");
+	//imageNames.push_back("X");
+	//imageNames.push_back("Y");
+	//imageNames.push_back("Z");
+
+    imageNames.push_back("Mathilde");
     imageNames.push_back("James Bentley");
     imageNames.push_back("Pete Hellicar");
     imageNames.push_back("Naho Matsuda");
@@ -131,7 +158,7 @@ void ofApp::setup() {
 		tempText->setShaders(&shaders);
 		tempText->setImg(&(images[i%imageNames.size()]));
 		tempText->setShardSize(ofRandom(1, 10), ofRandom(1, 10));
-		tempText->setText(imageNames[i%imageNames.size()]);
+		tempText->setTextPoints(imageNames[i%imageNames.size()]);
 		tempText->setViewPositionSpherical(150.0, theta, phi);
         tempText->fadeOut();
 		//tempText->setCenter(ofVec3f(0, 0, 0));
@@ -142,6 +169,7 @@ void ofApp::setup() {
 
 	animating = true;
 
+	glPointSize(4);
 
 }
  

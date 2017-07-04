@@ -27,7 +27,10 @@ public:
     //Initializer
     Textsplosion();
     //Setters
-    void setText(string _text);
+    void setTextPoints(string _text);
+	void setTextLines(string _text);
+	void setTextTris(string _text);
+
 	void setViewPositionSpherical(float _r, float _theta, float _phi);
     void setUpVector(ofVec3f _upVector ) { upVector = _upVector; };
     void setCam(ofEasyCam* _cam) { cam = _cam; };
@@ -97,7 +100,7 @@ public:
 	void fadeIn();
 	void fadeOut();
     ofVec4f ColorToUniformRange(ofColor col);
-
+	bool isInsideOnlyFirstLine(vector<ofPolyline>* lines, ofPoint p);
 
 private:
 	//Core variables
@@ -113,8 +116,8 @@ private:
 	vector<ofShader>* shaders;
 	float distortFactor;
 
-
 	ofRectangle boundingBox;
+	ofRectangle charBoundingBox;
 	ofVec3f textCenter;
 	float rotationTheta;
 	ofVec3f rotationAxis;
