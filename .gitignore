@@ -1,4 +1,6 @@
 # project specific
+images/
+fonts/
 
 # ignore core oF files that we dont want to track
 libs/*
