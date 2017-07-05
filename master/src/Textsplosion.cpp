@@ -215,13 +215,14 @@ void Textsplosion::setTextXml(string _text) {
 				p.z = 0;
 				xmlPoints->popTag();
 				(*letterMeshes)[c].addVertex(p);
+				(*letterMeshes)[c].addColor(ofColor(255));
 			}
 			xmlPoints->popTag();
 			xmlPoints->popTag();
-			mesh = (*letterMeshes)[c];
+			mesh.addVertices((*letterMeshes)[c].getVertices());
 		}
 		else {
-			mesh = (*letterMeshes)[c];
+			mesh.addVertices((*letterMeshes)[c].getVertices());
 		}
 
 	}
