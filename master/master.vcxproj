@@ -95,7 +95,7 @@
 			<PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
 			<RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
 			<WarningLevel>Level3</WarningLevel>
-			<AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);src;..\..\..\addons\ofxFontStash\libs;..\..\..\addons\ofxFontStash\libs\fontstash;..\..\..\addons\ofxFontStash\libs\fontstash\src;..\..\..\addons\ofxFontStash\src;..\..\..\addons\ofxGui\src;..\..\..\addons\ofxNestedFileLoader\src</AdditionalIncludeDirectories>
+			<AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);src;..\..\..\addons\ofxFontStash\libs;..\..\..\addons\ofxFontStash\libs\fontstash;..\..\..\addons\ofxFontStash\libs\fontstash\src;..\..\..\addons\ofxFontStash\src;..\..\..\addons\ofxGui\src;..\..\..\addons\ofxNestedFileLoader\src;..\..\..\addons\ofxXmlSettings\libs;..\..\..\addons\ofxXmlSettings\src</AdditionalIncludeDirectories>
 			<CompileAs>CompileAsCpp</CompileAs>
 		</ClCompile>
 		<Link>
@@ -114,7 +114,7 @@
 			<PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
 			<RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
 			<WarningLevel>Level3</WarningLevel>
-			<AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);src;..\..\..\addons\ofxFontStash\libs;..\..\..\addons\ofxFontStash\libs\fontstash;..\..\..\addons\ofxFontStash\libs\fontstash\src;..\..\..\addons\ofxFontStash\src;..\..\..\addons\ofxGui\src;..\..\..\addons\ofxNestedFileLoader\src</AdditionalIncludeDirectories>
+			<AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);src;..\..\..\addons\ofxFontStash\libs;..\..\..\addons\ofxFontStash\libs\fontstash;..\..\..\addons\ofxFontStash\libs\fontstash\src;..\..\..\addons\ofxFontStash\src;..\..\..\addons\ofxGui\src;..\..\..\addons\ofxNestedFileLoader\src;..\..\..\addons\ofxXmlSettings\libs;..\..\..\addons\ofxXmlSettings\src</AdditionalIncludeDirectories>
 			<CompileAs>CompileAsCpp</CompileAs>
 			<MultiProcessorCompilation>true</MultiProcessorCompilation>
 		</ClCompile>
@@ -133,7 +133,7 @@
 			<PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
 			<RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
 			<WarningLevel>Level3</WarningLevel>
-			<AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);src;..\..\..\addons\ofxFontStash\libs;..\..\..\addons\ofxFontStash\libs\fontstash;..\..\..\addons\ofxFontStash\libs\fontstash\src;..\..\..\addons\ofxFontStash\src;..\..\..\addons\ofxGui\src;..\..\..\addons\ofxNestedFileLoader\src</AdditionalIncludeDirectories>
+			<AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);src;..\..\..\addons\ofxFontStash\libs;..\..\..\addons\ofxFontStash\libs\fontstash;..\..\..\addons\ofxFontStash\libs\fontstash\src;..\..\..\addons\ofxFontStash\src;..\..\..\addons\ofxGui\src;..\..\..\addons\ofxNestedFileLoader\src;..\..\..\addons\ofxXmlSettings\libs;..\..\..\addons\ofxXmlSettings\src</AdditionalIncludeDirectories>
 			<CompileAs>CompileAsCpp</CompileAs>
 			<MultiProcessorCompilation>true</MultiProcessorCompilation>
 		</ClCompile>
@@ -155,7 +155,7 @@
 			<PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
 			<RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
 			<WarningLevel>Level3</WarningLevel>
-			<AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);src;..\..\..\addons\ofxFontStash\libs;..\..\..\addons\ofxFontStash\libs\fontstash;..\..\..\addons\ofxFontStash\libs\fontstash\src;..\..\..\addons\ofxFontStash\src;..\..\..\addons\ofxGui\src;..\..\..\addons\ofxNestedFileLoader\src</AdditionalIncludeDirectories>
+			<AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);src;..\..\..\addons\ofxFontStash\libs;..\..\..\addons\ofxFontStash\libs\fontstash;..\..\..\addons\ofxFontStash\libs\fontstash\src;..\..\..\addons\ofxFontStash\src;..\..\..\addons\ofxGui\src;..\..\..\addons\ofxNestedFileLoader\src;..\..\..\addons\ofxXmlSettings\libs;..\..\..\addons\ofxXmlSettings\src</AdditionalIncludeDirectories>
 			<CompileAs>CompileAsCpp</CompileAs>
 		</ClCompile>
 		<Link>
@@ -187,6 +187,10 @@
 		<ClCompile Include="..\..\..\addons\ofxGui\src\ofxSliderGroup.cpp" />
 		<ClCompile Include="..\..\..\addons\ofxGui\src\ofxToggle.cpp" />
 		<ClCompile Include="..\..\..\addons\ofxNestedFileLoader\src\ofxNestedFileLoader.cpp" />
+		<ClCompile Include="..\..\..\addons\ofxXmlSettings\src\ofxXmlSettings.cpp" />
+		<ClCompile Include="..\..\..\addons\ofxXmlSettings\libs\tinyxml.cpp" />
+		<ClCompile Include="..\..\..\addons\ofxXmlSettings\libs\tinyxmlerror.cpp" />
+		<ClCompile Include="..\..\..\addons\ofxXmlSettings\libs\tinyxmlparser.cpp" />
 	</ItemGroup>
 	<ItemGroup>
 		<ClInclude Include="src\ofApp.h" />
@@ -205,6 +209,8 @@
 		<ClInclude Include="..\..\..\addons\ofxGui\src\ofxSliderGroup.h" />
 		<ClInclude Include="..\..\..\addons\ofxGui\src\ofxToggle.h" />
 		<ClInclude Include="..\..\..\addons\ofxNestedFileLoader\src\ofxNestedFileLoader.h" />
+		<ClInclude Include="..\..\..\addons\ofxXmlSettings\src\ofxXmlSettings.h" />
+		<ClInclude Include="..\..\..\addons\ofxXmlSettings\libs\tinyxml.h" />
 	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="$(OF_ROOT)\libs\openFrameworksCompiled\project\vs\openframeworksLib.vcxproj">

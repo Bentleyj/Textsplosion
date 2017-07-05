@@ -87,7 +87,7 @@ void Textsplosion::draw() {
 	(*shaders)[0].end();
 
 	ofSetColor(255);
-	ofDrawRectangle(charBoundingBox);
+	//ofDrawRectangle(charBoundingBox);
 
     ofPopMatrix();
 }
@@ -198,12 +198,80 @@ void Textsplosion::setTextTris(string _text) {
 	}
 }
 
+void Textsplosion::setTextXml(string _text) {
+	text = _text;
+	cout << "Start: " << ofGetElapsedTimef() << endl;
+	int maxPoints = 1000;
+	for (char& c : text) {
+		if (letterMeshes->find(c) == letterMeshes->end()) {
+			xmlPoints->pushTag("Letters");
+			xmlPoints->pushTag(ofToString(c));
+			maxPoints = (xmlPoints->getNumTags("point") > maxPoints) ? maxPoints : xmlPoints->getNumTags("point");
+			for (int i = 0; i < maxPoints; i++) {
+				ofPoint p;
+				xmlPoints->pushTag("point", i);
+				p.x = xmlPoints->getValue("X", 0);
+				p.y = -xmlPoints->getValue("Y", 0);
+				p.z = 0;
+				xmlPoints->popTag();
+				(*letterMeshes)[c].addVertex(p);
+			}
+			xmlPoints->popTag();
+			xmlPoints->popTag();
+			mesh = (*letterMeshes)[c];
+		}
+		else {
+			mesh = (*letterMeshes)[c];
+		}
+
+	}
+	cout << "End: " << ofGetElapsedTimef() << endl;
+	//boundingBox = font->getStringBoundingBox(text, 0, 0);
+}
 
 void Textsplosion::setTextPoints(string _text) {
     text = _text;
 
 	// Find the string bounding box for our font about the particular text we want to write.
     boundingBox = font->getStringBoundingBox(text, 0, 0);
+
+	// Get the text as a vector of ofTTFCharacters, these characters have a whole bunch of info about the text.
+	vector<ofTTFCharacter> characters = font->getStringAsPoints(text);
+
+	// Go through all the characters
+	for (int j = 0; j < characters.size(); j++) {
+		// Get the outline of each character
+        
+        vector<ofPolyline> lines = characters[j].getOutline();
+		charBoundingBox = lines[0].getBoundingBox();
+		charBoundingBox.x = charBoundingBox.x - boundingBox.width / 2;
+		charBoundingBox.y = -charBoundingBox.y - boundingBox.height / 2;
+		charBoundingBox.y -= charBoundingBox.height;
+
+		vector<ofPolyline> newLines;
+		newLines.resize(lines.size());
+
+		for (int i = 0; i < lines.size(); i++) {
+			vector<ofPoint> points = lines[i].getVertices();
+			for (int j = 0; j < points.size(); j++) {
+				newLines[i].addVertex(ofVec3f(points[j].x - boundingBox.width / 2, -points[j].y - boundingBox.height / 2, 0));
+			}
+		}
+
+		int numLines = newLines.size();
+
+		for (int i = 0; i < 5000; i++) {
+			ofPoint testPoint = ofPoint(ofRandom(charBoundingBox.x, charBoundingBox.x + charBoundingBox.width), ofRandom(charBoundingBox.y, charBoundingBox.y + charBoundingBox.height));
+			while (!isInsideOnlyFirstLine(&newLines, testPoint)) {
+				testPoint = ofPoint(ofRandom(charBoundingBox.x, charBoundingBox.x + charBoundingBox.width), ofRandom(charBoundingBox.y, charBoundingBox.y + charBoundingBox.height));
+			}
+			mesh.addVertex(testPoint);
+			mesh.addColor(ofColor(255));
+		}
+	}
+}
+
+void Textsplosion::setTextBackground(string _text) {
 	//ofRectangle boundingBox = rect;
 	//boundingBox.y = -boundingBox.y;
 	//boundingBox.y -= boundingBox.height;
@@ -262,42 +330,6 @@ void Textsplosion::setTextPoints(string _text) {
 	//		backgroundMesh.addTexCoord(ofVec3f(x * (img->getWidth() / w), img->getHeight() - (y - yStep) * (img->getHeight() / h)));
 	//	}
 	//}
-	//Heres a random version
-
-	// Get the text as a vector of ofTTFCharacters, these characters have a whole bunch of info about the text.
-	vector<ofTTFCharacter> characters = font->getStringAsPoints(text);
-	//characters[0].draw();
-	// Go through all the characters
-	for (int j = 0; j < characters.size(); j++) {
-		// Get the outline of each character
-        
-        vector<ofPolyline> lines = characters[j].getOutline();
-		charBoundingBox = lines[0].getBoundingBox();
-		charBoundingBox.x = charBoundingBox.x - boundingBox.width / 2;
-		charBoundingBox.y = -charBoundingBox.y - boundingBox.height / 2;
-		charBoundingBox.y -= charBoundingBox.height;
-
-		vector<ofPolyline> newLines;
-		newLines.resize(lines.size());
-
-		for (int i = 0; i < lines.size(); i++) {
-			vector<ofPoint> points = lines[i].getVertices();
-			for (int j = 0; j < points.size(); j++) {
-				newLines[i].addVertex(ofVec3f(points[j].x - boundingBox.width / 2, -points[j].y - boundingBox.height / 2, 0));
-			}
-		}
-
-		int numLines = newLines.size();
-
-		for (int i = 0; i < 5000; i++) {
-			ofPoint testPoint = ofPoint(ofRandom(charBoundingBox.x, charBoundingBox.x + charBoundingBox.width), ofRandom(charBoundingBox.y, charBoundingBox.y + charBoundingBox.height));
-			while (!isInsideOnlyFirstLine(&newLines, testPoint)) {
-				testPoint = ofPoint(ofRandom(charBoundingBox.x, charBoundingBox.x + charBoundingBox.width), ofRandom(charBoundingBox.y, charBoundingBox.y + charBoundingBox.height));
-			}
-			mesh.addVertex(testPoint);
-			mesh.addColor(ofColor(255));
-		}
-	}
 }
 
 bool Textsplosion::isInsideOnlyFirstLine(vector<ofPolyline>* lines, ofPoint p) {

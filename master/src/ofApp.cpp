@@ -15,6 +15,7 @@ void ofApp::setup() {
 
 	font->load("fonts/AlteHaasGroteskBold.ttf", 55, true, true, true);
 
+	points.loadFile("positions.xml");
 	//font->setLetterSpacing(10.0f);
 
 	light.setPosition(0, 0, 0);
@@ -70,8 +71,8 @@ void ofApp::setup() {
 	ofxNestedFileLoader loader;
 	vector<string> imageNames; // = loader.load("images/finalPNGS");
 
-	//imageNames.push_back("AB");
-	//imageNames.push_back("B");
+	imageNames.push_back("AB");
+	imageNames.push_back("A");
 	//imageNames.push_back("C");
 	//imageNames.push_back("D");
 	//imageNames.push_back("E");
@@ -153,12 +154,14 @@ void ofApp::setup() {
         tempText = new Textsplosion();
 		tempText->setFont(font);
 		tempText->setCam(&cam);
+		tempText->setXML(&points);
+		tempText->setLetterMeshes(&letterMeshes);
 		//tempText->setColorGradient(ofRandom(0, 127), ofRandom(127, 255), ofRandom(127, 255), ofRandom(0, 127), ofRandom(127, 255), ofRandom(127, 255));
 		tempText->setColorGradient(255, 255, 255, 255, 255, 255);
 		tempText->setShaders(&shaders);
 		tempText->setImg(&(images[i%imageNames.size()]));
 		tempText->setShardSize(ofRandom(1, 10), ofRandom(1, 10));
-		tempText->setTextPoints(imageNames[i%imageNames.size()]);
+		tempText->setTextXml(imageNames[i%imageNames.size()]);
 		tempText->setViewPositionSpherical(150.0, theta, phi);
         tempText->fadeOut();
 		//tempText->setCenter(ofVec3f(0, 0, 0));

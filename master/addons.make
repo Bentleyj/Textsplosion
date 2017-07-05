@@ -1,3 +1,4 @@
 ofxFontStash
 ofxGui
 ofxNestedFileLoader
+ofxXmlSettings

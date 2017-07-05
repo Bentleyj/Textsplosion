@@ -21,15 +21,18 @@
 #define Textsplosion_h
 
 #include "ofMain.h"
+#include "ofxXmlSettings.h"
 
 class Textsplosion {
 public:
     //Initializer
     Textsplosion();
     //Setters
+	void setTextXml(string _text);
     void setTextPoints(string _text);
 	void setTextLines(string _text);
 	void setTextTris(string _text);
+	void setTextBackground(string _text);
 
 	void setViewPositionSpherical(float _r, float _theta, float _phi);
     void setUpVector(ofVec3f _upVector ) { upVector = _upVector; };
@@ -55,6 +58,9 @@ public:
 
 	void setColorGradient(int r1, int g1, int b1, int a1, int r2, int g2, int b2, int a2) { setColor1(r1, g1, b1, a1); setColor2(r2, g2, b2, a2); };
 	void setColorGradient(int r1, int g1, int b1, int r2, int g2, int b2) { setColor1(r1, g1, b1, 255.0); setColor2(r2, g2, b2, 255.0); };
+
+	void setXML(ofxXmlSettings* _xml) { xmlPoints = _xml; };
+	void setLetterMeshes(map<char, ofMesh>* _map) { letterMeshes = _map; };
 
 	void setCenter(ofVec3f _pos) { textCenter = _pos; };
 	void setShaders(vector<ofShader>* _shaders) { shaders = _shaders; };
@@ -135,6 +141,8 @@ private:
 	ofEasyCam* cam;
 	ofTrueTypeFont* font;
 	ofImage* img;
+	ofxXmlSettings* xmlPoints;
+	map<char, ofMesh>* letterMeshes;
 };
 
 #endif /* textsplosion_hpp */

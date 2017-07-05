@@ -68,4 +68,8 @@ public:
 	ofLight light;
 
 	ofEasyCam cam;
+
+	ofxXmlSettings points;
+
+	map<char, ofMesh> letterMeshes;
 };
