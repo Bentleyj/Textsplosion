@@ -72,4 +72,5 @@ public:
 	ofxXmlSettings points;
 
 	map<char, ofMesh> letterMeshes;
+	map<char, ofVec2f> letterSizes;
 };

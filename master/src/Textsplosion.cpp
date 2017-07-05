@@ -202,9 +202,22 @@ void Textsplosion::setTextXml(string _text) {
 	text = _text;
 	cout << "Start: " << ofGetElapsedTimef() << endl;
 	int maxPoints = 1000;
+	vector<int> widths;
+	float totalWidth = 0;
+	xmlPoints->pushTag("Letters");
+
+	for (char& c : text) {
+		xmlPoints->pushTag(ofToString(c));
+		cout << c << endl;
+		int width = xmlPoints->getValue("Width", 0);
+		widths.push_back(width);
+		totalWidth += width;
+		xmlPoints->popTag();
+	}
+	float fullWidth = totalWidth;
+	int charIndex = 0;
 	for (char& c : text) {
 		if (letterMeshes->find(c) == letterMeshes->end()) {
-			xmlPoints->pushTag("Letters");
 			xmlPoints->pushTag(ofToString(c));
 			maxPoints = (xmlPoints->getNumTags("point") > maxPoints) ? maxPoints : xmlPoints->getNumTags("point");
 			for (int i = 0; i < maxPoints; i++) {
@@ -218,14 +231,23 @@ void Textsplosion::setTextXml(string _text) {
 				(*letterMeshes)[c].addColor(ofColor(255));
 			}
 			xmlPoints->popTag();
-			xmlPoints->popTag();
-			mesh.addVertices((*letterMeshes)[c].getVertices());
+			for (int i = 0; i < (*letterMeshes)[c].getNumVertices(); i++) {
+				mesh.addVertex((*letterMeshes)[c].getVertex(i) - ofVec2f(totalWidth, 0) + ofVec2f(fullWidth/2, 0));
+			}
+			totalWidth -= widths[charIndex];
+			charIndex++;
+
 		}
 		else {
-			mesh.addVertices((*letterMeshes)[c].getVertices());
+			for (int i = 0; i < (*letterMeshes)[c].getNumVertices(); i++) {
+				mesh.addVertex((*letterMeshes)[c].getVertex(i) - ofVec2f(totalWidth, 0) + ofVec2f(fullWidth / 2, 0));
+			}
+			totalWidth -= widths[charIndex];
+			charIndex++;;
 		}
 
 	}
+	xmlPoints->popTag();
 	cout << "End: " << ofGetElapsedTimef() << endl;
 	//boundingBox = font->getStringBoundingBox(text, 0, 0);
 }

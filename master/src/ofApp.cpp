@@ -1,6 +1,6 @@
 #include "ofApp.h"
 
-#define NUM_NAMES 1
+#define NUM_NAMES 2
 
 //--------------------------------------------------------------
 void ofApp::setup() {
@@ -16,6 +16,18 @@ void ofApp::setup() {
 	font->load("fonts/AlteHaasGroteskBold.ttf", 55, true, true, true);
 
 	points.loadFile("positions.xml");
+
+	points.pushTag("Letters");
+	string alphabet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+	for (char&c : alphabet) {
+		points.pushTag(ofToString(c));
+		ofVec2f size;
+		size.x = points.getValue("Width", 0);
+		size.y = points.getValue("Height", 0);
+		letterSizes[c] = size;
+		points.popTag();
+	}
+	points.popTag();
 	//font->setLetterSpacing(10.0f);
 
 	light.setPosition(0, 0, 0);
@@ -156,6 +168,7 @@ void ofApp::setup() {
 		tempText->setCam(&cam);
 		tempText->setXML(&points);
 		tempText->setLetterMeshes(&letterMeshes);
+		tempText->setLetterSizes(&letterSizes);
 		//tempText->setColorGradient(ofRandom(0, 127), ofRandom(127, 255), ofRandom(127, 255), ofRandom(0, 127), ofRandom(127, 255), ofRandom(127, 255));
 		tempText->setColorGradient(255, 255, 255, 255, 255, 255);
 		tempText->setShaders(&shaders);

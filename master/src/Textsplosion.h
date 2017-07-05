@@ -61,6 +61,7 @@ public:
 
 	void setXML(ofxXmlSettings* _xml) { xmlPoints = _xml; };
 	void setLetterMeshes(map<char, ofMesh>* _map) { letterMeshes = _map; };
+	void setLetterSizes(map<char, ofVec2f>* _map) { letterSizes = _map; };
 
 	void setCenter(ofVec3f _pos) { textCenter = _pos; };
 	void setShaders(vector<ofShader>* _shaders) { shaders = _shaders; };
@@ -143,6 +144,7 @@ private:
 	ofImage* img;
 	ofxXmlSettings* xmlPoints;
 	map<char, ofMesh>* letterMeshes;
+	map<char, ofVec2f>* letterSizes;
 };
 
 #endif /* textsplosion_hpp */
