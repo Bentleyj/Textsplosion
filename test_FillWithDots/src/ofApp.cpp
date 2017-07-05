@@ -88,7 +88,7 @@ void ofApp::saveCharacter(char c) {
 		// Get the outline of each character
 
 		vector<ofPolyline> lines = characters[j].getOutline();
-		ofRectangle charBoundingBox = boundingBox;
+		charBoundingBox = boundingBox;
 		charBoundingBox.x = charBoundingBox.x - boundingBox.width / 2;
 		charBoundingBox.y = -charBoundingBox.y - boundingBox.height / 2;
 		charBoundingBox.y -= charBoundingBox.height;
@@ -141,7 +141,7 @@ void ofApp::keyPressed(int key){
 			// Get the outline of each character
 
 			vector<ofPolyline> lines = characters[j].getOutline();
-			ofRectangle charBoundingBox = boundingBox;
+			charBoundingBox = boundingBox;
 			charBoundingBox.x = charBoundingBox.x - boundingBox.width / 2;
 			charBoundingBox.y = -charBoundingBox.y - boundingBox.height / 2;
 			charBoundingBox.y -= charBoundingBox.height;
@@ -183,6 +183,8 @@ void ofApp::savePoints() {
 	if (!positions.tagExists(text))
 		positions.addTag(text);
 	positions.pushTag(text);
+	positions.addValue("Width", charBoundingBox.width);
+	positions.addValue("Height", charBoundingBox.height);
 	for (int i = 0; i < mesh.getNumVertices(); i++) {
 		positions.addTag("point");
 		positions.pushTag("point", i);
@@ -191,7 +193,7 @@ void ofApp::savePoints() {
 		positions.popTag();
 	}
 	positions.popTag();
-	positions.saveFile("positions.xml");
+	positions.saveFile(fontName + "positions.xml");
 }
 
 //--------------------------------------------------------------

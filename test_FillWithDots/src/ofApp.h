@@ -39,6 +39,8 @@ class ofApp : public ofBaseApp{
 
 		ofxXmlSettings positions;
 
+		ofRectangle charBoundingBox;
+
 		ofMesh mesh;
 		ofMesh controlMesh;
 		
