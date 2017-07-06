@@ -100,16 +100,16 @@ void main(){
 
 	float cappedDistortAmount = min(distortAmount, distanceToTarget);
 
-  //int numPointsPerPoly = 3; //  Change this to 2 for outline and 3 for filled.
-	//if (gl_VertexID % numPointsPerPoly == 0) {
-	noiseAmntZ = snoise(vec2(timeVal + gl_VertexID, 1.0f)) * cappedDistortAmount;
-	//}
-	// else if (gl_VertexID % numPointsPerPoly == 1) {
-	// 	noiseAmntZ = snoise(vec2(timeVal + gl_VertexID - 1, 1.0f)) * cappedDistortAmount;
-	// }
-	// else {
-	// 	noiseAmntZ = snoise(vec2(timeVal + gl_VertexID - 2, 1.0f)) * cappedDistortAmount;
-	// } // Comment this out for lines
+  int numPointsPerPoly = 2; //  Change this to 2 for outline and 3 for filled.
+	if (gl_VertexID % numPointsPerPoly == 0) {
+		noiseAmntZ = snoise(vec2(timeVal + gl_VertexID, 1.0f)) * cappedDistortAmount;
+	}
+	else if (gl_VertexID % numPointsPerPoly == 1) {
+		noiseAmntZ = snoise(vec2(timeVal + gl_VertexID - 1, 1.0f)) * cappedDistortAmount;
+	}
+	else {
+		noiseAmntZ = snoise(vec2(timeVal + gl_VertexID - 2, 1.0f)) * cappedDistortAmount;
+	} // Comment this out for lines
 
 	pos.z += noiseAmntZ;//cos(pos.x * timeVal);//noiseAmntZ;
 

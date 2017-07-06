@@ -1,6 +1,6 @@
 #include "ofApp.h"
 
-#define NUM_NAMES 2
+#define NUM_NAMES 20
 
 //--------------------------------------------------------------
 void ofApp::setup() {
@@ -83,8 +83,8 @@ void ofApp::setup() {
 	ofxNestedFileLoader loader;
 	vector<string> imageNames; // = loader.load("images/finalPNGS");
 
-	imageNames.push_back("AB");
-	imageNames.push_back("A");
+	//imageNames.push_back("ABCDEFGHIJKLMNOPQRSTUVWYZ");
+	//imageNames.push_back("B");
 	//imageNames.push_back("C");
 	//imageNames.push_back("D");
 	//imageNames.push_back("E");
@@ -110,7 +110,7 @@ void ofApp::setup() {
 	//imageNames.push_back("Y");
 	//imageNames.push_back("Z");
 
-    imageNames.push_back("Mathilde");
+    imageNames.push_back("Mathilde Steen");
     imageNames.push_back("James Bentley");
     imageNames.push_back("Pete Hellicar");
     imageNames.push_back("Naho Matsuda");
@@ -174,7 +174,7 @@ void ofApp::setup() {
 		tempText->setShaders(&shaders);
 		tempText->setImg(&(images[i%imageNames.size()]));
 		tempText->setShardSize(ofRandom(1, 10), ofRandom(1, 10));
-		tempText->setTextXml(imageNames[i%imageNames.size()]);
+		tempText->setTextLines(imageNames[i%imageNames.size()]);
 		tempText->setViewPositionSpherical(150.0, theta, phi);
         tempText->fadeOut();
 		//tempText->setCenter(ofVec3f(0, 0, 0));
@@ -259,15 +259,11 @@ void ofApp::draw() {
     ofSetColor(255, 0, 0);
 	for (int i = 0; i < texts.size(); i++) {
         texts[i]->draw();
-//        if(texts[i]->getBrightnessModifier() > 0.3) {
-//            brightTexts.push_back(texts[i]);
-//        }
 	}
-//    for(int i = 0; i < brightTexts.size(); i++) {
-//        brighttexts[i]->draw
-//    }
+
+	//ofSetColor(255, 0, 0);
+	//ofDrawSphere(0, 0, 10);
 	cam.end();
-	//cam.end();
 
 	if (showGui) {
 		ofPushStyle();
@@ -308,6 +304,29 @@ void ofApp::keyPressed(int key) {
 			ofShowCursor();
 		}
 		showGui = !showGui;
+	}
+	if (key == 'n') {
+		for (int i = 0; i < NUM_NAMES; i++) {
+			float theta = ofRandom(0.0, 180.0);
+			float phi = ofRandom(0.0, 360.0);
+			Textsplosion* tempText;
+			tempText = new Textsplosion();
+			tempText->setFont(font);
+			tempText->setCam(&cam);
+			tempText->setXML(&points);
+			tempText->setLetterMeshes(&letterMeshes);
+			tempText->setLetterSizes(&letterSizes);
+			//tempText->setColorGradient(ofRandom(0, 127), ofRandom(127, 255), ofRandom(127, 255), ofRandom(0, 127), ofRandom(127, 255), ofRandom(127, 255));
+			tempText->setColorGradient(255, 255, 255, 255, 255, 255);
+			tempText->setShaders(&shaders);
+			tempText->setImg(&(images[i%imageNames.size()]));
+			tempText->setShardSize(ofRandom(1, 10), ofRandom(1, 10));
+			tempText->setTextLines(imageNames[i%imageNames.size()]);
+			tempText->setViewPositionSpherical(150.0, theta, phi);
+			tempText->fadeOut();
+			//tempText->setCenter(ofVec3f(0, 0, 0));
+			texts.push_back(tempText);
+		}
 	}
 }
 

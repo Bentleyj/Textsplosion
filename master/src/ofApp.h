@@ -65,6 +65,8 @@ public:
 
 	vector<ofShader> shaders;
 
+	vector<string> imageNames;
+
 	ofLight light;
 
 	ofEasyCam cam;

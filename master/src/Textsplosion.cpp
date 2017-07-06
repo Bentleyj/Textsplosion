@@ -80,7 +80,7 @@ void Textsplosion::draw() {
     (*shaders)[0].setUniform4f("col1", ColorToUniformRange(color1));
     (*shaders)[0].setUniform4f("col2", ColorToUniformRange(color2));
     (*shaders)[0].setUniform4f("boundingBox", ofVec4f(boundingBox.x, boundingBox.y, boundingBox.width, boundingBox.height));
-	mesh.setMode(OF_PRIMITIVE_POINTS);
+	mesh.setMode(OF_PRIMITIVE_LINES);
 	ofEnableDepthTest();
 	mesh.draw();
 	ofDisableDepthTest();
@@ -148,6 +148,7 @@ void Textsplosion::setViewPositionSpherical(float _r, float _theta, float _phi)
 }
 
 void Textsplosion::setTextLines(string _text) {
+	text = _text;
 	boundingBox = font->getStringBoundingBox(text, 0, 0);
 	// Get the text as a vector of ofTTFCharacters, these characters have a whole bunch of info about the text.
 	vector<ofTTFCharacter> characters = font->getStringAsPoints(text);
@@ -176,6 +177,8 @@ void Textsplosion::setTextLines(string _text) {
 }
 
 void Textsplosion::setTextTris(string _text) {
+	text = _text;
+
 	boundingBox = font->getStringBoundingBox(text, 0, 0);
 	// Get the text as a vector of ofTTFCharacters, these characters have a whole bunch of info about the text.
 	vector<ofTTFCharacter> characters = font->getStringAsPoints(text);
@@ -201,21 +204,22 @@ void Textsplosion::setTextTris(string _text) {
 void Textsplosion::setTextXml(string _text) {
 	text = _text;
 	cout << "Start: " << ofGetElapsedTimef() << endl;
-	int maxPoints = 1000;
+	int maxPoints = 500;
 	vector<int> widths;
 	float totalWidth = 0;
 	xmlPoints->pushTag("Letters");
 
 	for (char& c : text) {
+		cout<<"Finding: " << c << endl;
 		xmlPoints->pushTag(ofToString(c));
-		cout << c << endl;
 		int width = xmlPoints->getValue("Width", 0);
+		cout <<"Width: " << width << endl;
 		widths.push_back(width);
 		totalWidth += width;
 		xmlPoints->popTag();
 	}
-	float fullWidth = totalWidth;
 	int charIndex = 0;
+	int xOffset = widths[0]/2;
 	for (char& c : text) {
 		if (letterMeshes->find(c) == letterMeshes->end()) {
 			xmlPoints->pushTag(ofToString(c));
@@ -232,18 +236,18 @@ void Textsplosion::setTextXml(string _text) {
 			}
 			xmlPoints->popTag();
 			for (int i = 0; i < (*letterMeshes)[c].getNumVertices(); i++) {
-				mesh.addVertex((*letterMeshes)[c].getVertex(i) - ofVec2f(totalWidth, 0) + ofVec2f(fullWidth/2, 0));
+				mesh.addVertex((*letterMeshes)[c].getVertex(i) + ofVec2f(xOffset, 0) - ofVec2f(totalWidth/2, 0));
 			}
-			totalWidth -= widths[charIndex];
+			xOffset += widths[charIndex];
 			charIndex++;
 
 		}
 		else {
 			for (int i = 0; i < (*letterMeshes)[c].getNumVertices(); i++) {
-				mesh.addVertex((*letterMeshes)[c].getVertex(i) - ofVec2f(totalWidth, 0) + ofVec2f(fullWidth / 2, 0));
+				mesh.addVertex((*letterMeshes)[c].getVertex(i) + ofVec2f(xOffset, 0) - ofVec2f(totalWidth / 2, 0));
 			}
-			totalWidth -= widths[charIndex];
-			charIndex++;;
+			xOffset += widths[charIndex] + widths[charIndex+1]/2;
+			charIndex++;
 		}
 
 	}
@@ -264,33 +268,39 @@ void Textsplosion::setTextPoints(string _text) {
 	// Go through all the characters
 	for (int j = 0; j < characters.size(); j++) {
 		// Get the outline of each character
-        
-        vector<ofPolyline> lines = characters[j].getOutline();
-		charBoundingBox = lines[0].getBoundingBox();
-		charBoundingBox.x = charBoundingBox.x - boundingBox.width / 2;
-		charBoundingBox.y = -charBoundingBox.y - boundingBox.height / 2;
-		charBoundingBox.y -= charBoundingBox.height;
 
-		vector<ofPolyline> newLines;
-		newLines.resize(lines.size());
+		if (text.at(j) == ' ') {
+			// Skip spaces
+		}
+		else {
+			vector<ofPolyline> lines = characters[j].getOutline();
+			charBoundingBox = lines[0].getBoundingBox();
+			charBoundingBox.x = charBoundingBox.x - boundingBox.width / 2;
+			charBoundingBox.y = -charBoundingBox.y - boundingBox.height / 2;
+			charBoundingBox.y -= charBoundingBox.height;
 
-		for (int i = 0; i < lines.size(); i++) {
-			vector<ofPoint> points = lines[i].getVertices();
-			for (int j = 0; j < points.size(); j++) {
-				newLines[i].addVertex(ofVec3f(points[j].x - boundingBox.width / 2, -points[j].y - boundingBox.height / 2, 0));
+			vector<ofPolyline> newLines;
+			newLines.resize(lines.size());
+
+			for (int i = 0; i < lines.size(); i++) {
+				vector<ofPoint> points = lines[i].getVertices();
+				for (int j = 0; j < points.size(); j++) {
+					newLines[i].addVertex(ofVec3f(points[j].x - boundingBox.width / 2, -points[j].y - boundingBox.height / 2, 0));
+				}
+			}
+
+			int numLines = newLines.size();
+
+			for (int i = 0; i < 5000; i++) {
+				ofPoint testPoint = ofPoint(ofRandom(charBoundingBox.x, charBoundingBox.x + charBoundingBox.width), ofRandom(charBoundingBox.y, charBoundingBox.y + charBoundingBox.height));
+				while (!isInsideOnlyFirstLine(&newLines, testPoint)) {
+					testPoint = ofPoint(ofRandom(charBoundingBox.x, charBoundingBox.x + charBoundingBox.width), ofRandom(charBoundingBox.y, charBoundingBox.y + charBoundingBox.height));
+				}
+				mesh.addVertex(testPoint);
+				mesh.addColor(ofColor(255));
 			}
 		}
 
-		int numLines = newLines.size();
-
-		for (int i = 0; i < 5000; i++) {
-			ofPoint testPoint = ofPoint(ofRandom(charBoundingBox.x, charBoundingBox.x + charBoundingBox.width), ofRandom(charBoundingBox.y, charBoundingBox.y + charBoundingBox.height));
-			while (!isInsideOnlyFirstLine(&newLines, testPoint)) {
-				testPoint = ofPoint(ofRandom(charBoundingBox.x, charBoundingBox.x + charBoundingBox.width), ofRandom(charBoundingBox.y, charBoundingBox.y + charBoundingBox.height));
-			}
-			mesh.addVertex(testPoint);
-			mesh.addColor(ofColor(255));
-		}
 	}
 }
 
