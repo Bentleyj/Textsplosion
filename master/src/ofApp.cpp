@@ -1,6 +1,6 @@
 #include "ofApp.h"
 
-#define NUM_NAMES 20
+#define NUM_NAMES 1
 
 //--------------------------------------------------------------
 void ofApp::setup() {
@@ -81,7 +81,7 @@ void ofApp::setup() {
 	shaders.push_back(backgroundNoise);
 
 	ofxNestedFileLoader loader;
-	vector<string> imageNames; // = loader.load("images/finalPNGS");
+	 // = loader.load("images/finalPNGS");
 
 	//imageNames.push_back("ABCDEFGHIJKLMNOPQRSTUVWYZ");
 	//imageNames.push_back("B");
@@ -218,7 +218,6 @@ void ofApp::update() {
 		texts[i]->setBackgroundColor2(backgroundColor2.get());
 		texts[i]->setColor1(foregroundColor1.get());
 		texts[i]->setColor2(foregroundColor2.get());
-		//texts[i]->setTextColor();
 	}
 }
 
