@@ -1,6 +1,6 @@
 #include "ofApp.h"
 
-#define NUM_NAMES 1
+#define NUM_NAMES 20
 
 //--------------------------------------------------------------
 void ofApp::setup() {
@@ -13,7 +13,7 @@ void ofApp::setup() {
 
 	ofSetLogLevel(OF_LOG_WARNING);
 
-	font->load("fonts/AlteHaasGroteskBold.ttf", 55, true, true, true);
+	font->load("fonts/Calligraphr-Regular.ttf", 55, true, true, true);
 
 	points.loadFile("positions.xml");
 
@@ -41,7 +41,7 @@ void ofApp::setup() {
 	gui.add(transitionDuration.set("Duration", 20.0, 1.0, 30.0));
 	gui.add(lineWidth.set("Line Width", 3.0, 1.0, 10.0));
 	gui.add(foregroundColor1.set("foreGroundColor1", ofColor(255, 255, 255)));
-	gui.add(foregroundColor2.set("foreGroundColor1", ofColor(255, 255, 255)));
+	gui.add(foregroundColor2.set("foreGroundColor2", ofColor(255, 255, 255)));
 	gui.add(backgroundColor1.set("backgroundColor1", ofColor(255, 255, 255)));
 	gui.add(backgroundColor2.set("backgroundColor2", ofColor(255, 255, 255)));
 
@@ -303,29 +303,6 @@ void ofApp::keyPressed(int key) {
 			ofShowCursor();
 		}
 		showGui = !showGui;
-	}
-	if (key == 'n') {
-		for (int i = 0; i < NUM_NAMES; i++) {
-			float theta = ofRandom(0.0, 180.0);
-			float phi = ofRandom(0.0, 360.0);
-			Textsplosion* tempText;
-			tempText = new Textsplosion();
-			tempText->setFont(font);
-			tempText->setCam(&cam);
-			tempText->setXML(&points);
-			tempText->setLetterMeshes(&letterMeshes);
-			tempText->setLetterSizes(&letterSizes);
-			//tempText->setColorGradient(ofRandom(0, 127), ofRandom(127, 255), ofRandom(127, 255), ofRandom(0, 127), ofRandom(127, 255), ofRandom(127, 255));
-			tempText->setColorGradient(255, 255, 255, 255, 255, 255);
-			tempText->setShaders(&shaders);
-			tempText->setImg(&(images[i%imageNames.size()]));
-			tempText->setShardSize(ofRandom(1, 10), ofRandom(1, 10));
-			tempText->setTextLines(imageNames[i%imageNames.size()]);
-			tempText->setViewPositionSpherical(150.0, theta, phi);
-			tempText->fadeOut();
-			//tempText->setCenter(ofVec3f(0, 0, 0));
-			texts.push_back(tempText);
-		}
 	}
 }
 

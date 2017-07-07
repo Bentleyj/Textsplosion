@@ -1,7 +1,7 @@
 #pragma once
 
 #include "ofMain.h"
-#include "ofxFontStash.h"
+//#include "ofxFontStash.h"
 #include "ofxGui.h"
 #include "Textsplosion.h"
 // #include "ofxPostProcessing.h"
