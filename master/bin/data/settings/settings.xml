@@ -3,7 +3,7 @@
 	<Duration>1</Duration>
 	<Line_Width>3</Line_Width>
 <GUI/>
-<foreGroundColor1>181, 247, 245, 255</foreGroundColor1>
+<foreGroundColor1>255, 255, 255, 255</foreGroundColor1>
 	<backgroundColor1>106, 169, 234, 255</backgroundColor1>
 	<backgroundColor2>50, 221, 154, 255</backgroundColor2>
 </GUI>

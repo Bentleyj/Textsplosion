@@ -7,13 +7,14 @@ void ofApp::setup() {
     
     ofLogToFile("log.txt", true);
 
-	ofSetWindowPosition(ofGetScreenWidth() + 10, 30);
+	//ofSetWindowPosition(ofGetScreenWidth() + 10, 30);
 
 	font = new ofTrueTypeFont();
 
 	ofSetLogLevel(OF_LOG_WARNING);
 
 	font->load("fonts/AlteHaasGroteskBold.ttf", 55, true, true, true);
+	font->setLineHeight(70);
 
 	//font->setLetterSpacing(10.0f);
 
@@ -55,7 +56,7 @@ void ofApp::setup() {
 
 	ofSetLogLevel(OF_LOG_ERROR);
 
-	cameraPosTarget = ofVec3f(0, 0, 600);
+	cameraPosTarget = ofVec3f(0, 0, 200);
 	camUpVectorTarget = ofVec3f(0, 1, 0);
 
 	ofBackground(ofColor(17, 30, 86));
@@ -70,13 +71,13 @@ void ofApp::setup() {
 	ofxNestedFileLoader loader;
 	vector<string> imageNames; // = loader.load("images/finalPNGS");
 
-    imageNames.push_back("Mathilde Steen");
-    imageNames.push_back("James Bentley");
-    imageNames.push_back("Pete Hellicar");
-    imageNames.push_back("Naho Matsuda");
-    imageNames.push_back("Kelly Addison");
-    imageNames.push_back("Jim Brady");
-    imageNames.push_back("Jacinta Francis");
+    imageNames.push_back("1");
+    imageNames.push_back("2");
+    imageNames.push_back("3");
+    imageNames.push_back("4");
+    imageNames.push_back("5");
+    imageNames.push_back("6");
+    imageNames.push_back("  Place \n Hatton \n      7");
 
 	//vector<string> names;
 	//for (int i = 0; i < imageNames.size(; i++) {
@@ -153,15 +154,15 @@ void ofApp::update() {
 		float distance = (cam.getPosition() - ofVec3f(0, 0, 0)).length();
 
         //auto easingMethod = &ofxeasing::linear::easeIn;
-        float newX = ofLerp(cam.getPosition().x, cameraPosTarget.x, 0.1);//ofxeasing::map(now, initTime, endTime, cam.getPosition().x, cameraPosTarget.x, easingMethod);
-        float newY = ofLerp(cam.getPosition().y, cameraPosTarget.y, 0.1);//ofxeasing::map(now, initTime, endTime, cam.getPosition().y, cameraPosTarget.y, easingMethod);
-        float newZ = ofLerp(cam.getPosition().z, cameraPosTarget.z, 0.1);//ofxeasing::map(now, initTime, endTime, cam.getPosition().z, cameraPosTarget.z, easingMethod);
+        float newX = ofLerp(cam.getPosition().x, cameraPosTarget.x, 0.2);//ofxeasing::map(now, initTime, endTime, cam.getPosition().x, cameraPosTarget.x, easingMethod);
+        float newY = ofLerp(cam.getPosition().y, cameraPosTarget.y, 0.2);//ofxeasing::map(now, initTime, endTime, cam.getPosition().y, cameraPosTarget.y, easingMethod);
+        float newZ = ofLerp(cam.getPosition().z, cameraPosTarget.z, 0.2);//ofxeasing::map(now, initTime, endTime, cam.getPosition().z, cameraPosTarget.z, easingMethod);
 
         cam.setPosition(newX, newY, newZ);
 
-        float newUpX = ofLerp(cam.getUpDir().x, camUpVectorTarget.x, 0.1);//ofxeasing::map(now, initTime, endTime, cam.getUpDir().x, camUpVectorTarget.x, easingMethod);
-        float newUpY = ofLerp(cam.getUpDir().y, camUpVectorTarget.y, 0.1);// ofxeasing::map(now, initTime, endTime, cam.getUpDir().y, camUpVectorTarget.y, easingMethod);
-        float newUpZ = ofLerp(cam.getUpDir().z, camUpVectorTarget.z, 0.1);//ofxeasing::map(now, initTime, endTime, cam.getUpDir().z, camUpVectorTarget.z, easingMethod);
+        float newUpX = ofLerp(cam.getUpDir().x, camUpVectorTarget.x, 0.2);//ofxeasing::map(now, initTime, endTime, cam.getUpDir().x, camUpVectorTarget.x, easingMethod);
+        float newUpY = ofLerp(cam.getUpDir().y, camUpVectorTarget.y, 0.2);// ofxeasing::map(now, initTime, endTime, cam.getUpDir().y, camUpVectorTarget.y, easingMethod);
+        float newUpZ = ofLerp(cam.getUpDir().z, camUpVectorTarget.z, 0.2);//ofxeasing::map(now, initTime, endTime, cam.getUpDir().z, camUpVectorTarget.z, easingMethod);
 
         cam.lookAt(ofVec3f(0, 0, 0), ofVec3f(newUpX, newUpY, newUpZ));
 	}
@@ -248,7 +249,7 @@ void ofApp::goToNextText(float distance) {
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key) {
 	if (key == ' ') {
-		goToNextText(500);
+		goToNextText(220);
 	}
 	if (key == 'a') {
 		animating = !animating;
