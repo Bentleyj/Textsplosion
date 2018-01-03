@@ -49,6 +49,10 @@ public:
 	void setBackgroundColor2(ofColor col) { backgroundColor2 = col; };
 	void setColor1(ofColor col) { color1 = col; };
 	void setColor2(ofColor col) { color2 = col; };
+	void setHighlightColor(ofColor col) { highlightCol = col; };
+	void setHighlightColor(int r, int g, int b, int a) {
+		setHighlightColor(ofColor(r, g, b, a));
+	}
 
 	void setColorGradient(int r1, int g1, int b1, int a1, int r2, int g2, int b2, int a2) { setColor1(r1, g1, b1, a1); setColor2(r2, g2, b2, a2); };
 	void setColorGradient(int r1, int g1, int b1, int r2, int g2, int b2) { setColor1(r1, g1, b1, 255.0); setColor2(r2, g2, b2, 255.0); };
@@ -124,6 +128,7 @@ private:
 	ofColor color2;
 	ofColor backgroundColor1;
 	ofColor backgroundColor2;
+	ofColor highlightCol;
 	float brightnessModifier;
 	float targetBrightness;
 	float lineWidth;

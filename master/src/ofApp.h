@@ -42,6 +42,7 @@ public:
 	ofParameter<ofColor> backgroundColor2;
 	ofParameter<ofColor> foregroundColor1;
 	ofParameter<ofColor> foregroundColor2;
+	ofParameter<ofColor> highlightColor;
 
 	ofVec3f cameraPosTarget;
 	ofVec3f camUpVectorTarget;

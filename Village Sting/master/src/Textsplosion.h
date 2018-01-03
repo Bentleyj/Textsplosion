@@ -38,7 +38,7 @@ public:
 	void setColor2(int r, int g, int b, int a) { color2 = ofColor(r, g, b, a); };
     void setColor(int r, int g, int b) { 
 		setColor1(r, g, b, 255);
-		setColor1(r, g, b, 255);
+		setColor2(r, g, b, 255);
 	};
 	void setColorGradient(int r1, int g1, int b1, int a1, int r2, int g2, int b2, int a2) { setColor1(r1, g1, b1, a1); setColor2(r2, g2, b2, a2); };
 	void setColorGradient(int r1, int g1, int b1, int r2, int g2, int b2) { setColor1(r1, g1, b1, 255.0); setColor2(r2, g2, b2, 255.0); };

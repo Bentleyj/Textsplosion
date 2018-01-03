@@ -1,6 +1,6 @@
 #include "ofApp.h"
 
-#define NUM_NAMES 50
+#define NUM_NAMES 7
 
 //--------------------------------------------------------------
 void ofApp::setup() {
@@ -32,6 +32,7 @@ void ofApp::setup() {
 	gui.add(foregroundColor2.set("foreGroundColor1", ofColor(255, 255, 255)));
 	gui.add(backgroundColor1.set("backgroundColor1", ofColor(255, 255, 255)));
 	gui.add(backgroundColor2.set("backgroundColor2", ofColor(255, 255, 255)));
+	gui.add(highlightColor.set("highlightColor", ofColor(255, 255, 255)));
 
 	gui.loadFromFile("settings/settings.xml");
 
@@ -129,6 +130,7 @@ void ofApp::setup() {
 		tempText->setCam(&cam);
 		//tempText->setColorGradient(ofRandom(0, 127), ofRandom(127, 255), ofRandom(127, 255), ofRandom(0, 127), ofRandom(127, 255), ofRandom(127, 255));
 		tempText->setColorGradient(255, 255, 255, 255, 255, 255);
+		tempText->setHighlightColor(255, 255, 255, 255);
 		tempText->setShaders(&shaders);
 		tempText->setImg(&(images[i%imageNames.size()]));
 		tempText->setShardSize(ofRandom(1, 10), ofRandom(1, 10));
@@ -175,6 +177,7 @@ void ofApp::update() {
 		texts[i]->setBackgroundColor2(backgroundColor2.get());
 		texts[i]->setColor1(foregroundColor1.get());
 		texts[i]->setColor2(foregroundColor2.get());
+		texts[i]->setHighlightColor(highlightColor.get());
 		//texts[i]->setTextColor();
 	}
 }

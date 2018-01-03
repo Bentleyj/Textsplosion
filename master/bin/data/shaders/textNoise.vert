@@ -10,7 +10,10 @@ uniform vec4 bcol1;
 uniform vec4 bcol2;
 uniform vec4 col1;
 uniform vec4 col2;
+uniform vec4 highlightCol;
 uniform vec4 boundingBox;
+
+varying vec4 colB;
 
 //
 // Description : Array and textureless GLSL 2D simplex noise function.
@@ -128,18 +131,20 @@ void main(){
     
 	pos = gl_ProjectionMatrix * gl_ModelViewMatrix * pos;
     
-    vec4 hCol = mix(col2, col1, map(pos.x, boundingBox.x, boundingBox.z, 0.0, 1.0));
-
+    vec4 hCol = mix(col2, col1, map(pos.x, boundingBox.x, boundingBox.y, 0.0, 1.0));
 
 	vec4 bCol = mix(bcol2, bcol1, normalizedDist);
+
     
     if (gl_VertexID % 30 == 0 || gl_VertexID % 30 == 1 || gl_VertexID % 30 == 2) {
-        bCol = vec4(250.0/255.0, 194.0/255.0, 44.0/255.0, 255);
+        bCol = highlightCol;
     }
-    
-    vec4 finalCol = mix(bCol, hCol, brightnessModifier);
 
-	gl_FrontColor = vec4(finalCol.xyz, 1.0);
+	colB = bCol;
+    
+	//vec4 finalCol = hCol;// mix(bCol, hCol, brightnessModifier);
+
+	//gl_FrontColor = vec4(finalCol.xyz, 1.0);
 	
 	gl_Position = pos;
 	gl_TexCoord[0] = gl_MultiTexCoord0;

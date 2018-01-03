@@ -196,7 +196,6 @@ void Textsplosion::setText(string _text) {
 		Triangulator::generateTriangulation(&inputMesh, &mesh);
 		for (int i = 0; i < mesh.getNumVertices(); i++) {
 			mesh.addColor(color1.getLerped(color2, mesh.getVertex(i).x / (rect.getWidth() + 10)));
-
 		}
 
 		//for (int k = 0; k < lines.size(); k++) {

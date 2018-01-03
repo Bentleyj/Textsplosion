@@ -1,11 +1,11 @@
 #include "ofApp.h"
 
-#define NUM_NAMES 0
+#define NUM_NAMES 1
 
 //--------------------------------------------------------------
 void ofApp::setup() {
 
-	ofSetWindowPosition(ofGetScreenWidth() + 10, 30);
+	//ofSetWindowPosition(ofGetScreenWidth() + 10, 30);
 
 	font = new ofTrueTypeFont();
 

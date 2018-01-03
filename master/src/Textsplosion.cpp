@@ -79,6 +79,7 @@ void Textsplosion::draw() {
 	(*shaders)[0].setUniform4f("bcol2", ColorToUniformRange(backgroundColor2));
     (*shaders)[0].setUniform4f("col1", ColorToUniformRange(color1));
     (*shaders)[0].setUniform4f("col2", ColorToUniformRange(color2));
+	(*shaders)[0].setUniform4f("highlightCol", ColorToUniformRange(highlightCol));
     (*shaders)[0].setUniform4f("boundingBox", ofVec4f(boundingBox.x, boundingBox.y, boundingBox.width, boundingBox.height));
 	mesh.setMode(OF_PRIMITIVE_TRIANGLES);
 	mesh.draw();
